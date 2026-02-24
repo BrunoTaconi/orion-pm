@@ -1,0 +1,261 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+//////////////////////////////////////////////////////
+// ENUMS
+//////////////////////////////////////////////////////
+
+enum Methodology {
+  SCRUM
+  KANBAN
+  CASCADE
+  XP
+  INCREMENTAL
+  SPIRAL
+}
+
+enum ProjectVisibility {
+  PRIVATE
+  TEAM
+  PUBLIC
+}
+
+enum BoardType {
+  SCRUM
+  KANBAN
+}
+
+enum WorkItemType {
+  TASK
+  STORY
+  BUG
+  SPIKE
+}
+
+enum SprintStatus {
+  PLANNED
+  ACTIVE
+  CLOSED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+//////////////////////////////////////////////////////
+// AUTH
+//////////////////////////////////////////////////////
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+//////////////////////////////////////////////////////
+// USER & TEAM
+//////////////////////////////////////////////////////
+
+model User {
+  id        String   @id @default(uuid())
+  name      String?
+  email     String?  @unique
+  password  String?
+  createdAt DateTime @default(now())
+
+  accounts Account[]
+  sessions Session[]
+
+  projects    Project[]
+  comments    Comment[]
+  workItems   WorkItem[]   @relation("AssignedWorkItems")
+  teamMembers TeamMember[]
+  teams       Team[]
+}
+
+model Team {
+  id      String @id @default(uuid())
+  name    String
+  ownerId String
+
+  owner   User         @relation(fields: [ownerId], references: [id])
+  members TeamMember[]
+}
+
+model TeamMember {
+  id     String @id @default(uuid())
+  userId String
+  teamId String
+  role   String
+
+  user User @relation(fields: [userId], references: [id])
+  team Team @relation(fields: [teamId], references: [id])
+
+  @@unique([userId, teamId])
+}
+
+//////////////////////////////////////////////////////
+// PROJECT
+//////////////////////////////////////////////////////
+
+model Project {
+  id          String            @id @default(uuid())
+  name        String
+  description String?
+  methodology Methodology?
+  visibility  ProjectVisibility @default(PRIVATE)
+  createdAt   DateTime          @default(now())
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id])
+
+  boards        Board[]
+  sprints       Sprint[]
+  workItems     WorkItem[]
+  wizardSession WizardSession?
+}
+
+//////////////////////////////////////////////////////
+// WIZARD
+//////////////////////////////////////////////////////
+
+model WizardSession {
+  id                     String       @id @default(uuid())
+  projectId              String       @unique
+  recommendedMethodology Methodology
+  finalMethodology       Methodology?
+  createdAt              DateTime     @default(now())
+
+  project Project        @relation(fields: [projectId], references: [id])
+  answers WizardAnswer[]
+}
+
+model WizardAnswer {
+  id          String @id @default(uuid())
+  sessionId   String
+  questionKey String
+  value       String
+
+  session WizardSession @relation(fields: [sessionId], references: [id])
+}
+
+//////////////////////////////////////////////////////
+// BOARD STRUCTURE
+//////////////////////////////////////////////////////
+
+model Board {
+  id        String    @id @default(uuid())
+  projectId String
+  type      BoardType
+
+  project Project  @relation(fields: [projectId], references: [id])
+  columns Column[]
+}
+
+model Column {
+  id       String @id @default(uuid())
+  boardId  String
+  name     String
+  order    Int
+  wipLimit Int?
+
+  board     Board      @relation(fields: [boardId], references: [id])
+  workItems WorkItem[]
+}
+
+//////////////////////////////////////////////////////
+// WORK MANAGEMENT
+//////////////////////////////////////////////////////
+
+model WorkItem {
+  id          String       @id @default(uuid())
+  projectId   String
+  title       String
+  description String?
+  type        WorkItemType
+  status      String
+  priority    Priority     @default(MEDIUM)
+  storyPoints Int?
+  createdAt   DateTime     @default(now())
+
+  sprintId   String?
+  columnId   String?
+  assigneeId String?
+
+  project  Project @relation(fields: [projectId], references: [id])
+  sprint   Sprint? @relation(fields: [sprintId], references: [id])
+  column   Column? @relation(fields: [columnId], references: [id])
+  assignee User?   @relation("AssignedWorkItems", fields: [assigneeId], references: [id])
+
+  comments Comment[]
+}
+
+//////////////////////////////////////////////////////
+// SCRUM
+//////////////////////////////////////////////////////
+
+model Sprint {
+  id        String       @id @default(uuid())
+  projectId String
+  name      String
+  startDate DateTime
+  endDate   DateTime
+  status    SprintStatus @default(PLANNED)
+
+  project   Project    @relation(fields: [projectId], references: [id])
+  workItems WorkItem[]
+}
+
+//////////////////////////////////////////////////////
+// COMMENTS
+//////////////////////////////////////////////////////
+
+model Comment {
+  id         String   @id @default(uuid())
+  workItemId String
+  userId     String
+  content    String
+  createdAt  DateTime @default(now())
+
+  workItem WorkItem @relation(fields: [workItemId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+}

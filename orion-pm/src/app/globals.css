@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@layer components {
+  .text-title {
+    @apply text-xl font-semibold tracking-tight;
+  }
+
+  .text-subtitle {
+    @apply text-sm font-normal;
+  }
+
+  .text-body {
+    @apply text-sm;
+  }
+
+  .text-caption {
+    @apply text-xs text-text-secondary;
+  }
+}
+
+@theme {
+  /* FONT */
+  --font-sans: var(--font-satoshi);
+
+  /* COLORS */
+  --color-accent-primary: rgb(39 99 235);
+  --color-accent-secondary: rbg(249 115 22);
+
+  --color-bg-primary: rgb(255 255 255);
+  --color-bg-secondary: rbg(245 247 249);
+  --color-bg-darker: rgb(212 216 219);
+
+  --color-success: rgb(34 197 94);
+  --color-warning: rgb(234 179 8);
+  --color-danger: rgb(239 68 68);
+
+  --color-text-primary: rgb(57 58 68);
+  --color-text-secondary: rgb(100 104 120);
+
+  --color-border: rgb(245 247 249);
+
+  /* RADIUS */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* SHADOW */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* ========================= */
+/* DARK MODE */
+/* ========================= */
+
+[data-theme="dark"] {
+  --color-bg-primary: 15 23 42;
+  --color-bg-secondary: 30 41 59;
+
+  --color-text-primary: 248 250 252;
+  --color-text-secondary: 148 163 184;
+
+  --color-border: 51 65 85;
+}
+
+body {
+  @apply bg-bg-primary text-text-primary;
+}
