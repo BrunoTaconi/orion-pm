@@ -1,0 +1,11 @@
+import { useSession } from "next-auth/react";
+
+export function useAuth() {
+  const { data, status } = useSession();
+
+  return {
+    user: data?.user,
+    loading: status === "loading",
+    authenticated: status === "authenticated",
+  };
+}

@@ -24,10 +24,10 @@
 
   /* COLORS */
   --color-accent-primary: rgb(39 99 235);
-  --color-accent-secondary: rbg(249 115 22);
+  --color-accent-secondary: rgb(249 115 22);
 
   --color-bg-primary: rgb(255 255 255);
-  --color-bg-secondary: rbg(245 247 249);
+  --color-bg-secondary: rgb(245 247 249);
   --color-bg-darker: rgb(212 216 219);
 
   --color-success: rgb(34 197 94);
@@ -45,8 +45,8 @@
   --radius-lg: 16px;
 
   /* SHADOW */
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* ========================= */

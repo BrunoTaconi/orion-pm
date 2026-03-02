@@ -1,17 +1,21 @@
-import { Sidebar } from "@/components/layout/sidebar";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import DashboardShell from "@/components/layout/dashboard-shell";
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="flex min-h-screen bg-bg-secondary">
-      <Sidebar />
+  if (process.env.DEV_AUTH_BYPASS === "true") {
+    return <DashboardShell>{children}</DashboardShell>;
+  }
 
-      <main className="flex-1 p-6">
-        {children}
-      </main>
-    </div>
-  );
+  const session = await auth();
+
+  if (!session) {
+    redirect("/login");
+  }
+
+  return <DashboardShell>{children}</DashboardShell>;
 }

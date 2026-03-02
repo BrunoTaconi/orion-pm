@@ -1,25 +1,27 @@
-"use client"
+"use client";
 import { useState } from "react";
 import Link from "next/link";
 import Modal from "@/components/ui/modal";
 import { FcGoogle } from "react-icons/fc";
 import { SiGithub } from "react-icons/si";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
-    const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(true);
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-        console.log({
-            email,
-            password,
-        });
-    }
+  async function handleSubmit(e: React.FormEvent) {
+    await signIn("credentials", {
+      email,
+      password,
+      redirect: true,
+      callbackUrl: "/dashboard",
+    });
+  }
 
-    return (
+  return (
     <div className="min-h-screen flex items-center justify-center bg-bg-secondary">
       <Modal
         isOpen={open}
@@ -31,7 +33,6 @@ export default function LoginPage() {
         showCloseButton={false}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
-
           {/* Email */}
           <div>
             <label className="text-body">Email</label>
@@ -76,11 +77,11 @@ export default function LoginPage() {
         {/* OAuth */}
         <div className="space-y-2">
           <button className="flex text-text-secondary items-center cursor-pointer justify-center gap-3 w-full border border-border rounded-md py-2 hover:bg-gray-100 hover:text-text-primary  transition">
-            <FcGoogle size={20} />  Continue with Google
+            <FcGoogle size={20} /> Continue with Google
           </button>
 
           <button className="flex  text-text-secondary items-center cursor-pointer justify-center gap-3 w-full border border-border rounded-md py-2 hover:bg-gray-100 hover:text-text-primary  transition">
-            <SiGithub size={18}/>
+            <SiGithub size={18} />
             Continue with Github
           </button>
         </div>
@@ -94,7 +95,6 @@ export default function LoginPage() {
             Create account
           </Link>
         </p>
-
       </Modal>
     </div>
   );

@@ -8,27 +8,50 @@ type SidebarItemConfig = {
   href: string;
 };
 
-export function Sidebar() {
+type SidebarProps = {
+  isCollapsed: boolean;
+  onToggle: () => void;
+};
+
+export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
   const sidebarItems: SidebarItemConfig[] = [
+    { icon: "Search", label: "Search", href: "/search" },
+    { icon: "Recent", label: "Recents", href: "/recents" },
+    { icon: "Favorite", label: "Favorites", href: "/favorites" },
+    { icon: "Project", label: "Projects", href: "/project" },
+    { icon: "Home", label: "Home", href: "/s" },
     { icon: "Dashboard", label: "Dashboard", href: "/dashboard" },
-    { icon: "Project", label: "Projects", href: "/projects" },
     { icon: "Team", label: "Teams", href: "/teams" },
   ];
 
   return (
-    <aside className="w-64 h-screen bg-bg-primary border-border border-r flex flex-col">
-      
+    <aside
+      className={`
+        h-screen bg-bg-secondary border-border border-r flex flex-col
+        transition-all duration-300 ease-in-out
+        ${isCollapsed ? "w-16" : "w-64"}
+      `}
+    >
       {/* Header */}
-      <div className="p-4 border-b border-border">
-        <div className="font-bold text-lg mb-4">Orion PM</div>
+      <div className="flex items-center justify-center px-2 py-2 border-b border-border">
+        {!isCollapsed && <SidebarUser name="Bruno" isCollapsed={isCollapsed} />}
 
-        <SidebarUser name="Bruno" />
+        <button
+          onClick={onToggle}
+          className="p-1 hover:bg-bg-darker rounded text-text-secondary transition cursor-pointer"
+        >
+          <Icons.Collapse
+            className={`transition-transform ${
+              isCollapsed ? "rotate-180" : ""
+            }`}
+          />
+        </button>
       </div>
 
       {/* Nav */}
-      <nav className="px-3 py-4 space-y-1">
+      <nav className="p-1 space-y-1">
         {sidebarItems.map((item) => (
-          <SidebarItem key={item.href} {...item} />
+          <SidebarItem key={item.href} {...item} isCollapsed={isCollapsed} />
         ))}
       </nav>
     </aside>
