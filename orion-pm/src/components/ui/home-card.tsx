@@ -1,16 +1,28 @@
 "use client";
 import React, { ReactNode } from "react";
 import { DynamicIcons, Icons } from "../icons";
+import { useRouter } from "next/navigation";
 
 type HomeCardVariant = "create" | "project" | "team";
+
+export type HomeCardAction =
+  | "create-project"
+  | "create-team"
+  | "enter-project"
+  | "enter-team";
 
 interface HomeCardProps {
   variant: HomeCardVariant;
   title: string;
   subtitle?: string;
   icon: keyof typeof Icons;
-  onClick?: () => void;
+  action?: HomeCardAction;
+  payload?: any;
+  onAction?: (action: HomeCardAction, payload?: any) => void;
   progress?: number;
+  memberCount?: number;
+  ownerName?: string;
+  teamName?: string;
 }
 
 const HomeCard = ({
@@ -18,8 +30,13 @@ const HomeCard = ({
   title,
   subtitle,
   icon,
-  onClick,
+  action,
+  payload,
+  onAction,
   progress,
+  memberCount,
+  ownerName,
+  teamName,
 }: HomeCardProps) => {
   const isCreate = variant === "create";
   const isProject = variant === "project";
@@ -27,10 +44,16 @@ const HomeCard = ({
   const showProgress = variant === "project" && progress !== undefined;
   const Icon = Icons[icon];
   const NewIcon = Icons["Add"];
+  const PeopleIcon = Icons["People"];
+
+  const handleClick = () => {
+    if (!action || !onAction) return;
+    onAction(action, payload);
+  };
 
   return (
     <div
-      onClick={onClick}
+      onClick={handleClick}
       className={`
         w-46
         h-46
@@ -106,7 +129,7 @@ const HomeCard = ({
             font-semibold
             text-text-primary
             pl-12
-            pt-3
+            pt-5
             pr-3
         `}
             >
@@ -117,18 +140,18 @@ const HomeCard = ({
             <div className="w-full h-2 bg-bg-secondary rounded-full overflow-hidden">
               <div
                 className="h-full bg-green-500 transition-all duration-300"
-                style={{ width: "60%" }}
+                style={{ width: `${progress ?? 0}%` }}
               />
             </div>
-            <div className="flex justify-between text-xs font-medium text-text-secondary mt-1">
+            <div className="flex justify-between text-xs font-normal text-text-secondary mt-1">
               <span>Tasks done</span>
-              <span>60%</span>
+              <span>{progress} %</span>
             </div>
           </div>
           <div className="absolute bottom-0 p-3 flex gap-2 w-full overflow-x-hidden">
             {
               <DynamicIcons.Letter
-                text={"Bruno Taconi"}
+                text={ownerName ?? ""}
                 size={22}
                 className="text-sm"
                 bgColor="bg-red-600"
@@ -136,7 +159,7 @@ const HomeCard = ({
               />
             }
             <p className="text-sm font-medium text-text-secondary">
-              Bruno Taconi's Team
+              {teamName}
             </p>
           </div>
         </>
@@ -165,21 +188,26 @@ const HomeCard = ({
               className={`
             font-semibold
             text-text-primary
-            pl-12
-            pt-18
+            pl-10
+            pt-17
             pr-4
         `}
             >
               {title}
             </h3>
           </div>
-          <div className="absolute bottom-0 p-3 flex gap-2 w-full">
-            {
-              <p className="w-6 h-6 bg-accent-primary text-bg-primary rounded-sm flex items-center text-sm text-center justify-center font-medium">
-                13
+          <div className="absolute bottom-0 p-3 flex gap-3 w-full items-center">
+            <div className="w-7 h-7 p-1 bg-bg-light-blue text-blue-icon rounded-sm flex items-center text-sm text-center justify-center">
+              <PeopleIcon size={22} />
+            </div>
+            <div className="flex items-center gap-1">
+              <p className="font-black text-lg text-text-primary">
+                {memberCount}
               </p>
-            }
-            <p className="text-sm font-medium text-text-secondary">members</p>
+              <p className="text-sm font-normal text-text-secondary">
+                Team Members
+              </p>
+            </div>
           </div>
         </>
       )}

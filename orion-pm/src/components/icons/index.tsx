@@ -13,7 +13,7 @@ import { FaRegStar, FaClock, FaRegClock, FaStar } from "react-icons/fa";
 import { MdOutlineSpaceDashboard, MdSpaceDashboard } from "react-icons/md";
 import { HiOutlineUserGroup, HiUserGroup } from "react-icons/hi2";
 import { AiOutlineProject, AiFillProject } from "react-icons/ai";
-import { IoMenu } from "react-icons/io5";
+import { IoMenu, IoPeopleOutline } from "react-icons/io5";
 import { MdAdd } from "react-icons/md";
 
 type IconProps = {
@@ -121,6 +121,10 @@ export const Icons = {
 
   Add: ({ size = 20, className }: IconProps) => (
     <MdAdd size={size} className={className} />
+  ),
+
+  People: ({ size = 20, className }: IconProps) => (
+    <IoPeopleOutline size={size} className={className} />
   ),
 
   Google: ({ size = 20, className }: IconProps) => (

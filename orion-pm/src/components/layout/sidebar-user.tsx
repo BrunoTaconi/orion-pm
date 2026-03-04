@@ -25,7 +25,7 @@ export function SidebarUser({ name, isCollapsed }: SidebarUserProps) {
 
       {!isCollapsed && (
         <div className="flex flex-col">
-          <span className="text-sm font-medium">{name}</span>
+          <span className="text-sm font-bold">{name}</span>
           <span className="text-xs text-text-secondary">Workspace</span>
         </div>
       )}

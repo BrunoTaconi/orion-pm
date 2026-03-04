@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+:root {
+  --font-sans: var(--font-satoshi);
+}
+
 @layer components {
   .text-title {
     @apply text-xl font-semibold tracking-tight;
@@ -19,8 +23,6 @@
 }
 
 @theme {
-  /* FONT */
-  --font-sans: var(--font-satoshi);
 
   /* COLORS */
   --color-accent-primary: rgb(39 99 235);
@@ -29,6 +31,12 @@
   --color-bg-primary: rgb(255 255 255);
   --color-bg-secondary: rgb(245 247 249);
   --color-bg-darker: rgb(212 216 219);
+  --color-bg-light-blue: rgb(232 240 254);
+  --color-bg-light-green: rgb(230 244 234);
+  --color-bg-light-yellow: rgb(255 244 214);
+  --color-bg-light-purple: rgb(243 232 253);
+  --color-bg-light-orange: rgb(250 120 65);
+  --color-bg-light-red: rgb(249 186 181);
 
   --color-success: rgb(34 197 94);
   --color-warning: rgb(234 179 8);
@@ -36,6 +44,15 @@
 
   --color-text-primary: rgb(57 58 68);
   --color-text-secondary: rgb(100 104 120);
+
+  --color-green-icon: rgb(52 168 83);
+  --color-blue-icon: rgb(26 115 232);
+  --color-yellow-icon: rgb(244 180 0);
+  --color-purple-icon: rgb(147 51 234);
+  --color-orange-icon: rgb(248 96 31);
+  --color-red-icon: rgb(234 60 44);
+
+  --color-text-icon: rgb(100 104 120);
 
   --color-border: rgb(245 247 249);
 
