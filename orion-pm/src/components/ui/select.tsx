@@ -105,7 +105,7 @@ const Select = ({
       </div>
 
       {isOpen && (
-        <div className="absolute z-10 top-[calc(100%+4px)] w-full bg-bg-primary border border-border rounded-md shadow-md overflow-hidden">
+        <div className="absolute z-20 top-[calc(100%+4px)] w-full bg-bg-primary border border-border rounded-md shadow-md overflow-hidden">
           {options.map((option) => {
             const isSelected = value === option.value;
 

@@ -1,3 +1,4 @@
+import Select, { SelectOption } from "@/components/ui/select";
 import type { WizardStepWithDataProps } from "../project-wizard";
 
 export default function TeamStep({
@@ -6,66 +7,162 @@ export default function TeamStep({
   next,
   back,
 }: WizardStepWithDataProps) {
+  const sizeOptions: SelectOption[] = [
+    {
+      value: "small",
+      label: "Small (1 - 4 people)",
+      icon: "PeopleFilled",
+      iconBgColor: "bg-bg-light-blue",
+      iconColor: "text-blue-icon",
+    },
+    {
+      value: "medium",
+      label: "Medium (5 - 8 people)",
+      icon: "TeamFilled",
+      iconBgColor: "bg-bg-light-blue",
+      iconColor: "text-blue-icon",
+    },
+    {
+      value: "big",
+      label: "Big (8+ people)",
+      icon: "UsersFour",
+      iconBgColor: "bg-bg-light-blue",
+      iconColor: "text-blue-icon",
+    },
+  ];
+
+  const availabilityOptions: SelectOption[] = [
+    {
+      value: "high",
+      label: "Full time",
+      icon: "Recent",
+      iconBgColor: "bg-bg-light-green",
+      iconColor: "text-green-icon",
+    },
+    {
+      value: "medium",
+      label: "Partial",
+      icon: "Half",
+      iconBgColor: "bg-bg-light-yellow",
+      iconColor: "text-yellow-icon",
+    },
+    {
+      value: "low",
+      label: "Irregular",
+      icon: "Cycle",
+      iconBgColor: "bg-bg-light-red",
+      iconColor: "text-red-icon",
+    },
+  ];
+
+  const experienceOptions: SelectOption[] = [
+    {
+      value: "high",
+      label: "High",
+      icon: "Rocket",
+      iconBgColor: "bg-bg-light-red",
+      iconColor: "text-red-icon",
+    },
+    {
+      value: "medium",
+      label: "Medium",
+      icon: "Tools",
+      iconBgColor: "bg-bg-light-yellow",
+      iconColor: "text-yellow-icon",
+    },
+    {
+      value: "low",
+      label: "Low",
+      icon: "Plant",
+      iconBgColor: "bg-bg-light-green",
+      iconColor: "text-green-icon",
+    },
+  ];
+
+  const participationOptions: SelectOption[] = [
+    {
+      value: "constant",
+      label: "Constant",
+      icon: "Infinity",
+      iconBgColor: "bg-bg-light-purple",
+      iconColor: "text-purple-icon",
+    },
+    {
+      value: "weekly",
+      label: "Weekly",
+      icon: "Calendar",
+      iconBgColor: "bg-bg-light-purple",
+      iconColor: "text-purple-icon",
+    },
+    {
+      value: "rare",
+      label: "Rare",
+      icon: "Diamond",
+      iconBgColor: "bg-bg-light-purple",
+      iconColor: "text-purple-icon",
+    },
+  ];
+
   return (
-    <div>
-      <h2>Team Size and Experience</h2>
+    <div className="flex flex-col gap-6">
+      <div className="text-text-secondary">
+        <h2 className="text-lg font-normal">
+          2. Team Size and Experience
+        </h2>
+      </div>
 
-      <div>
-        <label>Team size</label>
-        <select
+      <div className="grid grid-cols-2 gap-x-6 gap-y-15 mb-6">
+        <Select
+          label="Team Size"
+          options={sizeOptions}
           value={data.teamSize || ""}
-          onChange={(e) => updateData({ teamSize: e.target.value })}
-        >
-          <option value="">Select an option</option>
-          <option value="small">Small (1 - 4 people)</option>
-          <option value="medium">Medium (5 - 8 people)</option>
-          <option value="big">Big (8+ people)</option>
-        </select>
-      </div>
+          onChange={(value) => updateData({ teamSize: value })}
+        />
 
-      <div>
-        Disponibilidade da Equipe
-        <label>Team Availability</label>
-        <select
+        <Select
+          label="Team Availability"
+          options={availabilityOptions}
           value={data.teamAvailability || ""}
-          onChange={(e) => updateData({ teamAvailability: e.target.value })}
-        >
-          <option value="">Select an option</option>
-          <option value="high">Full time</option>
-          <option value="medium">Partial</option>
-          <option value="low">Irregular</option>
-        </select>
+          onChange={(value) => updateData({ teamAvailability: value })}
+        />
+
+        <Select
+          label="Team Experience"
+          options={experienceOptions}
+          value={data.teamExperience || ""}
+          onChange={(value) => updateData({ teamExperience: value })}
+        />
+
+        <Select
+          label="Customer (or stakeholder) participation"
+          options={participationOptions}
+          value={data.customerParticipation || ""}
+          onChange={(value) => updateData({ customerParticipation: value })}
+        />
       </div>
 
-      <div>
-        <label>Team experience</label>
-        <select
-          value={data.teamExperience}
-          onChange={(e) => updateData({ teamExperience: e.target.value })}
+      <div className="flex justify-end gap-3">
+        <button
+          className="p-2 text-text-secondary hover:text-black cursor-pointer transition"
+          onClick={back}
         >
-          <option value="">Select an option</option>
-          <option value="high">High</option>
-          <option value="medium">Medium</option>
-          <option value="low">Low</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Customer (or stakeholder) participation</label>
-        <select
-          value={data.customerParticipation}
-          onChange={(e) => updateData({ customerParticipation: e.target.value })}
+          Back
+        </button>
+        <button
+          className="
+        bg-accent-primary
+        text-bg-primary
+        py-1
+        px-4
+        rounded-sm
+        cursor-pointer
+        hover:bg-blue-700
+        transition
+        "
+          onClick={next}
         >
-          <option value="">Select an option</option>
-          <option value="constant">Constant</option>
-          <option value="weekly">Weekly</option>
-          <option value="rare">Rare</option>
-        </select>
-      </div>
-
-      <div className="flex gap-2">
-        <button onClick={back}>Back</button>
-        <button onClick={next}>Next</button>
+          Next
+        </button>
       </div>
     </div>
   );

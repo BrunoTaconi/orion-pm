@@ -34,7 +34,7 @@ export type WizardData = {
   externalDependencies?: string;
   technicalComplexity?: string;
   newTechUse?: string;
-  identifiableRisks?: string;
+  identifiableRisks?: string[];
 };
 
 export type WizardStepBaseProps = {

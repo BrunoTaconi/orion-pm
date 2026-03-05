@@ -86,7 +86,7 @@ const ExplanationStep = ({ next, back }: ExplanationStepProps) => {
         </div>
       </div>
 
-      <div className="flex justify-end gap-5">
+      <div className="flex justify-end gap-3">
         <button
           className="p-2 text-text-secondary hover:text-black cursor-pointer transition"
           onClick={back}
@@ -97,7 +97,8 @@ const ExplanationStep = ({ next, back }: ExplanationStepProps) => {
           className="
         bg-accent-primary
         text-bg-primary
-        p-2
+        py-2
+        px-4
         rounded-sm
         cursor-pointer
         hover:bg-blue-700
@@ -105,7 +106,7 @@ const ExplanationStep = ({ next, back }: ExplanationStepProps) => {
         "
           onClick={next}
         >
-          Advance to the assistant
+          Next
         </button>
       </div>
     </div>

@@ -6,6 +6,7 @@ import {
   FiChevronsLeft,
 } from "react-icons/fi";
 import { HiOutlineBell } from "react-icons/hi";
+import { HiRocketLaunch } from "react-icons/hi2";
 import { FcGoogle } from "react-icons/fc";
 import { SiGithub } from "react-icons/si";
 import { BsHouse, BsHouseFill, BsBuildingsFill } from "react-icons/bs";
@@ -16,16 +17,35 @@ import {
   FaStar,
   FaGlobeAmericas,
   FaClipboardList,
+  FaQuestionCircle,
+  FaTools,
+  FaCalendarAlt,
+  FaBrain,
 } from "react-icons/fa";
-import { FaPeopleGroup } from "react-icons/fa6";
-import { MdOutlineSpaceDashboard, MdSpaceDashboard } from "react-icons/md";
+import {
+  FaPeopleGroup,
+  FaCircleHalfStroke,
+  FaThumbsUp,
+  FaThumbsDown,
+  FaNewspaper,
+  FaGear,
+} from "react-icons/fa6";
+import {
+  MdOutlineSpaceDashboard,
+  MdSpaceDashboard,
+  MdSunny,
+} from "react-icons/md";
 import { HiOutlineUserGroup, HiUserGroup } from "react-icons/hi2";
 import { AiOutlineProject, AiFillProject } from "react-icons/ai";
-import { IoMenu, IoPeopleOutline } from "react-icons/io5";
-import { MdAdd } from "react-icons/md";
-import { RiLock2Fill } from "react-icons/ri";
+import { IoMenu, IoPeopleOutline, IoExtensionPuzzle } from "react-icons/io5";
+import { MdAdd, MdPeopleAlt, MdOutlineMenuBook } from "react-icons/md";
+import { RiLock2Fill, RiPlantFill } from "react-icons/ri";
 import { TiWarning } from "react-icons/ti";
-import { GrCycle } from "react-icons/gr";
+import { GrCycle, GrCloudComputer } from "react-icons/gr";
+import { LuSunSnow } from "react-icons/lu";
+import { PiInfinityBold, PiUsersFourFill } from "react-icons/pi";
+import { TbDiamondFilled, TbArrowBarBoth } from "react-icons/tb";
+import { GiGreekTemple } from "react-icons/gi";
 
 type IconProps = {
   size?: number;
@@ -197,7 +217,83 @@ export const Icons = {
   ),
 
   Cycle: ({ size = 18, className }: IconProps) => (
-    <GrCycle  size={size} className={className} />
+    <GrCycle size={size} className={className} />
+  ),
+
+  Sun: ({ size = 18, className }: IconProps) => (
+    <MdSunny size={size} className={className} />
+  ),
+
+  SunPartial: ({ size = 18, className }: IconProps) => (
+    <LuSunSnow size={size} className={className} />
+  ),
+
+  Question: ({ size = 18, className }: IconProps) => (
+    <FaQuestionCircle size={size} className={className} />
+  ),
+
+  Half: ({ size = 18, className }: IconProps) => (
+    <FaCircleHalfStroke size={size} className={className} />
+  ),
+
+  Rocket: ({ size = 18, className }: IconProps) => (
+    <HiRocketLaunch size={size} className={className} />
+  ),
+
+  Tools: ({ size = 18, className }: IconProps) => (
+    <FaTools size={size} className={className} />
+  ),
+
+  Plant: ({ size = 18, className }: IconProps) => (
+    <RiPlantFill size={size} className={className} />
+  ),
+
+  Infinity: ({ size = 18, className }: IconProps) => (
+    <PiInfinityBold size={size} className={className} />
+  ),
+
+  Calendar: ({ size = 18, className }: IconProps) => (
+    <FaCalendarAlt size={size} className={className} />
+  ),
+
+  Diamond: ({ size = 18, className }: IconProps) => (
+    <TbDiamondFilled size={size} className={className} />
+  ),
+  UsersFour: ({ size = 18, className }: IconProps) => (
+    <PiUsersFourFill size={size} className={className} />
+  ),
+  PeopleFilled: ({ size = 18, className }: IconProps) => (
+    <MdPeopleAlt size={size} className={className} />
+  ),
+  ThumbsUp: ({ size = 18, className }: IconProps) => (
+    <FaThumbsUp size={size} className={className} />
+  ),
+  ThumbsDown: ({ size = 18, className }: IconProps) => (
+    <FaThumbsDown size={size} className={className} />
+  ),
+  Puzzle: ({ size = 18, className }: IconProps) => (
+    <IoExtensionPuzzle size={size} className={className} />
+  ),
+  Both: ({ size = 18, className }: IconProps) => (
+    <TbArrowBarBoth size={size} className={className} />
+  ),
+  CloudComputer: ({ size = 18, className }: IconProps) => (
+    <GrCloudComputer size={size} className={className} />
+  ),
+  Book: ({ size = 18, className }: IconProps) => (
+    <MdOutlineMenuBook size={size} className={className} />
+  ),
+  Paper: ({ size = 18, className }: IconProps) => (
+    <FaNewspaper size={size} className={className} />
+  ),
+  Temple: ({ size = 18, className }: IconProps) => (
+    <GiGreekTemple size={size} className={className} />
+  ),
+  Brain: ({ size = 18, className }: IconProps) => (
+    <FaBrain size={size} className={className} />
+  ),
+  Gear: ({ size = 18, className }: IconProps) => (
+    <FaGear size={size} className={className} />
   ),
 };
 

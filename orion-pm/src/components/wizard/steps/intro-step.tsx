@@ -67,6 +67,9 @@ const IntroStep = ({
 
   return (
     <div className="flex flex-col gap-6">
+      <div className="text-text-secondary">
+        <h2 className="text-lg font-normal">First Steps</h2>
+      </div>
       <Input
         label="Name"
         required
