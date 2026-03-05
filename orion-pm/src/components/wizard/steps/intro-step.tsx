@@ -1,16 +1,20 @@
 "use client";
+import Input from "@/components/ui/input";
+import Select, { SelectOption } from "@/components/ui/select";
 import React from "react";
 
 type IntroStepProps = {
   projectData: any;
   updateProjectData: (values: any) => void;
   next: () => void;
+  onClose: () => void;
 };
 
 const IntroStep = ({
   projectData,
   updateProjectData,
   next,
+  onClose,
 }: IntroStepProps) => {
   const handleNext = () => {
     if (!projectData.name || !projectData.teamId) {
@@ -19,53 +23,115 @@ const IntroStep = ({
     }
     next();
   };
+
+  const teamOptions: SelectOption[] = [
+    {
+      value: "1",
+      label: "Meu Time 1",
+      icon: "Team",
+      iconColor: "text-orange-icon",
+      iconBgColor: "bg-bg-light-orange",
+    },
+    {
+      value: "2",
+      label: "Meu Time 2",
+      icon: "Team",
+      iconColor: "text-purple-icon",
+      iconBgColor: "bg-bg-light-purple",
+    },
+  ];
+
+  const visibilityOptions: SelectOption[] = [
+    {
+      value: "private",
+      label: "Privado",
+      icon: "Lock",
+      iconColor: "text-red-icon",
+      iconBgColor: "bg-bg-light-red",
+    },
+    {
+      value: "public",
+      label: "Público",
+      icon: "Globe",
+      iconColor: "text-green-icon",
+      iconBgColor: "bg-bg-light-green",
+    },
+    {
+      value: "internal",
+      label: "Interno",
+      icon: "Building",
+      iconColor: "text-blue-icon",
+      iconBgColor: "bg-bg-light-blue",
+    },
+  ];
+
   return (
-    <div className="flex flex-col gap-4">
-      <h2>Create Project</h2>
+    <div className="flex flex-col gap-6">
+      <Input
+        label="Name"
+        required
+        type="text"
+        placeholder="Project name"
+        value={projectData.name}
+        onChange={(e) => updateProjectData({ name: e.target.value })}
+      />
+      <Input
+        label="Description"
+        multiline
+        rows={3}
+        required
+        type="text"
+        placeholder="Brief summary of the project's objective."
+        value={projectData.description}
+        onChange={(e) => updateProjectData({ description: e.target.value })}
+      />
 
-      <div>
-        <label>Name *</label>
-        <input
-          type="text"
-          value={projectData.name}
-          onChange={(e) => updateProjectData({ name: e.target.value })}
-        />
-      </div>
+      <Select
+        label="Team"
+        required
+        options={teamOptions}
+        value={projectData.teamId}
+        onChange={(value) => updateProjectData({ teamId: value })}
+        placeholder="Select a team"
+      />
 
-      <div>
-        <label>Description</label>
-        <textarea
-          value={projectData.description}
-          onChange={(e) => updateProjectData({ description: e.target.value })}
-        />
-      </div>
+      <Input
+        label="Deadline"
+        type="date"
+        value={projectData.deadline || ""}
+        onChange={(e) => updateProjectData({ deadline: e.target.value })}
+      />
 
-      <div>
-        <label>Team *</label>
-        <select
-          value={projectData.teamId}
-          onChange={(e) => updateProjectData({ teamId: e.target.value })}
+      <Select
+        label="Visibility"
+        required
+        options={visibilityOptions}
+        value={projectData.visibility}
+        onChange={(value) => updateProjectData({ visibility: value })}
+        placeholder="Select visibility"
+      />
+
+      <div className="flex justify-end gap-5">
+        <button
+          className="p-2 text-text-secondary hover:text-black cursor-pointer transition"
+          onClick={onClose}
         >
-          <option value="">Select an option</option>
-          <option value="1">My Team 1</option>
-          <option value="2">My Team 2</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Visibility</label>
-        <select
-          value={projectData.visibility}
-          onChange={(e) => updateProjectData({ visibility: e.target.value })}
+          Cancel
+        </button>
+        <button
+          className="
+        bg-accent-primary
+        text-bg-primary
+        p-2
+        rounded-sm
+        cursor-pointer
+        hover:bg-blue-700
+        transition
+        "
+          onClick={handleNext}
         >
-          <option value="private">Private</option>
-          <option value="public">Public</option>
-          <option value="internal">Intern</option>
-        </select>
-      </div>
-
-      <div className="flex justify-end gap-2">
-        <button onClick={handleNext}>Advance to the assistant</button>
+          Advance to the assistant
+        </button>
       </div>
     </div>
   );

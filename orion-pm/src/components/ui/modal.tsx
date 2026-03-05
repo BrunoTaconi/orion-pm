@@ -7,10 +7,12 @@ interface ModalProps {
   onClose: () => void;
   children: ReactNode;
   title?: string;
+  titleSize?: string;
   subtitle?: string;
   showCloseButton?: boolean;
   closeOnOverlayClick: boolean;
   size?: "sm" | "md" | "lg" | "xl";
+  padding?: string;
 }
 
 const sizeClasses = {
@@ -25,10 +27,12 @@ const Modal = ({
   onClose,
   children,
   title,
+  titleSize = "text-2xl",
   subtitle,
   showCloseButton = true,
   closeOnOverlayClick = true,
   size = "md",
+  padding = "p-8"
 }: ModalProps) => {
   const headerAlignment = showCloseButton
     ? "justify-between"
@@ -60,25 +64,31 @@ const Modal = ({
       <div className="absolute inset-0 flex items-center justify-center">
         {/* Modal */}
         <div
-          className={`bg-bg-primary rounded-xl shadow-xl w-full ${sizeClasses[size]} p-8 relative`}
+          className={`bg-bg-primary rounded-xl shadow-xl w-full ${sizeClasses[size]} ${padding} relative`}
         >
           {(title || showCloseButton) && (
-            <div className={`flex items-center mb-2 ${headerAlignment}`}>
-              {title && <h2 className="text-2xl text-text-primary font-semibold">{title}</h2>}
+            <div className={`flex items-center mb-4 ${headerAlignment}`}>
+              {title && (
+                <h2 className={`${titleSize} text-text-primary font-semibold`}>
+                  {title}
+                </h2>
+              )}
 
               {showCloseButton && (
                 <button
                   onClick={onClose}
                   className="text-text-secondary hover:text-text-primary transition cursor-pointer"
                 >
-                  <IoIosClose size={26} />
+                  <IoIosClose size={30} />
                 </button>
               )}
             </div>
           )}
           {subtitle && (
             <div className={`flex items-center mb-4 ${headerAlignment}`}>
-              <h4 className="text-lg text-text-secondary font-normal">{subtitle}</h4>
+              <h4 className="text-lg text-text-secondary font-normal">
+                {subtitle}
+              </h4>
             </div>
           )}
           {children}

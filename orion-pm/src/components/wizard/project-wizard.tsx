@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Modal from "../ui/modal";
-import ProjectProfileStep from "./steps/project-profile-step";
 import IntroStep from "./steps/intro-step";
+import ExplanationStep from "./steps/explanation-step"; // <-- Importe o novo step aqui
+import ProjectProfileStep from "./steps/project-profile-step";
 import TeamStep from "./steps/team-step";
 import { RequirementsStep } from "./steps/requirements-step";
 import RisksStep from "./steps/risks-step";
@@ -99,9 +100,12 @@ export default function ProjectWizard({ isOpen, onClose }: ProjectWizardProps) {
               setProjectData((prev) => ({ ...prev, ...values }))
             }
             next={next}
+            onClose={onClose}
           />
         );
       case 1:
+        return <ExplanationStep next={next} back={back} />;
+      case 2:
         return (
           <ProjectProfileStep
             data={wizardData}
@@ -110,7 +114,7 @@ export default function ProjectWizard({ isOpen, onClose }: ProjectWizardProps) {
             back={back}
           />
         );
-      case 2:
+      case 3:
         return (
           <TeamStep
             data={wizardData}
@@ -119,7 +123,7 @@ export default function ProjectWizard({ isOpen, onClose }: ProjectWizardProps) {
             back={back}
           />
         );
-      case 3:
+      case 4:
         return (
           <RequirementsStep
             data={wizardData}
@@ -128,7 +132,7 @@ export default function ProjectWizard({ isOpen, onClose }: ProjectWizardProps) {
             back={back}
           />
         );
-      case 4:
+      case 5:
         return (
           <RisksStep
             data={wizardData}
@@ -137,7 +141,7 @@ export default function ProjectWizard({ isOpen, onClose }: ProjectWizardProps) {
             back={back}
           />
         );
-      case 5:
+      case 6:
         return (
           <ResultStep
             data={wizardData}
@@ -150,9 +154,12 @@ export default function ProjectWizard({ isOpen, onClose }: ProjectWizardProps) {
 
   return (
     <Modal
+      title="Create Project"
       isOpen={isOpen}
       onClose={onClose}
       size="xl"
+      titleSize="text-xl"
+      padding="p-6"
       closeOnOverlayClick={false}
     >
       {renderStep()}

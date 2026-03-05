@@ -8,13 +8,24 @@ import {
 import { HiOutlineBell } from "react-icons/hi";
 import { FcGoogle } from "react-icons/fc";
 import { SiGithub } from "react-icons/si";
-import { BsHouse, BsHouseFill } from "react-icons/bs";
-import { FaRegStar, FaClock, FaRegClock, FaStar } from "react-icons/fa";
+import { BsHouse, BsHouseFill, BsBuildingsFill } from "react-icons/bs";
+import {
+  FaRegStar,
+  FaClock,
+  FaRegClock,
+  FaStar,
+  FaGlobeAmericas,
+  FaClipboardList,
+} from "react-icons/fa";
+import { FaPeopleGroup } from "react-icons/fa6";
 import { MdOutlineSpaceDashboard, MdSpaceDashboard } from "react-icons/md";
 import { HiOutlineUserGroup, HiUserGroup } from "react-icons/hi2";
 import { AiOutlineProject, AiFillProject } from "react-icons/ai";
 import { IoMenu, IoPeopleOutline } from "react-icons/io5";
 import { MdAdd } from "react-icons/md";
+import { RiLock2Fill } from "react-icons/ri";
+import { TiWarning } from "react-icons/ti";
+import { GrCycle } from "react-icons/gr";
 
 type IconProps = {
   size?: number;
@@ -30,7 +41,15 @@ type LetterIconProps = {
   className?: string;
 };
 
-const LetterIcon = ({
+type BoxedIconProps = {
+  icon: keyof typeof Icons;
+  bgColor: string;
+  iconColor: string;
+  size?: number;
+  className?: string;
+};
+
+export const LetterIcon = ({
   text,
   size = 32,
   bgColor = "bg-gray-200",
@@ -54,6 +73,24 @@ const LetterIcon = ({
       }}
     >
       {letter}
+    </div>
+  );
+};
+
+export const BoxedIcon = ({
+  icon,
+  bgColor,
+  iconColor,
+  size = 16,
+  className = "",
+}: BoxedIconProps) => {
+  const BaseIcon = Icons[icon];
+
+  return (
+    <div
+      className={`flex items-center justify-center w-6 h-6 rounded ${bgColor} ${className}`}
+    >
+      <BaseIcon size={size} className={iconColor} />
     </div>
   );
 };
@@ -133,6 +170,34 @@ export const Icons = {
 
   Github: ({ size = 18, className }: IconProps) => (
     <SiGithub size={size} className={className} />
+  ),
+
+  Lock: ({ size = 18, className }: IconProps) => (
+    <RiLock2Fill size={size} className={className} />
+  ),
+
+  Globe: ({ size = 18, className }: IconProps) => (
+    <FaGlobeAmericas size={size} className={className} />
+  ),
+
+  Building: ({ size = 18, className }: IconProps) => (
+    <BsBuildingsFill size={size} className={className} />
+  ),
+
+  TeamFilled: ({ size = 18, className }: IconProps) => (
+    <FaPeopleGroup size={size} className={className} />
+  ),
+
+  Warning: ({ size = 18, className }: IconProps) => (
+    <TiWarning size={size} className={className} />
+  ),
+
+  Clipboard: ({ size = 18, className }: IconProps) => (
+    <FaClipboardList size={size} className={className} />
+  ),
+
+  Cycle: ({ size = 18, className }: IconProps) => (
+    <GrCycle  size={size} className={className} />
   ),
 };
 
