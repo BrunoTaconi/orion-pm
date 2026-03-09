@@ -145,7 +145,7 @@ export function RequirementsStep({
       <div className="flex justify-end gap-3 mt-4">
         <button
           onClick={back}
-          className="p-2 text-md text-text-secondary hover:text-black cursor-pointer transition"
+          className="p-2 text-text-secondary hover:text-black cursor-pointer transition"
         >
           Back
         </button>

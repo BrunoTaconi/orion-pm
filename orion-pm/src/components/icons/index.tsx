@@ -9,7 +9,12 @@ import { HiOutlineBell } from "react-icons/hi";
 import { HiRocketLaunch } from "react-icons/hi2";
 import { FcGoogle } from "react-icons/fc";
 import { SiGithub } from "react-icons/si";
-import { BsHouse, BsHouseFill, BsBuildingsFill } from "react-icons/bs";
+import {
+  BsHouse,
+  BsHouseFill,
+  BsBuildingsFill,
+  BsKanban,
+} from "react-icons/bs";
 import {
   FaRegStar,
   FaClock,
@@ -34,6 +39,7 @@ import {
   MdOutlineSpaceDashboard,
   MdSpaceDashboard,
   MdSunny,
+  MdOutlineAutoGraph,
 } from "react-icons/md";
 import { HiOutlineUserGroup, HiUserGroup } from "react-icons/hi2";
 import { AiOutlineProject, AiFillProject } from "react-icons/ai";
@@ -43,9 +49,10 @@ import { RiLock2Fill, RiPlantFill } from "react-icons/ri";
 import { TiWarning } from "react-icons/ti";
 import { GrCycle, GrCloudComputer } from "react-icons/gr";
 import { LuSunSnow } from "react-icons/lu";
-import { PiInfinityBold, PiUsersFourFill } from "react-icons/pi";
+import { PiInfinityBold, PiUsersFourFill, PiSpiralBold } from "react-icons/pi";
 import { TbDiamondFilled, TbArrowBarBoth } from "react-icons/tb";
-import { GiGreekTemple } from "react-icons/gi";
+import { GiGreekTemple, GiWaterfall } from "react-icons/gi";
+import { DiScrum } from "react-icons/di";
 
 type IconProps = {
   size?: number;
@@ -294,6 +301,21 @@ export const Icons = {
   ),
   Gear: ({ size = 18, className }: IconProps) => (
     <FaGear size={size} className={className} />
+  ),
+  Waterfall: ({ size = 18, className }: IconProps) => (
+    <GiWaterfall size={size} className={className} />
+  ),
+  Kanban: ({ size = 18, className }: IconProps) => (
+    <BsKanban size={size} className={className} />
+  ),
+  Spiral: ({ size = 18, className }: IconProps) => (
+    <PiSpiralBold size={size} className={className} />
+  ),
+  Incremental: ({ size = 18, className }: IconProps) => (
+    <MdOutlineAutoGraph size={size} className={className} />
+  ),
+  Scrum: ({ size = 18, className }: IconProps) => (
+    <DiScrum size={size} className={className} />
   ),
 };
 

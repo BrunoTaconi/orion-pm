@@ -94,13 +94,13 @@ export type ProjectMock = {
 
 export const projectsMock: ProjectMock[] = [
   {
-    id: "project-1",
+    id: "dd93b263-dedc-4ea2-bc36-f32f7a3dfa73",
     name: "Orion Project Manager",
     description: "Sistema de gerenciamento ágil de projetos",
     methodology: "SCRUM",
-    visibility: "TEAM",
+    visibility: "PUBLIC" as ProjectVisibility,
     ownerId: "user-1",
-    createdAt: new Date(),
+    createdAt: new Date("2026-03-06T18:27:55"),
   },
 ];
 
