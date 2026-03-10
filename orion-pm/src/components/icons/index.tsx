@@ -34,6 +34,7 @@ import {
   FaThumbsDown,
   FaNewspaper,
   FaGear,
+  FaFlag,
 } from "react-icons/fa6";
 import {
   MdOutlineSpaceDashboard,
@@ -318,8 +319,11 @@ export const Icons = {
   Scrum: ({ size = 18, className }: IconProps) => (
     <DiScrum size={size} className={className} />
   ),
-    Blocked: ({ size = 18, className }: IconProps) => (
+  Blocked: ({ size = 18, className }: IconProps) => (
     <ImBlocked size={size} className={className} />
+  ),
+  Flag: ({ size = 18, className }: IconProps) => (
+    <FaFlag size={size} className={className} />
   ),
 };
 

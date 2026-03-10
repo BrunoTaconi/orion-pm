@@ -168,6 +168,11 @@ export const boardsMock: BoardMock[] = [
     projectId: "project-1",
     type: "SCRUM",
   },
+  {
+    id: "board-2",
+    projectId: "dd93b263-dedc-4ea2-bc36-f32f7a3dfa73",
+    type: "SCRUM",
+  },
 ];
 
 export type ColumnMock = {
@@ -179,16 +184,10 @@ export type ColumnMock = {
 };
 
 export const columnsMock: ColumnMock[] = [
-  { id: "col-1", boardId: "board-1", name: "Backlog", order: 1 },
-  { id: "col-2", boardId: "board-1", name: "To Do", order: 2 },
-  {
-    id: "col-3",
-    boardId: "board-1",
-    name: "In Progress",
-    order: 3,
-    wipLimit: 3,
-  },
-  { id: "col-4", boardId: "board-1", name: "Done", order: 4 },
+  { id: "col-2-1", boardId: "board-2", name: "To Do", order: 1 },
+  { id: "col-2-2", boardId: "board-2", name: "In Progress", order: 2 },
+  { id: "col-2-3", boardId: "board-2", name: "In Review", order: 3 },
+  { id: "col-2-4", boardId: "board-2", name: "Done", order: 4 },
 ];
 
 //////////////////////////////////////////////////////
@@ -281,6 +280,7 @@ export const workItemsMock: WorkItemMock[] = [
     storyPoints: 8,
     sprintId: "sprint-2",
     assigneeId: "user-1",
+    columnId: "col-2-4",
     createdAt: new Date(),
   },
   {
@@ -293,7 +293,8 @@ export const workItemsMock: WorkItemMock[] = [
     priority: "MEDIUM",
     storyPoints: 5,
     sprintId: "sprint-2",
-    assigneeId: "user-2", 
+    assigneeId: "user-2",
+    columnId: "col-2-3",
     createdAt: new Date(),
   },
   {
@@ -306,7 +307,8 @@ export const workItemsMock: WorkItemMock[] = [
     priority: "CRITICAL",
     storyPoints: 3,
     sprintId: "sprint-2",
-    assigneeId: "user-1", 
+    assigneeId: "user-1",
+    columnId: "col-2-3",
     createdAt: new Date(),
   },
 ];

@@ -74,6 +74,16 @@ export default function ProjectDashboardPage({
   const formatDate = (date: Date) =>
     date.toLocaleDateString("en-US", { day: "2-digit", month: "short" });
 
+  // Ajustes tela Dashboard
+  // Adicionar funcionalidade correta de botão "Go to Backlog" ir para o Backlog, 
+  // "See All events" (ver o que fazer com ele, como eu veria os eventos ou mapearia eles).
+  // Calculo de quantos dias faltam para o fim da sprint caso ela ainda esteja em progresso, caso esteja finalizada texto será "Sprint finished". 
+  // Eventos tão passados na mão que nem outras coisas, ver como ficará isso em termos de back e banco (isso para tudo até agora). 
+  // Alertas estão na mão também, ver como vamos calcular esses pontos de atenção.
+  //  Card de Team Workload seria bacana pegar a foto do usuario e exibir ali e só caso não tenaha colocar a letra
+  // Colocar cards no fim de convidar membros e criar novo item ou algo do tipo que seja util
+
+
   return (
     <div className="flex flex-col gap-6 w-full max-w-6xl mx-auto pb-8">
       {" "}
