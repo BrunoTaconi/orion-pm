@@ -35,15 +35,15 @@ export default function DashboardClient({
         break;
 
       case "create-team":
-        router.push("/teams/create");
+        router.push("/teams/create"); 
         break;
 
       case "enter-project":
-        router.push(`/projects/${payload?.id}`);
+        router.push(`/project/${payload?.id}/dashboard`);
         break;
 
       case "enter-team":
-        router.push(`/teams/${payload?.id}`);
+        router.push(`/teams/${payload?.id}`); 
         break;
     }
   };

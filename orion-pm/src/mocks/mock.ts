@@ -94,11 +94,20 @@ export type ProjectMock = {
 
 export const projectsMock: ProjectMock[] = [
   {
-    id: "dd93b263-dedc-4ea2-bc36-f32f7a3dfa73",
+    id: "project-1",
     name: "Orion Project Manager",
     description: "Sistema de gerenciamento ágil de projetos",
     methodology: "SCRUM",
-    visibility: "PUBLIC" as ProjectVisibility,
+    visibility: "TEAM",
+    ownerId: "user-1",
+    createdAt: new Date(),
+  },
+  {
+    id: "dd93b263-dedc-4ea2-bc36-f32f7a3dfa73",
+    name: "Test Project",
+    description: "Testing the wizard creation",
+    methodology: "SCRUM",
+    visibility: "PUBLIC",
     ownerId: "user-1",
     createdAt: new Date("2026-03-06T18:27:55"),
   },
@@ -204,6 +213,14 @@ export const sprintsMock: SprintMock[] = [
     endDate: new Date(new Date().setDate(new Date().getDate() + 14)),
     status: "ACTIVE",
   },
+  {
+    id: "sprint-2",
+    projectId: "dd93b263-dedc-4ea2-bc36-f32f7a3dfa73", // ID do Test Project
+    name: "Sprint 1",
+    startDate: new Date(),
+    endDate: new Date(new Date().setDate(new Date().getDate() + 14)), // Daqui a 14 dias
+    status: "ACTIVE",
+  },
 ];
 
 //////////////////////////////////////////////////////
@@ -251,6 +268,45 @@ export const workItemsMock: WorkItemMock[] = [
     sprintId: "sprint-1",
     columnId: "col-2",
     assigneeId: "user-3",
+    createdAt: new Date(),
+  },
+  {
+    id: "wi-3",
+    projectId: "dd93b263-dedc-4ea2-bc36-f32f7a3dfa73",
+    title: "Configurar banco de dados",
+    description: "Subir o Prisma e o Postgres",
+    type: "STORY",
+    status: "DONE",
+    priority: "HIGH",
+    storyPoints: 8,
+    sprintId: "sprint-2",
+    assigneeId: "user-1",
+    createdAt: new Date(),
+  },
+  {
+    id: "wi-4",
+    projectId: "dd93b263-dedc-4ea2-bc36-f32f7a3dfa73",
+    title: "Criar tela de Board",
+    description: "Fazer o drag and drop do Kanban",
+    type: "STORY",
+    status: "IN_PROGRESS",
+    priority: "MEDIUM",
+    storyPoints: 5,
+    sprintId: "sprint-2",
+    assigneeId: "user-2", 
+    createdAt: new Date(),
+  },
+  {
+    id: "wi-5",
+    projectId: "dd93b263-dedc-4ea2-bc36-f32f7a3dfa73",
+    title: "Corrigir responsividade",
+    description: "Header quebrando no mobile",
+    type: "BUG",
+    status: "IN_PROGRESS",
+    priority: "CRITICAL",
+    storyPoints: 3,
+    sprintId: "sprint-2",
+    assigneeId: "user-1", 
     createdAt: new Date(),
   },
 ];

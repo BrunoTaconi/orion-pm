@@ -53,6 +53,7 @@ import { PiInfinityBold, PiUsersFourFill, PiSpiralBold } from "react-icons/pi";
 import { TbDiamondFilled, TbArrowBarBoth } from "react-icons/tb";
 import { GiGreekTemple, GiWaterfall } from "react-icons/gi";
 import { DiScrum } from "react-icons/di";
+import { ImBlocked } from "react-icons/im";
 
 type IconProps = {
   size?: number;
@@ -316,6 +317,9 @@ export const Icons = {
   ),
   Scrum: ({ size = 18, className }: IconProps) => (
     <DiScrum size={size} className={className} />
+  ),
+    Blocked: ({ size = 18, className }: IconProps) => (
+    <ImBlocked size={size} className={className} />
   ),
 };
 

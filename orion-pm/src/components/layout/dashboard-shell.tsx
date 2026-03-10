@@ -13,14 +13,14 @@ export default function DashboardShell({
 
   return (
     <WorkspaceProvider>
-      <div className="flex min-h-screen bg-bg-primary">
+      <div className="flex h-screen overflow-hidden w-full bg-bg-primary">
         <Sidebar
           isCollapsed={isCollapsed}
           onToggle={() => setIsCollapsed(!isCollapsed)}
         />
 
-        <main className="flex-1">
-          <div className="p-6">{children}</div>
+        <main className="flex-1 flex flex-col h-full overflow-hidden p-6">
+          {children}
         </main>
       </div>
     </WorkspaceProvider>
