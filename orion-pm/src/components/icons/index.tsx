@@ -44,17 +44,23 @@ import {
 } from "react-icons/md";
 import { HiOutlineUserGroup, HiUserGroup } from "react-icons/hi2";
 import { AiOutlineProject, AiFillProject } from "react-icons/ai";
-import { IoMenu, IoPeopleOutline, IoExtensionPuzzle } from "react-icons/io5";
+import {
+  IoMenu,
+  IoPeopleOutline,
+  IoExtensionPuzzle,
+  IoBulbSharp,
+} from "react-icons/io5";
 import { MdAdd, MdPeopleAlt, MdOutlineMenuBook } from "react-icons/md";
 import { RiLock2Fill, RiPlantFill } from "react-icons/ri";
 import { TiWarning } from "react-icons/ti";
 import { GrCycle, GrCloudComputer } from "react-icons/gr";
-import { LuSunSnow } from "react-icons/lu";
+import { LuSunSnow, LuBug } from "react-icons/lu";
 import { PiInfinityBold, PiUsersFourFill, PiSpiralBold } from "react-icons/pi";
 import { TbDiamondFilled, TbArrowBarBoth } from "react-icons/tb";
 import { GiGreekTemple, GiWaterfall } from "react-icons/gi";
 import { DiScrum } from "react-icons/di";
 import { ImBlocked } from "react-icons/im";
+import { BiTask } from "react-icons/bi";
 
 type IconProps = {
   size?: number;
@@ -324,6 +330,15 @@ export const Icons = {
   ),
   Flag: ({ size = 18, className }: IconProps) => (
     <FaFlag size={size} className={className} />
+  ),
+  Bug: ({ size = 18, className }: IconProps) => (
+    <LuBug size={size} className={className} />
+  ),
+  Bulb: ({ size = 18, className }: IconProps) => (
+    <IoBulbSharp size={size} className={className} />
+  ),
+  Task: ({ size = 18, className }: IconProps) => (
+    <BiTask size={size} className={className} />
   ),
 };
 

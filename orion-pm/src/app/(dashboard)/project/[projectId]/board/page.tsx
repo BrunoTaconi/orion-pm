@@ -16,6 +16,7 @@ import {
   Droppable,
   DropResult,
 } from "@hello-pangea/dnd";
+import { Priority, WorkItemType } from "@prisma/client";
 import { use, useEffect, useState } from "react";
 
 export default function BoardPage({
@@ -28,6 +29,8 @@ export default function BoardPage({
 
   const [isMounted, setIsMounted] = useState(false);
   const [tasks, setTasks] = useState<WorkItemMock[]>([]);
+
+  const [editingPointsId, setEditingPointsId] = useState<string | null>(null);
 
   const board = boardsMock.find((board) => board.projectId === projectId);
   const columns = columnsMock
@@ -68,13 +71,37 @@ export default function BoardPage({
 
     const updateTask = { ...draggedTask, columnId: destination.droppableId };
 
-    // const destinationTasks = newTasks.filter(
-    //   (task) => task.columnId === destination.droppableId,
-    // );
-
     newTasks.push(updateTask); //api will be called here later
 
     setTasks(newTasks);
+  };
+
+  const handleUpdateType = (taskId: string, newType: WorkItemType) => {
+    //todo: chamar api de put
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === taskId ? { ...task, type: newType } : task,
+      ),
+    );
+  };
+
+  const handleUpdatePriority = (taskId: string, newPriority: Priority) => {
+    //todo: chamar api de put
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === taskId ? { ...task, priority: newPriority } : task,
+      ),
+    );
+  };
+
+  const handleUpdateStoryPoints = (taskId: string, newPoints: number) => {
+    //todo: chamar api de put
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === taskId ? { ...task, storyPoints: newPoints } : task,
+      ),
+    );
+    setEditingPointsId(null);
   };
 
   const getPriorityStyle = (priority: string) => {
@@ -82,22 +109,22 @@ export default function BoardPage({
       case "CRITICAL":
         return {
           label: "priority critical",
-          style: "bg-red-100 text-red-700",
+          style: "bg-red-100 text-red-600",
         };
       case "HIGH":
         return {
           label: "priority high",
-          style: "bg-orange-100 text-orange-700",
+          style: "bg-orange-100 text-orange-600",
         };
       case "MEDIUM":
         return {
           label: "priority medium",
-          style: "bg-yellow-100 text-yellow-700",
+          style: "bg-yellow-100 text-yellow-600",
         };
       case "LOW":
         return {
           label: "priority low",
-          style: "bg-green-100 text-green-700",
+          style: "bg-green-100 text-green-600",
         };
       default:
         return null;
@@ -107,13 +134,13 @@ export default function BoardPage({
   const getTypeColor = (type: string) => {
     switch (type) {
       case "STORY":
-        return "bg-green-100 text-green-700";
+        return "bg-yellow-100 text-yellow-600";
       case "BUG":
         return "bg-red-100 text-red-700";
       case "TASK":
         return "bg-blue-100 text-blue-700";
       case "SPIKE":
-        return "bg-yellow-100 text-yellow-600";
+        return "bg-bg-light-purple text-purple-icon";
       default:
         return "bg-gray-100 text-gray-700";
     }
@@ -135,79 +162,6 @@ export default function BoardPage({
         return "bg-gray-100 text-gray-700";
     }
   };
-
-  const storyPointOptions: SelectOption[] = [
-    {
-      value: "1",
-      label: "1",
-      icon: "Favorite",
-      iconColor: "text-yellow-icon",
-      iconBgColor: "bg-bg-light-yellow",
-    },
-    {
-      value: "2",
-      label: "2",
-      icon: "Favorite",
-      iconColor: "text-yellow-icon",
-      iconBgColor: "bg-bg-light-yellow",
-    },
-    {
-      value: "3",
-      label: "3",
-      icon: "Favorite",
-      iconColor: "text-yellow-icon",
-      iconBgColor: "bg-bg-light-yellow",
-    },
-    {
-      value: "4",
-      label: "4",
-      icon: "Favorite",
-      iconColor: "text-yellow-icon",
-      iconBgColor: "bg-bg-light-yellow",
-    },
-    {
-      value: "5",
-      label: "5",
-      icon: "Favorite",
-      iconColor: "text-yellow-icon",
-      iconBgColor: "bg-bg-light-yellow",
-    },
-    {
-      value: "6",
-      label: "6",
-      icon: "Favorite",
-      iconColor: "text-yellow-icon",
-      iconBgColor: "bg-bg-light-yellow",
-    },
-    {
-      value: "7",
-      label: "7",
-      icon: "Favorite",
-      iconColor: "text-yellow-icon",
-      iconBgColor: "bg-bg-light-yellow",
-    },
-    {
-      value: "7",
-      label: "7",
-      icon: "Favorite",
-      iconColor: "text-yellow-icon",
-      iconBgColor: "bg-bg-light-yellow",
-    },
-    {
-      value: "8",
-      label: "8",
-      icon: "Favorite",
-      iconColor: "text-yellow-icon",
-      iconBgColor: "bg-bg-light-yellow",
-    },
-    {
-      value: "9",
-      label: "9",
-      icon: "Favorite",
-      iconColor: "text-yellow-icon",
-      iconBgColor: "bg-bg-light-yellow",
-    },
-  ];
 
   if (!isMounted) return null;
 
@@ -266,12 +220,6 @@ export default function BoardPage({
                       );
                       const priority = getPriorityStyle(task.priority);
 
-                      function updateProjectData(arg0: {
-                        teamId: string;
-                      }): void {
-                        throw new Error("Function not implemented.");
-                      }
-
                       return (
                         <Draggable
                           key={task.id}
@@ -290,11 +238,41 @@ export default function BoardPage({
                               }`}
                             >
                               <div className="flex items-start justify-between gap-2">
-                                <span
-                                  className={`text-[10px] font-bold px-2 py-0.5 rounded-sm ${getTypeColor(task.type)}`}
+                                <select
+                                  value={task.type}
+                                  onChange={(e) =>
+                                    handleUpdateType(
+                                      task.id,
+                                      e.target.value as WorkItemType,
+                                    )
+                                  }
+                                  className={`appearance-none flex justify-center text-[10px] font-bold px-2 py-0.5 rounded-sm outline-none cursor-pointer transition-colors ${getTypeColor(task.type)}`}
                                 >
-                                  {task.type}
-                                </span>
+                                  <option
+                                    value="STORY"
+                                    className="bg-bg-primary text-text-primary font-medium"
+                                  >
+                                    STORY
+                                  </option>
+                                  <option
+                                    value="BUG"
+                                    className="bg-bg-primary text-text-primary font-medium"
+                                  >
+                                    BUG
+                                  </option>
+                                  <option
+                                    value="TASK"
+                                    className="bg-bg-primary text-text-primary font-medium"
+                                  >
+                                    TASK
+                                  </option>
+                                  <option
+                                    value="SPIKE"
+                                    className="bg-bg-primary text-text-primary font-medium"
+                                  >
+                                    SPIKE
+                                  </option>
+                                </select>
                               </div>
 
                               <p className="text-sm font-medium text-text-primary leading-tight">
@@ -307,39 +285,79 @@ export default function BoardPage({
                                     {task.id}
                                   </p>
 
-                                  <span
-                                    className={`text-xs font-bold px-2 py-0.5 rounded-sm ${priority?.style}`}
+                                  {/* --- PRIORIDADE INLINE COM O SEU LABEL --- */}
+                                  <div
+                                    className="relative cursor-pointer hover:opacity-80 transition-opacity inline-block"
+                                    title={`Priority: ${task.priority}`}
                                   >
-                                    {priority?.label}
-                                  </span>
+                                    <select
+                                      value={task.priority}
+                                      onChange={(e) =>
+                                        handleUpdatePriority(
+                                          task.id,
+                                          e.target.value as Priority,
+                                        )
+                                      }
+                                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full "
+                                    >
+                                      <option value="LOW">Low</option>
+                                      <option value="MEDIUM">Medium</option>
+                                      <option value="HIGH">High</option>
+                                      <option value="CRITICAL">Critical</option>
+                                    </select>
+                                    <span
+                                      className={`text-xs font-bold px-2 py-1 rounded-sm ${priority?.style}`}
+                                    >
+                                      {priority?.label}
+                                    </span>
+                                  </div>
                                 </div>
 
                                 <div className="flex items-center gap-3">
-                                  {task.storyPoints && (
-                                    <div className="flex items-center gap-1.5 text-sm text-text-secondary font-medium bg-bg-secondary px-1.5 py-1 rounded">
+                                  {editingPointsId === task.id ? (
+                                    <input
+                                      type="number"
+                                      autoFocus
+                                      defaultValue={task.storyPoints || ""}
+                                      className="w-10 h-6 text-xs bg-bg-primary border border-accent-primary rounded px-1 outline-none text-text-primary font-medium"
+                                      onBlur={(e) =>
+                                        handleUpdateStoryPoints(
+                                          task.id,
+                                          Number(e.target.value),
+                                        )
+                                      }
+                                      onKeyDown={(e) => {
+                                        if (e.key === "Enter")
+                                          handleUpdateStoryPoints(
+                                            task.id,
+                                            Number(e.currentTarget.value),
+                                          );
+                                        if (e.key === "Escape")
+                                          setEditingPointsId(null);
+                                      }}
+                                    />
+                                  ) : (
+                                    <div
+                                      onClick={() =>
+                                        setEditingPointsId(task.id)
+                                      }
+                                      className="flex items-center gap-1 text-xs text-text-secondary font-medium bg-bg-secondary hover:bg-bg-primary hover:border-bg-darker border border-transparent px-1.5 py-0.5 rounded cursor-pointer transition-colors"
+                                      title="Click to edit Story Points"
+                                    >
                                       <Icons.Favorite
-                                        size={14}
+                                        size={12}
                                         className="text-yellow-500"
                                         filled
                                       />
-                                      {task.storyPoints}
-                                      <Select
-                                        label=""
-                                        options={storyPointOptions}
-                                        value={task.storyPoints}
-                                        onChange={(value) =>
-                                          updateProjectData({ teamId: value })
-                                        }
-                                        placeholder=""
-                                      />
+                                      {task.storyPoints || "-"}
                                     </div>
                                   )}
                                   {assignee ? (
                                     <div
                                       title={assignee.name}
-                                      className="w-7 h-7 rounded-full bg-blue-500 flex items-center justify-center text-sm font-bold text-white uppercase"
+                                      className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-xs font-normal text-white uppercase"
                                     >
-                                      {assignee.name.charAt(0)}
+                                      {assignee.name.charAt(0)}{assignee.name.charAt(0)}
                                     </div>
                                   ) : (
                                     <div className="w-6 h-6 rounded-full bg-bg-secondary border border-dashed border-border flex items-center justify-center text-text-secondary">
@@ -360,11 +378,6 @@ export default function BoardPage({
             </Droppable>
           );
         })}
-
-        {/* <button className="flex items-center justify-center gap-2 bg-transparent border-2 border-dashed border-border hover:border-accent-primary hover:text-accent-primary hover:bg-bg-primary text-text-secondary rounded-xl w-80 shrink-0 h-16 transition-all font-medium text-sm">
-          <Icons.ThumbsUp size={16} />
-          Add Column
-        </button> */}
       </div>
     </DragDropContext>
   );
