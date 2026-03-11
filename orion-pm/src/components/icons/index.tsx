@@ -117,7 +117,7 @@ export const BoxedIcon = ({
 
   return (
     <div
-      className={`flex items-center justify-center w-6 h-6 rounded ${bgColor} ${className}`}
+      className={`flex items-center justify-center p-1 rounded ${bgColor} ${className}`}
     >
       <BaseIcon size={size} className={iconColor} />
     </div>

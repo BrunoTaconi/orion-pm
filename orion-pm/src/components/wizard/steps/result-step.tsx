@@ -198,7 +198,7 @@ export default function ResultStep({
                     icon={reason.icon as any}
                     bgColor={reason.bgColor}
                     iconColor={reason.iconColor}
-                    size={16}
+                    size={20}
                   />
                   <span className="text-sm text-text-primary leading-tight">
                     {reason.text}
@@ -249,7 +249,7 @@ export default function ResultStep({
           </button>
           <button
             onClick={() => createProject(result)}
-            className="bg-accent-primary text-bg-primary py-2 px-4 rounded-sm cursor-pointer hover:bg-blue-700 transition"
+            className="bg-accent-primary text-bg-primary py-2 px-4 rounded-sm cursor-pointer hover:bg-blue-700 transition font-medium"
           >
             Accept recommendation and create project
           </button>

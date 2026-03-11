@@ -164,6 +164,7 @@ export default function ProjectProfileStep({
         cursor-pointer
         hover:bg-blue-700
         transition
+        font-medium
         "
           onClick={next}
         >

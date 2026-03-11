@@ -152,7 +152,9 @@ export default function RisksStep({
         rounded-sm
         cursor-pointer
         hover:bg-blue-700
-        transition"
+        transition
+        font-medium
+        "
         >
           Next
         </button>

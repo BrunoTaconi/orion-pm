@@ -4,7 +4,7 @@ import { BoxedIcon, Icons } from "../icons";
 import { IoChevronDown } from "react-icons/io5";
 
 export type SelectOption = {
-  value: string;
+  value: string | number;
   label: string;
   icon?: keyof typeof Icons;
   iconColor?: string;

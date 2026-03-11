@@ -158,6 +158,7 @@ export default function TeamStep({
         cursor-pointer
         hover:bg-blue-700
         transition
+        font-medium
         "
           onClick={next}
         >

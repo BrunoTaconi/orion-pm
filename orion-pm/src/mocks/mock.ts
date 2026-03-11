@@ -187,7 +187,8 @@ export const columnsMock: ColumnMock[] = [
   { id: "col-2-1", boardId: "board-2", name: "To Do", order: 1 },
   { id: "col-2-2", boardId: "board-2", name: "In Progress", order: 2 },
   { id: "col-2-3", boardId: "board-2", name: "In Review", order: 3 },
-  { id: "col-2-4", boardId: "board-2", name: "Done", order: 4 },
+  { id: "col-2-4", boardId: "board-2", name: "In Validation", order: 4 },
+  { id: "col-2-5", boardId: "board-2", name: "Done", order: 5 },
 ];
 
 //////////////////////////////////////////////////////
@@ -214,10 +215,10 @@ export const sprintsMock: SprintMock[] = [
   },
   {
     id: "sprint-2",
-    projectId: "dd93b263-dedc-4ea2-bc36-f32f7a3dfa73", // ID do Test Project
+    projectId: "dd93b263-dedc-4ea2-bc36-f32f7a3dfa73", 
     name: "Sprint 1",
     startDate: new Date(),
-    endDate: new Date(new Date().setDate(new Date().getDate() + 14)), // Daqui a 14 dias
+    endDate: new Date(new Date().setDate(new Date().getDate() + 14)),
     status: "ACTIVE",
   },
 ];
@@ -309,6 +310,20 @@ export const workItemsMock: WorkItemMock[] = [
     sprintId: "sprint-2",
     assigneeId: "user-1",
     columnId: "col-2-3",
+    createdAt: new Date(),
+  },
+  {
+    id: "wi-6",
+    projectId: "dd93b263-dedc-4ea2-bc36-f32f7a3dfa73",
+    title: "Ajustar tela de Board",
+    description: "Tela de Board com divergências de layout",
+    type: "SPIKE",
+    status: "IN_PROGRESS",
+    priority: "LOW",
+    storyPoints: 3,
+    sprintId: "sprint-2",
+    assigneeId: "user-1",
+    columnId: "col-2-5",
     createdAt: new Date(),
   },
 ];

@@ -19,7 +19,7 @@ export default function DashboardShell({
           onToggle={() => setIsCollapsed(!isCollapsed)}
         />
 
-        <main className="flex-1 flex flex-col h-full overflow-hidden p-6">
+        <main className="flex-1 flex flex-col h-full overflow-auto p-6">
           {children}
         </main>
       </div>
