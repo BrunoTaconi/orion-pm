@@ -111,7 +111,6 @@ export function RequirementsStep({
         <h2 className="text-lg font-normal">3. Requirements and Formality</h2>
       </div>
 
-      {/* ADICIONADO O items-end AQUI EMBAIXO 👇 */}
       <div className="grid grid-cols-2 gap-x-6 gap-y-12 mb-6 items-end">
         <Select
           label="Does the customer know exactly what they want?"

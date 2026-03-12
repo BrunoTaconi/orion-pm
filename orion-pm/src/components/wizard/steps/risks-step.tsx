@@ -45,13 +45,10 @@ export default function RisksStep({
     { value: "regulations", label: "Regulations" },
   ];
 
-  // Garante que é um array, mesmo que comece undefined
   const currentRisks = data.identifiableRisks || [];
 
-  // Função para adicionar ou remover riscos do array (Múltipla escolha)
   const handleRiskToggle = (riskValue: string) => {
     if (currentRisks.includes(riskValue as any)) {
-      // 'as any' previne erro de tipagem caso o TS reclame de string vs string[]
       updateData({
         identifiableRisks: (currentRisks as any).filter(
           (r: string) => r !== riskValue,
@@ -71,7 +68,6 @@ export default function RisksStep({
       </div>
 
       <div className="grid grid-cols-2 gap-x-6 gap-y-6">
-        {/* Left Column */}
         <div className="flex flex-col gap-6">
           <Select
             label="Technical complexity of the project"
@@ -105,7 +101,6 @@ export default function RisksStep({
           </div>
         </div>
 
-        {/* Right Column */}
         <div className="flex flex-col gap-2 w-full">
           <label className="text-md font-semibold text-text-primary mb-1">
             Use of new technology?

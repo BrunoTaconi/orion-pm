@@ -253,7 +253,7 @@ export default function BoardPage({
                                         e.target.value as WorkItemType,
                                       )
                                     }
-                                    className={`appearance-none flex text-xs font-bold px-2 py-0.5 rounded-sm outline-none cursor-pointer transition-colors ${getTypeColor(task.type)}`}
+                                    className={`appearance-none flex text-xs font-bold px-2 py-0.5 rounded-sm outline-none cursor-pointer hover:opacity-80 transition-opacity ${getTypeColor(task.type)}`}
                                   >
                                     <option
                                       value="STORY"
@@ -292,7 +292,6 @@ export default function BoardPage({
                                       {task.id}
                                     </p>
 
-                                    {/* --- PRIORIDADE INLINE COM O SEU LABEL --- */}
                                     <div
                                       className="relative cursor-pointer hover:opacity-80 transition-opacity inline-block"
                                       title={`Priority: ${task.priority}`}
