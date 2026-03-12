@@ -3,7 +3,6 @@
 import EditTask from "@/components/board/EditTask";
 import { Icons } from "@/components/icons";
 import Modal from "@/components/ui/modal";
-import Select, { SelectOption } from "@/components/ui/select";
 import {
   boardsMock,
   columnsMock,
@@ -18,12 +17,11 @@ import {
   Droppable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { Priority, WorkItemType } from "@prisma/client";
 import { use, useEffect, useState } from "react";
 import {
   getColumnStyle,
+  getMinimizedTypeDetails,
   getPriorityDetails,
-  getTypeDetails,
 } from "@/utils/board-utils";
 
 export default function BoardPage({
@@ -32,6 +30,7 @@ export default function BoardPage({
   params: Promise<{ projectId: string }>;
 }) {
   const [selectedTask, setSelectedTask] = useState<WorkItemMock | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
 
   const resolvedParams = use(params);
   const projectId = resolvedParams.projectId;
@@ -48,6 +47,19 @@ export default function BoardPage({
   const activeSprint = sprintsMock.find(
     (sprint) => sprint.projectId === projectId && sprint.status === "ACTIVE",
   );
+
+  const handleCreateTask = (columnId: string) => {
+    const newTask: Partial<WorkItemMock> = {
+      title: "New Task",
+      projectId: projectId,
+      type: "TASK",
+      priority: "MEDIUM",
+      columnId: columnId,
+      sprintId: activeSprint?.id,
+    };
+    setSelectedTask(newTask as WorkItemMock);
+    setIsCreating(true);
+  };
 
   useEffect(() => {
     setIsMounted(true);
@@ -83,24 +95,6 @@ export default function BoardPage({
     newTasks.push(updateTask); //api will be called here later
 
     setTasks(newTasks);
-  };
-
-  const handleUpdateType = (taskId: string, newType: WorkItemType) => {
-    //todo: chamar api de put
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === taskId ? { ...task, type: newType } : task,
-      ),
-    );
-  };
-
-  const handleUpdatePriority = (taskId: string, newPriority: Priority) => {
-    //todo: chamar api de put
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === taskId ? { ...task, priority: newPriority } : task,
-      ),
-    );
   };
 
   const handleUpdateStoryPoints = (taskId: string, newPoints: number) => {
@@ -160,7 +154,10 @@ export default function BoardPage({
                           {columnTasks.length}
                         </span>
                       </div>
-                      <button className="text-text-secondary hover:text-text-primary transition-colors cursor-pointer">
+                      <button
+                        onClick={() => handleCreateTask(column.id)}
+                        className="text-text-secondary hover:text-text-primary transition-colors cursor-pointer"
+                      >
                         <Icons.Add size={16} />
                       </button>
                     </div>
@@ -171,11 +168,9 @@ export default function BoardPage({
                           (user) => user.id === task.assigneeId,
                         );
 
-                        // Buscando as informações visuais dinâmicas usando os Utils
                         const priorityInfo = getPriorityDetails(task.priority);
-                        const typeInfo = getTypeDetails(task.type);
+                        const typeInfo = getMinimizedTypeDetails(task.type);
 
-                        // Resgatando o ícone dinâmico do tipo da tarefa
                         const TypeIcon =
                           Icons[typeInfo.icon as keyof typeof Icons];
 
@@ -198,9 +193,8 @@ export default function BoardPage({
                                 }`}
                               >
                                 <div className="flex items-start justify-between gap-2">
-                                  {/* --- TYPE INLINE COM ÍCONE DINÂMICO --- */}
                                   <div className="relative cursor-pointer hover:opacity-80 transition-opacity inline-block">
-                                    <select
+                                    {/* <select
                                       onClick={(e) => e.stopPropagation()}
                                       value={task.type}
                                       onChange={(e) =>
@@ -218,20 +212,20 @@ export default function BoardPage({
                                       <option value="TECH_DEBT">
                                         TECH DEBT
                                       </option>
-                                    </select>
+                                    </select> */}
                                     {/* A "Badge" que aparece por baixo com as cores utilitárias */}
                                     <div
-                                      className={`flex items-center gap-1.5 text-[10px] font-bold px-2 py-0.5 rounded-sm ${typeInfo.iconBgColor} ${typeInfo.iconColor}`}
+                                      className={`p-1 rounded-sm ${typeInfo.iconBgColor} ${typeInfo.iconColor}`}
                                     >
-                                      {TypeIcon && <TypeIcon size={12} />}
-                                      <span className="uppercase">
+                                      {TypeIcon && <TypeIcon size={16} />}
+                                      {/* <span className="uppercase">
                                         {typeInfo.label}
-                                      </span>
+                                      </span> */}
                                     </div>
                                   </div>
                                 </div>
 
-                                <p className="text-sm font-medium text-text-primary leading-tight">
+                                <p className="text-md font-medium text-text-primary leading-tight">
                                   {task.title}
                                 </p>
 
@@ -247,7 +241,7 @@ export default function BoardPage({
                                       title={`Priority: ${task.priority}`}
                                       onClick={(e) => e.stopPropagation()}
                                     >
-                                      <select
+                                      {/* <select
                                         value={task.priority}
                                         onChange={(e) =>
                                           handleUpdatePriority(
@@ -263,9 +257,9 @@ export default function BoardPage({
                                         <option value="CRITICAL">
                                           Critical
                                         </option>
-                                      </select>
+                                      </select> */}
                                       <span
-                                        className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-sm ${priorityInfo.iconBgColor} ${priorityInfo.iconColor}`}
+                                        className={`text-xs uppercase font-bold px-2 py-0.5 rounded-sm ${priorityInfo.iconBgColor} ${priorityInfo.iconColor}`}
                                       >
                                         {priorityInfo.label}
                                       </span>
@@ -279,7 +273,7 @@ export default function BoardPage({
                                         type="number"
                                         autoFocus
                                         defaultValue={task.storyPoints || ""}
-                                        className="w-10 h-6 text-xs bg-bg-primary border border-accent-primary rounded px-1 outline-none text-text-primary font-medium"
+                                        className="w-10 h-6 text-sm bg-bg-primary border border-accent-primary rounded px-1 outline-none text-text-primary font-medium"
                                         onBlur={(e) =>
                                           handleUpdateStoryPoints(
                                             task.id,
@@ -302,7 +296,7 @@ export default function BoardPage({
                                           e.stopPropagation();
                                           setEditingPointsId(task.id);
                                         }}
-                                        className="flex items-center gap-1 text-xs text-text-secondary font-medium bg-bg-secondary hover:bg-bg-primary hover:border-bg-darker border border-transparent px-1.5 py-0.5 rounded cursor-pointer transition-colors"
+                                        className="flex items-center gap-1 text-sm text-text-secondary font-medium bg-bg-secondary hover:bg-bg-primary hover:border-bg-darker border border-transparent px-1.5 py-0.5 rounded cursor-pointer transition-colors"
                                         title="Click to edit Story Points"
                                       >
                                         <Icons.Favorite
@@ -317,7 +311,7 @@ export default function BoardPage({
                                       <div
                                         onClick={(e) => e.stopPropagation()}
                                         title={assignee.name}
-                                        className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-[10px] font-bold text-white uppercase"
+                                        className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold text-white uppercase"
                                       >
                                         {assignee.name.charAt(0)}
                                       </div>
@@ -344,10 +338,15 @@ export default function BoardPage({
       </DragDropContext>
 
       <Modal
-        title={selectedTask?.id || "Task Details"}
+        title={
+          isCreating ? "Create New Task" : selectedTask?.id || "Task Details"
+        }
         isOpen={!!selectedTask}
-        onClose={() => setSelectedTask(null)}
-        size="xxl"
+        onClose={() => {
+          setSelectedTask(null);
+          setIsCreating(false);
+        }}
+        size="3xl"
         titleSize="text-md"
         padding="p-6"
         closeOnOverlayClick={true}

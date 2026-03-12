@@ -1,10 +1,8 @@
 import {
   commentsMock,
-  Priority,
   sprintsMock,
   usersMock,
   WorkItemMock,
-  WorkItemType,
 } from "@/mocks/mock";
 import { useState } from "react";
 import Input from "../ui/input";
@@ -29,7 +27,6 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
   const [newCriteria, setNewCriteria] = useState("");
   const [newComment, setNewComment] = useState("");
 
-  const assignee = usersMock.find((user) => user.id === task?.assigneeId);
   const sprint = sprintsMock.find((sprint) => sprint.id === task.sprintId);
   const taskComments = commentsMock.filter(
     (comment) => comment.workItemId === task.id,
@@ -41,6 +38,7 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
       label: "Unassigned",
       icon: "User",
       iconBgColor: "bg-gray-200",
+      iconSize: 14,
     },
     ...usersMock.map((user) => ({
       value: user.id,
@@ -48,6 +46,7 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
       icon: "User" as const,
       iconColor: "text-white",
       iconBgColor: "bg-blue-500",
+      iconSize: 14,
     })),
   ];
 
@@ -84,24 +83,27 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
     updateField("acceptanceCriteria", updatedCriteria);
   };
 
+  //colocar max-h no select e poder pesquisar usuarios porque poderiam ter muitos
+  //ajustar scrollbar tirando o radius do modal (tentar colocar interno)
+//fazer modal de adicionar tarefa 
+
   return (
     <>
-      <div className="flex flex-col md:flex-row items-start gap-6">
+      <div className="flex items-center gap-4 border-b border-border pb-4 ">
+        <h2 className="text-xl font-bold text-text-primary pt-1 ">
+          {task.title}
+        </h2>
+        <div className="w-40">
+          <Select
+            label=""
+            options={TASK_TYPE_OPTIONS}
+            value={task.type}
+            onChange={(value) => updateField("type", value)}
+          />
+        </div>
+      </div>
+      <div className="flex flex-col md:flex-row items-start gap-6 mt-4 ">
         <div className="flex flex-col gap-6 flex-1 w-full text-text-primary">
-          <div className="flex items-center gap-4 border-b border-border pb-4">
-            <h2 className="text-lg font-bold text-text-primary pt-1">
-              {task.title}
-            </h2>
-            <div className="w-40">
-              <Select
-                label=""
-                options={TASK_TYPE_OPTIONS}
-                value={task.type}
-                onChange={(value) => updateField("type", value)}
-              />
-            </div>
-          </div>
-
           <div className="min-h-30">
             <h4 className="text-md font-bold text-text-primary mb-2">
               Description
@@ -119,7 +121,7 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
                   <button
                     onClick={handleSaveDescription}
                     className="bg-accent-primary 
-                  text-white text-xs font-medium
+                  text-white text-sm font-medium
                     px-3 py-1.5 rounded hover:bg-blue-600 
                     transition
                     cursor-pointer
@@ -129,7 +131,7 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
                   </button>
                   <button
                     onClick={() => setIsEditingDesc(false)}
-                    className="text-text-secondary hover:text-text-primary text-xs 
+                    className="text-text-secondary hover:text-text-primary text-sm
             font-semibold px-3 py-1.5 transition cursor-pointer"
                   >
                     Cancel
@@ -159,7 +161,7 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
               </h4>
               {task.acceptanceCriteria &&
                 task.acceptanceCriteria.length > 0 && (
-                  <span className="text-xs text-text-secondary font-medium">
+                  <span className="text-sm text-text-secondary font-medium">
                     {task.acceptanceCriteria.filter((a) => a.completed).length}
                   </span>
                 )}
@@ -221,7 +223,7 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-5 w-full md:w-72 bg-bg-secondary p-5 rounded-lg border border-border">
+        <div className="flex flex-col gap-5 w-full md:w-72 bg-bg-primary p-5 rounded-lg border border-border">
           <Select
             label="Status"
             options={STATUS_OPTIONS}
@@ -268,17 +270,19 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
           </div>
 
           <div className="flex flex-col gap-1.5 pt-2 border-t border-border">
-            <label className="text-sm font-bold text-text-primary">
+            <label className="text-md font-bold text-text-primary">
               Sprint
             </label>
-            <span className="text-sm text-accent-primary hover:underline cursor-pointer">
+            <span className="text-md text-accent-primary hover:underline cursor-pointer">
               {sprint?.name || "Active Sprint"}
             </span>
           </div>
         </div>
       </div>
       <div className="mt-2 border-t border-border">
-        <h4 className="text-md font-bold text-text-primary mb-2 mt-2">Comments</h4>
+        <h4 className="text-md font-bold text-text-primary mb-2 mt-2">
+          Comments
+        </h4>
 
         <div className="flex flex-col gap-4 mb-2">
           {taskComments.length === 0 ? (
@@ -324,7 +328,7 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
           <div className="flex justify-end">
             <button
               disabled={!newComment.trim()}
-              className="cursor-pointer bg-accent-primary disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-medium px-4 py-2 rounded hover:bg-blue-600 transition"
+              className="cursor-pointer bg-accent-primary disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium px-4 py-2 rounded hover:bg-blue-600 transition"
             >
               Save Comment
             </button>

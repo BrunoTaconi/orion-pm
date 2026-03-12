@@ -11,16 +11,17 @@ interface ModalProps {
   subtitle?: string;
   showCloseButton?: boolean;
   closeOnOverlayClick: boolean;
-  size?: "sm" | "md" | "lg" | "xl" | "xxl";
+  size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
   padding?: string;
 }
 
 const sizeClasses = {
-  sm: "max-w-sm",
-  md: "max-w-md",
-  lg: "max-w-lg",
-  xl: "max-w-2xl",
-  xxl: "max-w-4xl",
+  "sm": "max-w-sm",
+  "md": "max-w-md",
+  "lg": "max-w-lg",
+  "xl": "max-w-2xl",
+  "2xl": "max-w-4xl",
+  "3xl": "max-w-6xl",
 };
 
 const Modal = ({
@@ -65,7 +66,7 @@ const Modal = ({
       <div className="absolute inset-0 flex items-center justify-center">
         {/* Modal */}
         <div
-          className={`bg-bg-primary rounded-xl shadow-xl w-full ${sizeClasses[size]} ${padding} relative`}
+          className={`bg-bg-primary rounded-xl shadow-xl w-full ${sizeClasses[size]} ${padding} relative max-h-[90vh] overflow-auto`}
         >
           {(title || showCloseButton) && (
             <div className={`flex items-center mb-4 ${headerAlignment}`}>
