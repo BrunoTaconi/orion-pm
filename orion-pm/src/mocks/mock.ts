@@ -326,6 +326,20 @@ export const workItemsMock: WorkItemMock[] = [
     columnId: "col-2-5",
     createdAt: new Date(),
   },
+    {
+    id: "wi-7",
+    projectId: "dd93b263-dedc-4ea2-bc36-f32f7a3dfa73",
+    title: "Ajustar tela de Board",
+    description: "Tela de Board com divergências de layout",
+    type: "TASK",
+    status: "IN_PROGRESS",
+    priority: "LOW",
+    storyPoints: 5,
+    sprintId: "sprint-2",
+    assigneeId: "user-2",
+    columnId: "col-2-1",
+    createdAt: new Date(),
+  },
 ];
 
 //////////////////////////////////////////////////////
