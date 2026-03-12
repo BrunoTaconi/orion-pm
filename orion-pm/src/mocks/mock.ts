@@ -11,7 +11,7 @@ export type Methodology =
   | "SPIRAL";
 export type ProjectVisibility = "PRIVATE" | "TEAM" | "PUBLIC";
 export type BoardType = "SCRUM" | "KANBAN";
-export type WorkItemType = "TASK" | "STORY" | "BUG" | "SPIKE";
+export type WorkItemType = "TASK" | "STORY" | "BUG" | "SPIKE" | "TECH_DEBT";
 export type SprintStatus = "PLANNED" | "ACTIVE" | "CLOSED";
 export type Priority = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
 
@@ -215,7 +215,7 @@ export const sprintsMock: SprintMock[] = [
   },
   {
     id: "sprint-2",
-    projectId: "dd93b263-dedc-4ea2-bc36-f32f7a3dfa73", 
+    projectId: "dd93b263-dedc-4ea2-bc36-f32f7a3dfa73",
     name: "Sprint 1",
     startDate: new Date(),
     endDate: new Date(new Date().setDate(new Date().getDate() + 14)),
@@ -240,6 +240,7 @@ export type WorkItemMock = {
   columnId?: string;
   assigneeId?: string;
   createdAt: Date;
+  acceptanceCriteria?: AcceptanceCriteria[];
 };
 
 export const workItemsMock: WorkItemMock[] = [
@@ -326,7 +327,7 @@ export const workItemsMock: WorkItemMock[] = [
     columnId: "col-2-5",
     createdAt: new Date(),
   },
-    {
+  {
     id: "wi-7",
     projectId: "dd93b263-dedc-4ea2-bc36-f32f7a3dfa73",
     title: "Ajustar tela de Board",
@@ -370,3 +371,9 @@ export const commentsMock: CommentMock[] = [
     createdAt: new Date(),
   },
 ];
+
+export type AcceptanceCriteria = {
+  id: string;
+  title: string;
+  completed: boolean;
+};

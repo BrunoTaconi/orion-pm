@@ -20,65 +20,11 @@ import {
 } from "@hello-pangea/dnd";
 import { Priority, WorkItemType } from "@prisma/client";
 import { use, useEffect, useState } from "react";
-
-export const getTypeColor = (type: string) => {
-  switch (type) {
-    case "STORY":
-      return "bg-yellow-100 text-yellow-600";
-    case "BUG":
-      return "bg-red-100 text-red-700";
-    case "TASK":
-      return "bg-blue-100 text-blue-700";
-    case "SPIKE":
-      return "bg-bg-light-purple text-purple-icon";
-    default:
-      return "bg-gray-100 text-gray-700";
-  }
-};
-
-export const getPriorityStyle = (priority: string) => {
-  switch (priority) {
-    case "CRITICAL":
-      return {
-        label: "priority critical",
-        style: "bg-red-100 text-red-600",
-      };
-    case "HIGH":
-      return {
-        label: "priority high",
-        style: "bg-orange-100 text-orange-600",
-      };
-    case "MEDIUM":
-      return {
-        label: "priority medium",
-        style: "bg-yellow-100 text-yellow-600",
-      };
-    case "LOW":
-      return {
-        label: "priority low",
-        style: "bg-green-100 text-green-600",
-      };
-    default:
-      return null;
-  }
-};
-
-export const getHeaderIconColor = (name: string) => {
-  switch (name) {
-    case "To Do":
-      return "bg-bg-light-red text-red-icon";
-    case "In Progress":
-      return "bg-bg-light-orange text-orange-icon";
-    case "In Review":
-      return "bg-bg-light-yellow text-yellow-icon";
-    case "In Validation":
-      return "bg-bg-light-purple text-purple-icon";
-    case "Done":
-      return "bg-bg-light-green text-green-icon";
-    default:
-      return "bg-gray-100 text-gray-700";
-  }
-};
+import {
+  getColumnStyle,
+  getPriorityDetails,
+  getTypeDetails,
+} from "@/utils/board-utils";
 
 export default function BoardPage({
   params,
@@ -201,8 +147,9 @@ export default function BoardPage({
                   >
                     <div className="flex items-center justify-between p-4 bg-bg-primary rounded-md shrink-0 shadow-sm">
                       <div className="flex items-center gap-2">
+                        {/* Utilizando a utilidade de estilo do cabeçalho */}
                         <div
-                          className={`p-1 rounded flex items-center justify-center ${getHeaderIconColor(column.name)}`}
+                          className={`p-1 rounded flex items-center justify-center ${getColumnStyle(column.name)}`}
                         >
                           <Icons.Flag size={14} />
                         </div>
@@ -223,7 +170,14 @@ export default function BoardPage({
                         const assignee = usersMock.find(
                           (user) => user.id === task.assigneeId,
                         );
-                        const priority = getPriorityStyle(task.priority);
+
+                        // Buscando as informações visuais dinâmicas usando os Utils
+                        const priorityInfo = getPriorityDetails(task.priority);
+                        const typeInfo = getTypeDetails(task.type);
+
+                        // Resgatando o ícone dinâmico do tipo da tarefa
+                        const TypeIcon =
+                          Icons[typeInfo.icon as keyof typeof Icons];
 
                         return (
                           <Draggable
@@ -244,42 +198,37 @@ export default function BoardPage({
                                 }`}
                               >
                                 <div className="flex items-start justify-between gap-2">
-                                  <select
-                                    onClick={(e) => e.stopPropagation()}
-                                    value={task.type}
-                                    onChange={(e) =>
-                                      handleUpdateType(
-                                        task.id,
-                                        e.target.value as WorkItemType,
-                                      )
-                                    }
-                                    className={`appearance-none flex text-xs font-bold px-2 py-0.5 rounded-sm outline-none cursor-pointer hover:opacity-80 transition-opacity ${getTypeColor(task.type)}`}
-                                  >
-                                    <option
-                                      value="STORY"
-                                      className="bg-bg-primary text-text-primary text-sm"
+                                  {/* --- TYPE INLINE COM ÍCONE DINÂMICO --- */}
+                                  <div className="relative cursor-pointer hover:opacity-80 transition-opacity inline-block">
+                                    <select
+                                      onClick={(e) => e.stopPropagation()}
+                                      value={task.type}
+                                      onChange={(e) =>
+                                        handleUpdateType(
+                                          task.id,
+                                          e.target.value as WorkItemType,
+                                        )
+                                      }
+                                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
                                     >
-                                      STORY
-                                    </option>
-                                    <option
-                                      value="BUG"
-                                      className="bg-bg-primary text-text-primary text-sm"
+                                      <option value="STORY">STORY</option>
+                                      <option value="BUG">BUG</option>
+                                      <option value="TASK">TASK</option>
+                                      <option value="SPIKE">SPIKE</option>
+                                      <option value="TECH_DEBT">
+                                        TECH DEBT
+                                      </option>
+                                    </select>
+                                    {/* A "Badge" que aparece por baixo com as cores utilitárias */}
+                                    <div
+                                      className={`flex items-center gap-1.5 text-[10px] font-bold px-2 py-0.5 rounded-sm ${typeInfo.iconBgColor} ${typeInfo.iconColor}`}
                                     >
-                                      BUG
-                                    </option>
-                                    <option
-                                      value="TASK"
-                                      className="bg-bg-primary text-text-primary text-sm"
-                                    >
-                                      TASK
-                                    </option>
-                                    <option
-                                      value="SPIKE"
-                                      className="bg-bg-primary text-text-primary text-sm"
-                                    >
-                                      SPIKE
-                                    </option>
-                                  </select>
+                                      {TypeIcon && <TypeIcon size={12} />}
+                                      <span className="uppercase">
+                                        {typeInfo.label}
+                                      </span>
+                                    </div>
+                                  </div>
                                 </div>
 
                                 <p className="text-sm font-medium text-text-primary leading-tight">
@@ -292,6 +241,7 @@ export default function BoardPage({
                                       {task.id}
                                     </p>
 
+                                    {/* --- PRIORITY INLINE USANDO UTILS --- */}
                                     <div
                                       className="relative cursor-pointer hover:opacity-80 transition-opacity inline-block"
                                       title={`Priority: ${task.priority}`}
@@ -315,9 +265,9 @@ export default function BoardPage({
                                         </option>
                                       </select>
                                       <span
-                                        className={`text-xs font-bold px-2 py-1 rounded-sm ${priority?.style}`}
+                                        className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-sm ${priorityInfo.iconBgColor} ${priorityInfo.iconColor}`}
                                       >
-                                        {priority?.label}
+                                        {priorityInfo.label}
                                       </span>
                                     </div>
                                   </div>
@@ -367,9 +317,8 @@ export default function BoardPage({
                                       <div
                                         onClick={(e) => e.stopPropagation()}
                                         title={assignee.name}
-                                        className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-xs font-normal text-white uppercase"
+                                        className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-[10px] font-bold text-white uppercase"
                                       >
-                                        {assignee.name.charAt(0)}
                                         {assignee.name.charAt(0)}
                                       </div>
                                     ) : (
@@ -395,11 +344,11 @@ export default function BoardPage({
       </DragDropContext>
 
       <Modal
-        title={selectedTask?.title || "Task Details"}
+        title={selectedTask?.id || "Task Details"}
         isOpen={!!selectedTask}
         onClose={() => setSelectedTask(null)}
-        size="xl"
-        titleSize="text-lg"
+        size="xxl"
+        titleSize="text-md"
         padding="p-6"
         closeOnOverlayClick={true}
       >

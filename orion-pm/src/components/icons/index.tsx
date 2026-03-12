@@ -26,6 +26,8 @@ import {
   FaTools,
   FaCalendarAlt,
   FaBrain,
+  FaArrowUp,
+  FaArrowDown,
 } from "react-icons/fa";
 import {
   FaPeopleGroup,
@@ -35,6 +37,9 @@ import {
   FaNewspaper,
   FaGear,
   FaFlag,
+  FaUser,
+  FaBug,
+  FaListCheck,
 } from "react-icons/fa6";
 import {
   MdOutlineSpaceDashboard,
@@ -51,7 +56,7 @@ import {
   IoBulbSharp,
 } from "react-icons/io5";
 import { MdAdd, MdPeopleAlt, MdOutlineMenuBook } from "react-icons/md";
-import { RiLock2Fill, RiPlantFill } from "react-icons/ri";
+import { RiLock2Fill, RiPlantFill, RiSpeakAiFill } from "react-icons/ri";
 import { TiWarning } from "react-icons/ti";
 import { GrCycle, GrCloudComputer } from "react-icons/gr";
 import { LuSunSnow, LuBug } from "react-icons/lu";
@@ -176,7 +181,7 @@ export const Icons = {
   },
 
   User: ({ size = 18, className, filled }: IconProps) => (
-    <FiUser size={size} className={className} />
+    <FaUser size={size} className={className} />
   ),
 
   Settings: ({ size = 18, className, filled }: IconProps) => (
@@ -332,13 +337,22 @@ export const Icons = {
     <FaFlag size={size} className={className} />
   ),
   Bug: ({ size = 18, className }: IconProps) => (
-    <LuBug size={size} className={className} />
+    <FaBug size={size} className={className} />
   ),
   Bulb: ({ size = 18, className }: IconProps) => (
     <IoBulbSharp size={size} className={className} />
   ),
   Task: ({ size = 18, className }: IconProps) => (
-    <BiTask size={size} className={className} />
+    <FaListCheck size={size} className={className} />
+  ),
+  ArrowUp: ({ size = 18, className }: IconProps) => (
+    <FaArrowUp size={size} className={className} />
+  ),
+  ArrowDown: ({ size = 18, className }: IconProps) => (
+    <FaArrowDown size={size} className={className} />
+  ),
+  UserSpeak: ({ size = 18, className }: IconProps) => (
+    <RiSpeakAiFill size={size} className={className} />
   ),
 };
 

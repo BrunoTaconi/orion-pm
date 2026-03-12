@@ -9,6 +9,7 @@ export type SelectOption = {
   icon?: keyof typeof Icons;
   iconColor?: string;
   iconBgColor?: string;
+  iconSize?: number;
 };
 
 interface CustomSelectProps {
@@ -61,6 +62,7 @@ const Select = ({
           icon={option.icon}
           bgColor={option.iconBgColor}
           iconColor={option.iconColor || "text-text-icon"}
+          size={option?.iconSize}
         />
       );
     }
@@ -86,13 +88,15 @@ const Select = ({
 
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full p-2.5 
+        className="flex items-center justify-between w-full p-2 
         border border-bg-secondary shadow-sm rounded-md bg-bg-primary 
-        cursor-pointer hover:border-blue-500 hover:ring-0.5 hover:ring-blue-500 transition-all" 
+        cursor-pointer hover:border-blue-500 hover:ring-0.5 hover:ring-blue-500 transition-all"
       >
         <div className="flex items-center gap-2">
           {renderIcon(selectedOption)}
-          <span className={`text-md ${selectedOption ? "text-text-primary" : "text-gray-400"}`}>
+          <span
+            className={`text-md ${selectedOption ? "text-text-primary" : "text-gray-400"}`}
+          >
             {selectedOption ? selectedOption.label : placeholder}
           </span>
         </div>
