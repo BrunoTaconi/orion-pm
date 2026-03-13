@@ -351,7 +351,16 @@ export default function BoardPage({
         padding="p-6"
         closeOnOverlayClick={true}
       >
-        {selectedTask && <EditTask task={selectedTask} />}
+        {selectedTask && (
+          <EditTask
+            task={selectedTask}
+            isCreating={isCreating}
+            onClose={() => {
+              setSelectedTask(null);
+              setIsCreating(false);
+            }}
+          />
+        )}
       </Modal>
     </>
   );

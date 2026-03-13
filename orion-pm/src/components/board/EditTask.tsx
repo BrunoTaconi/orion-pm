@@ -16,10 +16,21 @@ import {
 
 interface EditTaskProps {
   task: WorkItemMock;
+  isCreating?: boolean; 
+  onClose?: () => void; 
 }
 
-export default function EditTask({ task: initialTask }: EditTaskProps) {
+export default function EditTask({
+  task: initialTask,
+  isCreating = false,
+  onClose,
+}: EditTaskProps) {
   const [task, setTask] = useState<WorkItemMock>(initialTask);
+
+  const [isEditingTitle, setIsEditingTitle] = useState(isCreating); // Já abre editando se for criação
+  const [titleValue, setTitleValue] = useState(
+    task.title === "New Task" ? "" : task.title,
+  );
 
   const [isEditingDesc, setIsEditingDesc] = useState(false);
   const [descValue, setDescValue] = useState(task.description || "");
@@ -27,7 +38,6 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
   const [newCriteria, setNewCriteria] = useState("");
   const [newComment, setNewComment] = useState("");
 
-  const sprint = sprintsMock.find((sprint) => sprint.id === task.sprintId);
   const taskComments = commentsMock.filter(
     (comment) => comment.workItemId === task.id,
   );
@@ -50,9 +60,35 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
     })),
   ];
 
+  const sprintOptions: SelectOption[] = [
+    {
+      value: "backlog",
+      label: "Backlog (No Sprint)",
+      icon: "Book",
+      iconBgColor: "bg-gray-200",
+      iconSize: 14,
+    },
+    ...sprintsMock.map((sprint) => ({
+      value: sprint.id,
+      label: sprint.name,
+      icon: "Cycle" as const,
+      iconColor: "text-blue-600",
+      iconBgColor: "bg-blue-100",
+      iconSize: 14,
+    })),
+  ];
+
   const updateField = (field: keyof WorkItemMock, value: any) => {
-    // todo: chamar api de put
     setTask((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSaveTitle = () => {
+    if (titleValue.trim()) {
+      updateField("title", titleValue);
+    } else {
+      setTitleValue(task.title); 
+    }
+    setIsEditingTitle(false);
   };
 
   const handleSaveDescription = () => {
@@ -83,17 +119,44 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
     updateField("acceptanceCriteria", updatedCriteria);
   };
 
-  //colocar max-h no select e poder pesquisar usuarios porque poderiam ter muitos
-  //ajustar scrollbar tirando o radius do modal (tentar colocar interno)
-//fazer modal de adicionar tarefa 
+  const handleCreateTask = () => {
+    // TODO: Chamar API POST /tasks com o objeto `task`
+    console.log("Creating task:", task);
+    if (onClose) onClose();
+  };
 
   return (
     <>
-      <div className="flex items-center gap-4 border-b border-border pb-4 ">
-        <h2 className="text-xl font-bold text-text-primary pt-1 ">
-          {task.title}
-        </h2>
-        <div className="w-40">
+      <div className="flex items-center gap-4 border-b border-border pb-4 w-full">
+        <div className="flex-1">
+          {isEditingTitle ? (
+            <input
+              autoFocus
+              value={titleValue}
+              onChange={(e) => setTitleValue(e.target.value)}
+              onBlur={handleSaveTitle}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSaveTitle();
+                if (e.key === "Escape") {
+                  setTitleValue(task.title);
+                  setIsEditingTitle(false);
+                }
+              }}
+              placeholder="Enter task title..."
+              className="text-xl font-bold text-text-primary bg-bg-secondary border border-accent-primary rounded-sm px-2 py-1 outline-none w-full"
+            />
+          ) : (
+            <h2
+              onClick={() => setIsEditingTitle(true)}
+              className="text-xl font-bold text-text-primary py-2 cursor-text hover:bg-bg-secondary px-2 -ml-1 rounded-sm transition-colors"
+              title="Click to edit title"
+            >
+              {task.title}
+            </h2>
+          )}
+        </div>
+
+        <div className="w-40 shrink-0">
           <Select
             label=""
             options={TASK_TYPE_OPTIONS}
@@ -102,7 +165,8 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
           />
         </div>
       </div>
-      <div className="flex flex-col md:flex-row items-start gap-6 mt-4 ">
+
+      <div className="flex flex-col md:flex-row items-start gap-6 mt-4">
         <div className="flex flex-col gap-6 flex-1 w-full text-text-primary">
           <div className="min-h-30">
             <h4 className="text-md font-bold text-text-primary mb-2">
@@ -120,19 +184,13 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
                 <div className="flex gap-2 items-center justify-end">
                   <button
                     onClick={handleSaveDescription}
-                    className="bg-accent-primary 
-                  text-white text-sm font-medium
-                    px-3 py-1.5 rounded hover:bg-blue-600 
-                    transition
-                    cursor-pointer
-                    "
+                    className="bg-accent-primary text-white text-sm font-medium px-3 py-1.5 rounded hover:bg-blue-600 transition cursor-pointer"
                   >
                     Save
                   </button>
                   <button
                     onClick={() => setIsEditingDesc(false)}
-                    className="text-text-secondary hover:text-text-primary text-sm
-            font-semibold px-3 py-1.5 transition cursor-pointer"
+                    className="text-text-secondary hover:text-text-primary text-sm font-semibold px-3 py-1.5 transition cursor-pointer"
                   >
                     Cancel
                   </button>
@@ -141,9 +199,7 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
             ) : (
               <div
                 onClick={() => setIsEditingDesc(true)}
-                className="bg-bg-secondary hover:bg-bg-primary 
-              hover:border-border border border-transparent p-4 
-              rounded-sm text-sm min-h-20 cursor-text transition-colors"
+                className="bg-bg-secondary hover:bg-bg-primary hover:border-border border border-transparent p-4 rounded-sm text-sm min-h-20 cursor-text transition-colors"
               >
                 {task.description || (
                   <span className="text-text-secondary italic">
@@ -162,7 +218,8 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
               {task.acceptanceCriteria &&
                 task.acceptanceCriteria.length > 0 && (
                   <span className="text-sm text-text-secondary font-medium">
-                    {task.acceptanceCriteria.filter((a) => a.completed).length}
+                    {task.acceptanceCriteria.filter((a) => a.completed).length}{" "}
+                    / {task.acceptanceCriteria.length}
                   </span>
                 )}
             </div>
@@ -241,6 +298,15 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
           />
 
           <Select
+            label="Sprint"
+            options={sprintOptions}
+            value={task.sprintId || "backlog"}
+            onChange={(val) =>
+              updateField("sprintId", val === "backlog" ? null : val)
+            }
+          />
+
+          <Select
             label="Priority"
             options={PRIORITY_OPTIONS}
             value={task.priority}
@@ -268,72 +334,78 @@ export default function EditTask({ task: initialTask }: EditTaskProps) {
               />
             </div>
           </div>
-
-          <div className="flex flex-col gap-1.5 pt-2 border-t border-border">
-            <label className="text-md font-bold text-text-primary">
-              Sprint
-            </label>
-            <span className="text-md text-accent-primary hover:underline cursor-pointer">
-              {sprint?.name || "Active Sprint"}
-            </span>
-          </div>
         </div>
       </div>
-      <div className="mt-2 border-t border-border">
-        <h4 className="text-md font-bold text-text-primary mb-2 mt-2">
-          Comments
-        </h4>
 
-        <div className="flex flex-col gap-4 mb-2">
-          {taskComments.length === 0 ? (
-            <span className="text-sm text-text-secondary italic">
-              No comments yet.
-            </span>
-          ) : (
-            taskComments.map((comment) => {
-              const author = usersMock.find((u) => u.id === comment.userId);
-              return (
-                <div key={comment.id} className="flex gap-3">
-                  <div className="w-8 h-8 rounded-full bg-bg-darker flex items-center justify-center text-xs font-bold text-text-secondary uppercase shrink-0">
-                    {author?.name.charAt(0) || "U"}
-                  </div>
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold">
-                        {author?.name || "Unknown User"}
-                      </span>
-                      <span className="text-xs text-text-secondary">
-                        {new Date(comment.createdAt).toLocaleDateString()}
-                      </span>
+      <div className="mt-2 border-t border-border pt-4">
+        {!isCreating && (
+          <>
+            <h4 className="text-md font-bold text-text-primary mb-2">
+              Comments
+            </h4>
+            <div className="flex flex-col gap-4 mb-2">
+              {taskComments.length === 0 ? (
+                <span className="text-sm text-text-secondary italic">
+                  No comments yet.
+                </span>
+              ) : (
+                taskComments.map((comment) => {
+                  const author = usersMock.find((u) => u.id === comment.userId);
+                  return (
+                    <div key={comment.id} className="flex gap-3">
+                      <div className="w-8 h-8 rounded-full bg-bg-darker flex items-center justify-center text-xs font-bold text-text-secondary uppercase shrink-0">
+                        {author?.name.charAt(0) || "U"}
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-bold">
+                            {author?.name || "Unknown User"}
+                          </span>
+                          <span className="text-xs text-text-secondary">
+                            {new Date(comment.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-sm text-text-primary mt-1">
+                          {comment.content}
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-sm text-text-primary mt-1">
-                      {comment.content}
-                    </p>
-                  </div>
-                </div>
-              );
-            })
-          )}
-        </div>
+                  );
+                })
+              )}
+            </div>
 
-        <div className="flex flex-col gap-2">
-          <Input
-            label=""
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            multiline={true}
-            rows={2}
-            placeholder="Add a comment..."
-          />
-          <div className="flex justify-end">
+            <div className="flex flex-col gap-2 mt-4">
+              <Input
+                label=""
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                multiline={true}
+                rows={2}
+                placeholder="Add a comment..."
+              />
+              <div className="flex justify-end">
+                <button
+                  disabled={!newComment.trim()}
+                  className="cursor-pointer bg-accent-primary disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium px-4 py-2 rounded hover:bg-blue-600 transition"
+                >
+                  Save Comment
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+
+        {isCreating && (
+          <div className="flex justify-end mt-4">
             <button
-              disabled={!newComment.trim()}
-              className="cursor-pointer bg-accent-primary disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium px-4 py-2 rounded hover:bg-blue-600 transition"
+              onClick={handleCreateTask}
+              className="bg-accent-primary text-white font-medium px-4 py-2 rounded hover:bg-blue-700 transition cursor-pointer"
             >
-              Save Comment
+              Create Task
             </button>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

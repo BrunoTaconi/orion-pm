@@ -216,7 +216,7 @@ export const sprintsMock: SprintMock[] = [
   {
     id: "sprint-2",
     projectId: "dd93b263-dedc-4ea2-bc36-f32f7a3dfa73",
-    name: "Sprint 1",
+    name: "Sprint 2",
     startDate: new Date(),
     endDate: new Date(new Date().setDate(new Date().getDate() + 14)),
     status: "ACTIVE",
