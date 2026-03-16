@@ -18,6 +18,14 @@ import {
 } from "@hello-pangea/dnd";
 import { use, useEffect, useState } from "react";
 
+// Ajustes:
+// Botão de completar sprint ser funcional
+// Botão de create sprint ser funcional (Modal de criar sprint parecido com Jira)
+// Botão de criar issue ser funcional 
+// Botão + de adicionar pessoas ao time ser funcional 
+// Filtragem ser funcional
+// Exibir mais de uma sprint (atual e ja poder criar uma proxima pra poder colocar coisa nela)
+
 function BacklogTaskRow({
   task,
   index,
@@ -240,7 +248,7 @@ export default function BacklogPage({
   const getStatusCountBg = (colId: string) => {
     switch (colId) {
       case "col-2-1":
-        return "bg-gray-200 text-gray-600";
+        return "bg-red-200 text-red-600";
       case "col-2-2":
         return "bg-orange-100 text-orange-600";
       case "col-2-3":

@@ -171,8 +171,6 @@ export const getTypeDetails = (type: string) => {
   );
 };
 
-
-
 export const getMinimizedTypeDetails = (type: string) => {
   return (
     MINIMIZED_TYPE_OPTIONS.find((t) => t.value === type) || MINIMIZED_TYPE_OPTIONS[2]
