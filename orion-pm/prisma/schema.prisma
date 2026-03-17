@@ -217,6 +217,11 @@ model WorkItem {
   storyPoints Int?
   createdAt   DateTime     @default(now())
 
+  timeInProgress   Float    @default(0) 
+  timeInReview     Float    @default(0)
+  timeInValidation Float    @default(0)
+  statusUpdatedAt  DateTime @default(now())
+
   sprintId   String?
   columnId   String?
   assigneeId String?

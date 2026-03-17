@@ -211,7 +211,7 @@ export const sprintsMock: SprintMock[] = [
     name: "Sprint 1",
     startDate: new Date(),
     endDate: new Date(new Date().setDate(new Date().getDate() + 14)),
-    status: "ACTIVE",
+    status: "CLOSED",
   },
   {
     id: "sprint-2",
@@ -241,6 +241,11 @@ export type WorkItemMock = {
   assigneeId?: string;
   createdAt: Date;
   acceptanceCriteria?: AcceptanceCriteria[];
+
+  timeInProgress?: number;
+  timeInReview?: number;
+  timeInValidation?: number;
+  statusUpdatedAt?: Date;
 };
 
 export const workItemsMock: WorkItemMock[] = [
@@ -257,6 +262,10 @@ export const workItemsMock: WorkItemMock[] = [
     columnId: "col-3",
     assigneeId: "user-2",
     createdAt: new Date(),
+    timeInProgress: 12.5,
+    timeInReview: 0,
+    timeInValidation: 0,
+    statusUpdatedAt: new Date(new Date().setDate(new Date().getDate() - 1)), // 1 dia atrás
   },
   {
     id: "wi-2",
@@ -270,6 +279,10 @@ export const workItemsMock: WorkItemMock[] = [
     columnId: "col-2",
     assigneeId: "user-3",
     createdAt: new Date(),
+    timeInProgress: 0,
+    timeInReview: 0,
+    timeInValidation: 0,
+    statusUpdatedAt: new Date(),
   },
   {
     id: "wi-3",
@@ -284,6 +297,10 @@ export const workItemsMock: WorkItemMock[] = [
     assigneeId: "user-1",
     columnId: "col-2-4",
     createdAt: new Date(),
+    timeInProgress: 18.2,
+    timeInReview: 4.5,
+    timeInValidation: 2.0,
+    statusUpdatedAt: new Date(new Date().setDate(new Date().getDate() - 3)),
   },
   {
     id: "wi-4",
@@ -298,6 +315,10 @@ export const workItemsMock: WorkItemMock[] = [
     assigneeId: "user-2",
     columnId: "col-2-3",
     createdAt: new Date(),
+    timeInProgress: 8.0,
+    timeInReview: 0,
+    timeInValidation: 0,
+    statusUpdatedAt: new Date(new Date().setHours(new Date().getHours() - 5)), // 5 horas atrás
   },
   {
     id: "wi-5",
@@ -312,6 +333,10 @@ export const workItemsMock: WorkItemMock[] = [
     assigneeId: "user-1",
     columnId: "col-2-3",
     createdAt: new Date(),
+    timeInProgress: 4.5,
+    timeInReview: 2.0,
+    timeInValidation: 0,
+    statusUpdatedAt: new Date(),
   },
   {
     id: "wi-6",
@@ -326,6 +351,10 @@ export const workItemsMock: WorkItemMock[] = [
     assigneeId: "user-1",
     columnId: "col-2-5",
     createdAt: new Date(),
+    timeInProgress: 15.0,
+    timeInReview: 0,
+    timeInValidation: 0,
+    statusUpdatedAt: new Date(new Date().setDate(new Date().getDate() - 2)),
   },
   {
     id: "wi-7",
@@ -340,6 +369,10 @@ export const workItemsMock: WorkItemMock[] = [
     assigneeId: "user-2",
     columnId: "col-2-1",
     createdAt: new Date(),
+    timeInProgress: 2.0,
+    timeInReview: 0,
+    timeInValidation: 0,
+    statusUpdatedAt: new Date(new Date().setHours(new Date().getHours() - 2)),
   },
 ];
 
@@ -376,4 +409,54 @@ export type AcceptanceCriteria = {
   id: string;
   title: string;
   completed: boolean;
+};
+
+//////////////////////////////////////////////////////
+// REPORTS & METRICS MOCKS
+//////////////////////////////////////////////////////
+
+export const reportMocks = {
+  wipComparison: [
+    { sprint: "Sprint 1", wip: 8 },
+    { sprint: "Sprint 2 (Atual)", wip: 10 },
+  ],
+
+  pointsMetric: [
+    { name: "Planejados", value: 45, fill: "#94a3b8" },
+    { name: "Entregues", value: 38, fill: "#22c55e" },
+    { name: "Stories (Entregues)", value: 28, fill: "#3b82f6" },
+    { name: "Bugs (Resolvidos)", value: 10, fill: "#ef4444" },
+  ],
+
+  avgTimePerTask: [
+    { sprint: "Sprint 1", time: 4.2 },
+    { sprint: "Sprint 2", time: 3.1 },
+  ],
+
+  timePerItem: [
+    { task: "wi-3", days: 1.5, avg: 3.1 },
+    { task: "wi-4", days: 4.2, avg: 3.1 },
+    { task: "wi-5", days: 1.0, avg: 3.1 },
+    { task: "wi-6", days: 2.8, avg: 3.1 },
+    { task: "wi-7", days: 5.6, avg: 3.1 },
+  ],
+
+  timeInStages: [
+    { stage: "In Progress", hours: 24, fill: "#f59e0b" },
+    { stage: "Review", hours: 8, fill: "#8b5cf6" },
+    { stage: "Validation", hours: 4, fill: "#06b6d4" },
+  ],
+
+  burnupData: [
+    { day: "Dia 1", scope: 45, completed: 0 },
+    { day: "Dia 2", scope: 45, completed: 0 },
+    { day: "Dia 3", scope: 45, completed: 5 },
+    { day: "Dia 4", scope: 45, completed: 8 },
+    { day: "Dia 5", scope: 45, completed: 15 },
+    { day: "Dia 6", scope: 48, completed: 15 }, // Scope creep (adicionaram tarefas na sprint)
+    { day: "Dia 7", scope: 48, completed: 22 },
+    { day: "Dia 8", scope: 48, completed: 25 },
+    { day: "Dia 9", scope: 48, completed: 30 },
+    { day: "Dia 10", scope: 48, completed: 38 }, // Hoje
+  ],
 };

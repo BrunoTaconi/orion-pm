@@ -7,6 +7,7 @@ export interface NumericStatCardProps {
   footerText: string;
   icon: keyof typeof Icons;
   iconColor?: string;
+  iconBgColor?: string;
   valueColor?: string;
   valueBgColor?: string;
 }
@@ -17,6 +18,7 @@ export function NumericStatCard({
   footerText,
   icon,
   iconColor = "text-orange-500",
+  iconBgColor = "bg-bg-light-orange",
   valueColor = "text-accent-primary",
   valueBgColor = "bg-bg-light-blue",
 }: NumericStatCardProps) {
@@ -25,7 +27,7 @@ export function NumericStatCard({
   return (
     <div className="bg-bg-primary rounded-xl p-4 flex flex-col items-center justify-start text-center shadow-sm gap-2">
       <div className="flex items-center gap-2 mb-4 w-full justify-start">
-        <div className="bg-bg-light-orange p-2 rounded-sm">
+        <div className={`${iconBgColor} p-2 rounded-sm`}>
           {CardIcon && <CardIcon size={20} className={iconColor} />}
         </div>
         <span className="font-bold text-md text-text-primary">{title}</span>

@@ -1,9 +1,30 @@
 "use client";
 
 import { Icons } from "@/components/icons";
-import { workItemsMock } from "@/mocks/mock";
-import { getTypeDetails } from "@/utils/board-utils";
+import {
+  ComparisonStatCard,
+  NumericStatCard,
+  ProgressStatCard,
+} from "@/components/ui/widgets";
+import { reportMocks, sprintsMock, workItemsMock } from "@/mocks/mock";
 import { use, useEffect, useState } from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  ComposedChart,
+  ReferenceLine,
+  Area,
+} from "recharts";
 
 export default function ReportsPage({
   params,
@@ -20,211 +41,448 @@ export default function ReportsPage({
 
   if (!isMounted) return null;
 
-  const velocityData = [
-    { name: "Sprint 1", planned: 30, completed: 25 },
-    { name: "Sprint 2", planned: 28, completed: 28 },
-    { name: "Sprint 3", planned: 35, completed: 20 },
-    { name: "Sprint 4", planned: 32, completed: 30 },
-    { name: "Sprint 5 (Current)", planned: 25, completed: 12 },
-  ];
+  // ESTILOS MELHORADOS DO TOOLTIP (Hover Clean)
+  const tooltipStyle = {
+    backgroundColor: "var(--bg-primary, #ffffff)",
+    borderColor: "var(--border, #e5e7eb)",
+    borderRadius: "8px",
+    color: "var(--text-primary, #111827)",
+    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.05)",
+    fontSize: "12px",
+    padding: "8px 12px",
+  };
 
-  const maxVelocityPoints = Math.max(
-    ...velocityData.flatMap((data) => [data.planned, data.completed]),
+  const subtleCursor = { fill: "var(--border, #f3f4f6)", opacity: 0.4 };
+
+  const activeSprint = sprintsMock.find(
+    (sprint) => sprint.projectId === projectId && sprint.status === "ACTIVE",
   );
 
-  const projectTasks = workItemsMock.filter(
-    (task) => task.projectId === projectId,
+  const lastSprint = sprintsMock
+    .filter(
+      (sprint) => sprint.projectId === projectId && sprint.status === "CLOSED",
+    )
+    .at(-1);
+
+  const lastSprintTasks = workItemsMock.filter(
+    (wi) => wi.sprintId === lastSprint?.id,
   );
 
-  const typeDistribution = [
-    {
-      type: "STORY",
-      count: projectTasks.filter((t) => t.type === "STORY").length,
-    },
-    {
-      type: "TASK",
-      count: projectTasks.filter((t) => t.type === "TASK").length,
-    },
-    { type: "BUG", count: projectTasks.filter((t) => t.type === "BUG").length },
-    {
-      type: "SPIKE",
-      count: projectTasks.filter((t) => t.type === "SPIKE").length,
-    },
-  ].filter((d) => d.count > 0);
-
-  const totalTasks = typeDistribution.reduce(
-    (acc, curr) => acc + curr.count,
-    0,
+  const sprintTasks = workItemsMock.filter(
+    (wi) => wi.sprintId === activeSprint?.id,
   );
+
+  const totalTasks = sprintTasks.length;
+  const doneTasks = sprintTasks.filter(
+    (wi) => wi.status === "DONE" || wi.status === "CLOSED",
+  ).length;
+
+  const lastSprintTotalTasks = lastSprintTasks?.length;
+
+  const lastSprintDoneTasks = lastSprintTasks.filter(
+    (wi) => wi.status === "DONE" || wi.status === "CLOSED",
+  ).length;
+
+  const progressPercentage =
+    totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
+
+  const doneSprintsComparisonPerentage =
+    lastSprintDoneTasks && lastSprintDoneTasks > 0
+      ? Math.round(
+          (doneTasks - lastSprintDoneTasks / lastSprintDoneTasks) * 100,
+        )
+      : 100;
+
+  const doneSprintTasks = sprintTasks.filter(
+    (wi) => wi.status === "DONE" || wi.status === "CLOSED",
+  );
+
+  const avgLeadTime =
+    doneSprintTasks.length > 0
+      ? Number(
+          (
+            doneSprintTasks.reduce((acc, wi) => {
+              const totalTime =
+                (wi.timeInProgress ?? 0) +
+                (wi.timeInReview ?? 0) +
+                (wi.timeInValidation ?? 0);
+
+              return acc + totalTime;
+            }, 0) / doneSprintTasks.length
+          ).toFixed(1),
+        )
+      : 0;
+
+  const activeBugs = sprintTasks.filter(
+    (wi) => wi.type === "BUG" && wi.status !== "DONE" && wi.status !== "CLOSED",
+  ).length;
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-6xl mx-auto pb-10">
+    <div className="flex flex-col gap-6 w-full max-w-6xl mx-auto pb-5">
+      {/* HEADER */}
       <div className="flex items-center justify-between border-b border-border pb-4">
         <div>
           <h2 className="text-2xl font-bold text-text-primary">
             Reports & Analytics
           </h2>
           <p className="text-sm text-text-secondary">
-            Track your team&apos;s performance and project health over time.
+            Performance metrics, WIP (Work In Progress), and resolution time.
           </p>
         </div>
         <button className="flex items-center gap-2 bg-bg-secondary border border-border text-text-primary px-4 py-2 rounded-md hover:bg-bg-darker transition-colors text-sm font-medium">
-          <Icons.Calendar size={16} /> Last 5 Sprints
+          <Icons.Calendar size={16} /> Current Sprint
         </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-bg-primary border border-border rounded-xl p-5 flex flex-col gap-1 shadow-sm">
-          <div className="flex items-center gap-2 text-text-secondary mb-2">
-            <Icons.Cycle size={16} className="text-blue-500" />
-            <span className="text-sm font-bold">Sprint Completion Rate</span>
-          </div>
-          <h3 className="text-3xl font-black text-text-primary">82%</h3>
-          <p className="text-xs text-green-500 font-medium mt-1 flex items-center gap-1">
-            <Icons.ArrowUp size={12} /> +5% from last sprint
-          </p>
-        </div>
+        <ProgressStatCard
+          title="Sprint Completion Rato"
+          percentage={progressPercentage ? progressPercentage : 0}
+          footerText={`${doneSprintsComparisonPerentage}% vs last sprint`}
+          icon="Cycle"
+        />
 
-        <div className="bg-bg-primary border border-border rounded-xl p-5 flex flex-col gap-1 shadow-sm">
-          <div className="flex items-center gap-2 text-text-secondary mb-2">
-            <Icons.Recent size={16} className="text-purple-500" />
-            <span className="text-sm font-bold">Average Lead Time</span>
-          </div>
-          <h3 className="text-3xl font-black text-text-primary">
-            4.2{" "}
-            <span className="text-lg text-text-secondary font-medium">
-              days
-            </span>
-          </h3>
-          <p className="text-xs text-text-secondary font-medium mt-1">
-            From creation to done
-          </p>
-        </div>
+        <NumericStatCard
+          title="Average Lead Time"
+          value={(avgLeadTime / 24).toFixed(1)}
+          footerText="Days"
+          icon="Recent"
+          iconColor="text-green-icon"
+          iconBgColor="bg-bg-light-green"
+        />
 
-        <div className="bg-bg-primary border border-border rounded-xl p-5 flex flex-col gap-1 shadow-sm">
-          <div className="flex items-center gap-2 text-text-secondary mb-2">
-            <Icons.Bug size={16} className="text-red-500" />
-            <span className="text-sm font-bold">Active Bugs</span>
-          </div>
-          <h3 className="text-3xl font-black text-text-primary">3</h3>
-          <p className="text-xs text-red-500 font-medium mt-1 flex items-center gap-1">
-            <Icons.ArrowUp size={12} /> 1 critical bug requires attention
-          </p>
-        </div>
+        <NumericStatCard
+          title="Active Bugs"
+          value={activeBugs}
+          footerText="Bugs that needs your attention"
+          icon="Bug"
+          iconColor="text-red-icon"
+        />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-bg-primary border border-border rounded-xl p-6 shadow-sm flex flex-col">
-          <div className="flex items-center justify-between mb-6">
+      {/* ÁREA DOS GRÁFICOS */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* <div className="bg-bg-primary border border-border rounded-xl p-6 shadow-sm flex flex-col lg:col-span-2 hover:border-blue-200 transition-colors">
+          <div className="mb-6 flex justify-between items-start">
             <div>
-              <h3 className="font-bold text-text-primary">Velocity Chart</h3>
+              <h3 className="font-bold text-text-primary">Burnup Chart</h3>
               <p className="text-xs text-text-secondary">
-                Compare planned vs completed story points.
+                Escopo planejado vs. Trabalho concluído na Sprint atual.
               </p>
             </div>
-            <div className="flex items-center gap-4 text-xs font-medium">
-              <div className="flex items-center gap-1.5 text-text-secondary">
-                <div className="w-3 h-3 rounded-sm bg-bg-darker border border-border"></div>{" "}
-                Planned
+            <div className="flex items-center gap-4 text-xs font-medium text-text-secondary">
+              <div className="flex items-center gap-1.5">
+                <div className="w-3 h-3 rounded-sm bg-slate-200 border border-slate-300"></div>{" "}
+                Escopo
               </div>
-              <div className="flex items-center gap-1.5 text-text-primary">
-                <div className="w-3 h-3 rounded-sm bg-accent-primary"></div>{" "}
-                Completed
+              <div className="flex items-center gap-1.5">
+                <div className="w-3 h-3 rounded-sm bg-blue-500"></div> Concluído
               </div>
             </div>
           </div>
-
-          <div className="flex-1 flex items-end gap-6 min-h-50 mt-auto pt-4 border-b border-border pb-2 relative">
-            <div className="absolute w-full h-px bg-border bottom-[25%] opacity-50 z-0"></div>
-            <div className="absolute w-full h-px bg-border bottom-[50%] opacity-50 z-0"></div>
-            <div className="absolute w-full h-px bg-border bottom-[75%] opacity-50 z-0"></div>
-            <div className="absolute w-full h-px bg-border top-0 opacity-50 z-0"></div>
-
-            {velocityData.map((sprint) => (
-              <div
-                key={sprint.name}
-                className="flex-1 flex flex-col items-center gap-2 z-10 h-full justify-end"
-              >
-                <div className="flex items-end gap-1.5 w-full justify-center h-full">
-                  <div
-                    title={`Planned: ${sprint.planned} pts`}
-                    className="w-1/3 max-w-6 bg-bg-darker border border-border rounded-t-sm hover:opacity-80 transition-opacity cursor-crosshair"
-                    style={{
-                      height: `${(sprint.planned / maxVelocityPoints) * 100}%`,
-                    }}
-                  ></div>
-                  <div
-                    title={`Completed: ${sprint.completed} pts`}
-                    className="w-1/3 max-w-6 bg-accent-primary rounded-t-sm hover:opacity-80 transition-opacity cursor-crosshair shadow-[0_0_10px_rgba(var(--color-accent-primary),0.3)]"
-                    style={{
-                      height: `${(sprint.completed / maxVelocityPoints) * 100}%`,
-                    }}
-                  ></div>
-                </div>
-              </div>
-            ))}
+          <div className="h-72 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart data={reportMocks.burnupData}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  vertical={false}
+                  stroke="var(--border)"
+                  opacity={0.5}
+                />
+                <XAxis
+                  dataKey="day"
+                  stroke="var(--text-secondary)"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="var(--text-secondary)"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <Tooltip
+                  contentStyle={tooltipStyle}
+                  cursor={{
+                    stroke: "var(--border)",
+                    strokeWidth: 1,
+                    strokeDasharray: "3 3",
+                  }}
+                />
+                <Area
+                  type="stepAfter"
+                  dataKey="scope"
+                  name="Escopo Total (pts)"
+                  fill="var(--bg-secondary)"
+                  stroke="var(--border)"
+                  opacity={0.6}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="completed"
+                  name="Concluído (pts)"
+                  stroke="#3b82f6"
+                  strokeWidth={3}
+                  dot={{ r: 4, fill: "#3b82f6" }}
+                  activeDot={{ r: 6, strokeWidth: 0 }}
+                />
+              </ComposedChart>
+            </ResponsiveContainer>
           </div>
-          <div className="flex items-center gap-6 mt-2">
-            {velocityData.map((sprint) => (
-              <span
-                key={sprint.name}
-                className="flex-1 text-center text-[10px] font-bold text-text-secondary uppercase"
-              >
-                {sprint.name.replace(" (Current)", "")}
-              </span>
-            ))}
+        </div> */}
+
+        {/* Gráfico 1: WIP (Work in Progress) */}
+        <div className="bg-bg-primary border border-border rounded-xl p-6 shadow-sm flex flex-col hover:border-blue-200 transition-colors">
+          <div className="mb-6">
+            <h3 className="font-bold text-text-primary">
+              WIP (Work In Progress)
+            </h3>
+            <p className="text-xs text-text-secondary">
+              Comparação da carga de trabalho ao longo das sprints.
+            </p>
+          </div>
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={reportMocks.wipComparison}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  vertical={false}
+                  stroke="var(--border)"
+                  opacity={0.5}
+                />
+                <XAxis
+                  dataKey="sprint"
+                  stroke="var(--text-secondary)"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="var(--text-secondary)"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <Tooltip
+                  contentStyle={tooltipStyle}
+                  cursor={{
+                    stroke: "var(--border)",
+                    strokeWidth: 1,
+                    strokeDasharray: "3 3",
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="wip"
+                  name="Tarefas Simultâneas"
+                  stroke="#8b5cf6"
+                  strokeWidth={3}
+                  dot={{ r: 4, fill: "#8b5cf6" }}
+                  activeDot={{ r: 6, strokeWidth: 0 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
-        <div className="bg-bg-primary border border-border rounded-xl p-6 shadow-sm flex flex-col">
+        {/* Gráfico 2: Métricas de Pontos */}
+        <div className="bg-bg-primary border border-border rounded-xl p-6 shadow-sm flex flex-col hover:border-blue-200 transition-colors">
           <div className="mb-6">
-            <h3 className="font-bold text-text-primary">
-              Issue Type Breakdown
-            </h3>
+            <h3 className="font-bold text-text-primary">Status de Pontos</h3>
             <p className="text-xs text-text-secondary">
-              Current workload distribution.
+              Planejados vs. Entregues.
             </p>
           </div>
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={reportMocks.pointsMetric}
+                layout="vertical"
+                margin={{ left: 30 }}
+              >
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  horizontal={false}
+                  stroke="var(--border)"
+                  opacity={0.5}
+                />
+                <XAxis
+                  type="number"
+                  stroke="var(--text-secondary)"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  type="category"
+                  dataKey="name"
+                  stroke="var(--text-secondary)"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                  width={100}
+                />
+                <Tooltip cursor={subtleCursor} contentStyle={tooltipStyle} />
+                <Bar
+                  dataKey="value"
+                  name="Pontos"
+                  radius={[0, 4, 4, 0]}
+                  barSize={20}
+                >
+                  {reportMocks.pointsMetric.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
 
-          <div className="flex flex-col gap-5 mt-auto">
-            {typeDistribution.length === 0 ? (
-              <span className="text-sm text-text-secondary text-center italic py-10">
-                No tasks found.
-              </span>
-            ) : (
-              typeDistribution.map((item) => {
-                const details = getTypeDetails(item.type);
-                const TypeIcon = Icons[details.icon as keyof typeof Icons];
-                const percentage = Math.round((item.count / totalTasks) * 100);
+        {/* Gráfico 3: Tempo Médio de Tarefa */}
+        <div className="bg-bg-primary border border-border rounded-xl p-6 shadow-sm flex flex-col hover:border-blue-200 transition-colors">
+          <div className="mb-6">
+            <h3 className="font-bold text-text-primary">
+              Tempo Médio por Tarefa
+            </h3>
+            <p className="text-xs text-text-secondary">
+              Tempo histórico gasto em dias ao longo das sprints.
+            </p>
+          </div>
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={reportMocks.avgTimePerTask}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  vertical={false}
+                  stroke="var(--border)"
+                  opacity={0.5}
+                />
+                <XAxis
+                  dataKey="sprint"
+                  stroke="var(--text-secondary)"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="var(--text-secondary)"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <Tooltip cursor={subtleCursor} contentStyle={tooltipStyle} />
+                <Bar
+                  dataKey="time"
+                  name="Dias"
+                  fill="#3b82f6"
+                  radius={[4, 4, 0, 0]}
+                  barSize={28}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
 
-                return (
-                  <div key={item.type} className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-2">
-                        <div
-                          className={`p-1 rounded ${details.iconBgColor} ${details.iconColor}`}
-                        >
-                          {TypeIcon && <TypeIcon size={12} />}
-                        </div>
-                        <span className="font-bold text-text-primary">
-                          {details.label}
-                        </span>
-                      </div>
-                      <span className="text-text-secondary font-medium">
-                        {percentage}% ({item.count})
-                      </span>
-                    </div>
-                    {/* Barra de Progresso */}
-                    <div className="w-full h-2 bg-bg-secondary rounded-full overflow-hidden">
-                      <div
-                        className={`h-full rounded-full ${details?.iconColor.replace("text-", "bg-")}`}
-                        style={{ width: `${percentage}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                );
-              })
-            )}
+        {/* Gráfico 4: Tempo por Item Entregue (Composto) */}
+        <div className="bg-bg-primary border border-border rounded-xl p-6 shadow-sm flex flex-col hover:border-blue-200 transition-colors">
+          <div className="mb-6">
+            <h3 className="font-bold text-text-primary">
+              Tempo de Resolução por Item
+            </h3>
+            <p className="text-xs text-text-secondary">
+              Dias úteis gastos por tarefa vs. Média da Sprint.
+            </p>
+          </div>
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart data={reportMocks.timePerItem}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  vertical={false}
+                  stroke="var(--border)"
+                  opacity={0.5}
+                />
+                <XAxis
+                  dataKey="task"
+                  stroke="var(--text-secondary)"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="var(--text-secondary)"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <Tooltip
+                  cursor={subtleCursor}
+                  contentStyle={tooltipStyle}
+                  formatter={(value: number, name: string) => {
+                    if (name === "Média") return [`${value} dias`, name];
+                    return [`${value} dias`, "Tempo gasto"];
+                  }}
+                />
+                <Bar
+                  dataKey="days"
+                  name="Tempo gasto"
+                  fill="#10b981"
+                  radius={[4, 4, 0, 0]}
+                  barSize={24}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="avg"
+                  name="Média"
+                  stroke="#ef4444"
+                  strokeWidth={2}
+                  dot={false}
+                  strokeDasharray="5 5"
+                />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Gráfico 5: Tempo por Etapa */}
+        <div className="bg-bg-primary border border-border rounded-xl p-6 shadow-sm flex flex-col lg:col-span-2 hover:border-blue-200 transition-colors">
+          <div className="mb-2 text-center">
+            <h3 className="font-bold text-text-primary">
+              Média de Tempo por Etapa
+            </h3>
+            <p className="text-xs text-text-secondary">
+              Onde as tarefas passam mais tempo? (Em horas)
+            </p>
+          </div>
+          <div className="h-72 w-full flex items-center justify-center">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={reportMocks.timeInStages}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={80}
+                  outerRadius={120}
+                  paddingAngle={2}
+                  dataKey="hours"
+                  nameKey="stage"
+                  stroke="none"
+                  label={({ name, percent }) =>
+                    `${name} ${(percent * 100).toFixed(0)}%`
+                  }
+                  labelLine={false}
+                >
+                  {reportMocks.timeInStages.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{ ...tooltipStyle, border: "none" }}
+                  itemStyle={{ color: "var(--text-primary)" }}
+                />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </div>
       </div>
