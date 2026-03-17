@@ -22,8 +22,6 @@ import {
   Pie,
   Cell,
   ComposedChart,
-  ReferenceLine,
-  Area,
 } from "recharts";
 
 export default function ReportsPage({
@@ -41,7 +39,6 @@ export default function ReportsPage({
 
   if (!isMounted) return null;
 
-  // ESTILOS MELHORADOS DO TOOLTIP (Hover Clean)
   const tooltipStyle = {
     backgroundColor: "var(--bg-primary, #ffffff)",
     borderColor: "var(--border, #e5e7eb)",
@@ -144,8 +141,8 @@ export default function ReportsPage({
 
         <NumericStatCard
           title="Average Lead Time"
-          value={(avgLeadTime / 24).toFixed(1)}
-          footerText="Days"
+          value={(avgLeadTime / 24).toFixed(0)}
+          footerText="Days to deliver a task"
           icon="Recent"
           iconColor="text-green-icon"
           iconBgColor="bg-bg-light-green"
@@ -157,94 +154,115 @@ export default function ReportsPage({
           footerText="Bugs that needs your attention"
           icon="Bug"
           iconColor="text-red-icon"
+          iconBgColor="bg-bg-light-red"
         />
       </div>
 
-      {/* ÁREA DOS GRÁFICOS */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* <div className="bg-bg-primary border border-border rounded-xl p-6 shadow-sm flex flex-col lg:col-span-2 hover:border-blue-200 transition-colors">
+        <div className="bg-bg-primary border border-border rounded-xl p-6 shadow-sm flex flex-col lg:col-span-2 hover:border-blue-200 transition-colors">
           <div className="mb-6 flex justify-between items-start">
             <div>
               <h3 className="font-bold text-text-primary">Burnup Chart</h3>
-              <p className="text-xs text-text-secondary">
-                Escopo planejado vs. Trabalho concluído na Sprint atual.
+              <p className="text-sm text-text-secondary">
+                Planned scope vs. work completed in the current sprint.
               </p>
             </div>
             <div className="flex items-center gap-4 text-xs font-medium text-text-secondary">
               <div className="flex items-center gap-1.5">
-                <div className="w-3 h-3 rounded-sm bg-slate-200 border border-slate-300"></div>{" "}
-                Escopo
+                <div className="w-4 h-0 border-t-2 border-dashed border-slate-400"></div>{" "}
+                Scope
               </div>
               <div className="flex items-center gap-1.5">
-                <div className="w-3 h-3 rounded-sm bg-blue-500"></div> Concluído
+                <div className="w-2.5 h-2.5 rounded-full bg-indigo-500"></div>{" "}
+                Completed
               </div>
             </div>
           </div>
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart data={reportMocks.burnupData}>
+              <LineChart
+                data={reportMocks.burnupData}
+                margin={{ top: 5, right: 10, left: -20, bottom: 0 }}
+              >
                 <CartesianGrid
-                  strokeDasharray="3 3"
+                  strokeDasharray="4 4"
                   vertical={false}
                   stroke="var(--border)"
-                  opacity={0.5}
+                  opacity={0.3}
                 />
                 <XAxis
                   dataKey="day"
                   stroke="var(--text-secondary)"
-                  fontSize={12}
+                  fontSize={11}
                   tickLine={false}
                   axisLine={false}
+                  dy={12}
                 />
                 <YAxis
                   stroke="var(--text-secondary)"
-                  fontSize={12}
+                  fontSize={11}
                   tickLine={false}
                   axisLine={false}
+                  dx={-12}
                 />
                 <Tooltip
                   contentStyle={tooltipStyle}
                   cursor={{
                     stroke: "var(--border)",
                     strokeWidth: 1,
-                    strokeDasharray: "3 3",
+                    strokeDasharray: "4 4",
                   }}
                 />
-                <Area
-                  type="stepAfter"
+                <Line
+                  type="monotone"
                   dataKey="scope"
-                  name="Escopo Total (pts)"
-                  fill="var(--bg-secondary)"
-                  stroke="var(--border)"
-                  opacity={0.6}
+                  name="Total Scope (pts)"
+                  stroke="#94a3b8"
+                  strokeWidth={2}
+                  strokeDasharray="5 5"
+                  dot={false}
+                  activeDot={{
+                    r: 4,
+                    fill: "#94a3b8",
+                    stroke: "var(--bg-primary)",
+                    strokeWidth: 2,
+                  }}
                 />
                 <Line
                   type="monotone"
                   dataKey="completed"
-                  name="Concluído (pts)"
-                  stroke="#3b82f6"
+                  name="Completed (pts)"
+                  stroke="#6366f1"
                   strokeWidth={3}
-                  dot={{ r: 4, fill: "#3b82f6" }}
-                  activeDot={{ r: 6, strokeWidth: 0 }}
+                  dot={{ r: 0 }}
+                  activeDot={{
+                    r: 6,
+                    fill: "#6366f1",
+                    stroke: "var(--bg-primary)",
+                    strokeWidth: 3,
+                  }}
                 />
-              </ComposedChart>
+              </LineChart>
             </ResponsiveContainer>
           </div>
-        </div> */}
+        </div>
 
-        {/* Gráfico 1: WIP (Work in Progress) */}
         <div className="bg-bg-primary border border-border rounded-xl p-6 shadow-sm flex flex-col hover:border-blue-200 transition-colors">
           <div className="mb-6">
             <h3 className="font-bold text-text-primary">
               WIP (Work In Progress)
             </h3>
-            <p className="text-xs text-text-secondary">
-              Comparação da carga de trabalho ao longo das sprints.
+            <p className="text-sm text-text-secondary">
+              Comparison of workload across sprints.
             </p>
           </div>
-          <div className="h-64 w-full">
+          <div className="h-64 w-full focus:outline-none focus-visible:outline-none">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={reportMocks.wipComparison}>
+              <LineChart
+                data={reportMocks.wipComparison}
+                margin={{ top: 10, right: 10, left: -25, bottom: 0 }}
+                style={{ outline: "none" }}
+              >
                 <CartesianGrid
                   strokeDasharray="3 3"
                   vertical={false}
@@ -257,12 +275,15 @@ export default function ReportsPage({
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
+                  dy={10}
                 />
                 <YAxis
                   stroke="var(--text-secondary)"
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
+                  dx={-10}
+                  domain={["dataMin - 2", "dataMax + 2"]}
                 />
                 <Tooltip
                   contentStyle={tooltipStyle}
@@ -278,20 +299,24 @@ export default function ReportsPage({
                   name="Tarefas Simultâneas"
                   stroke="#8b5cf6"
                   strokeWidth={3}
-                  dot={{ r: 4, fill: "#8b5cf6" }}
-                  activeDot={{ r: 6, strokeWidth: 0 }}
+                  dot={{ r: 4, fill: "#8b5cf6", strokeWidth: 0 }}
+                  activeDot={{
+                    r: 6,
+                    fill: "#8b5cf6",
+                    stroke: "var(--bg-primary)",
+                    strokeWidth: 2,
+                  }}
                 />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Gráfico 2: Métricas de Pontos */}
         <div className="bg-bg-primary border border-border rounded-xl p-6 shadow-sm flex flex-col hover:border-blue-200 transition-colors">
           <div className="mb-6">
-            <h3 className="font-bold text-text-primary">Status de Pontos</h3>
-            <p className="text-xs text-text-secondary">
-              Planejados vs. Entregues.
+            <h3 className="font-bold text-text-primary">Points Status</h3>
+            <p className="text-sm text-text-secondary">
+              Planned vs. Delivered.
             </p>
           </div>
           <div className="h-64 w-full">
@@ -299,7 +324,7 @@ export default function ReportsPage({
               <BarChart
                 data={reportMocks.pointsMetric}
                 layout="vertical"
-                margin={{ left: 30 }}
+                margin={{ left: 0 }}
               >
                 <CartesianGrid
                   strokeDasharray="3 3"
@@ -339,14 +364,13 @@ export default function ReportsPage({
           </div>
         </div>
 
-        {/* Gráfico 3: Tempo Médio de Tarefa */}
         <div className="bg-bg-primary border border-border rounded-xl p-6 shadow-sm flex flex-col hover:border-blue-200 transition-colors">
           <div className="mb-6">
             <h3 className="font-bold text-text-primary">
-              Tempo Médio por Tarefa
+              Average Time per Task
             </h3>
-            <p className="text-xs text-text-secondary">
-              Tempo histórico gasto em dias ao longo das sprints.
+            <p className="text-sm text-text-secondary">
+              Historical time spent in days throughout the sprints.
             </p>
           </div>
           <div className="h-64 w-full">
@@ -374,7 +398,7 @@ export default function ReportsPage({
                 <Tooltip cursor={subtleCursor} contentStyle={tooltipStyle} />
                 <Bar
                   dataKey="time"
-                  name="Dias"
+                  name="Days"
                   fill="#3b82f6"
                   radius={[4, 4, 0, 0]}
                   barSize={28}
@@ -384,14 +408,13 @@ export default function ReportsPage({
           </div>
         </div>
 
-        {/* Gráfico 4: Tempo por Item Entregue (Composto) */}
         <div className="bg-bg-primary border border-border rounded-xl p-6 shadow-sm flex flex-col hover:border-blue-200 transition-colors">
           <div className="mb-6">
             <h3 className="font-bold text-text-primary">
-              Tempo de Resolução por Item
+              Resolution Time per Item
             </h3>
-            <p className="text-xs text-text-secondary">
-              Dias úteis gastos por tarefa vs. Média da Sprint.
+            <p className="text-sm text-text-secondary">
+              Working days spent per task vs. Sprint average.
             </p>
           </div>
           <div className="h-64 w-full">

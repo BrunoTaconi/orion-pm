@@ -422,15 +422,17 @@ export const reportMocks = {
   ],
 
   pointsMetric: [
-    { name: "Planejados", value: 45, fill: "#94a3b8" },
-    { name: "Entregues", value: 38, fill: "#22c55e" },
-    { name: "Stories (Entregues)", value: 28, fill: "#3b82f6" },
-    { name: "Bugs (Resolvidos)", value: 10, fill: "#ef4444" },
+    { name: "Planned", value: 45, fill: "rgb(100 104 120)" },
+    { name: "Delivered", value: 38, fill: "#22c55e" },
+    { name: "Spikes (Delivered)", value: 18, fill: "rgb(147 51 234)" },
+    { name: "Tech Debts (Delivered)", value: 13, fill: "rgb(244 180 0)" },
+    { name: "Bugs (Resolved)", value: 19, fill: "rgb(234 60 44)" },
   ],
 
   avgTimePerTask: [
     { sprint: "Sprint 1", time: 4.2 },
-    { sprint: "Sprint 2", time: 3.1 },
+    { sprint: "Sprint 2", time: 3.6 },
+    { sprint: "Sprint 3", time: 4.7 },
   ],
 
   timePerItem: [

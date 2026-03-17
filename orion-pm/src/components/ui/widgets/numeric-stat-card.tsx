@@ -25,10 +25,10 @@ export function NumericStatCard({
   const CardIcon = Icons[icon];
 
   return (
-    <div className="bg-bg-primary rounded-xl p-4 flex flex-col items-center justify-start text-center shadow-sm gap-2">
+    <div className="bg-bg-primary rounded-xl p-4 flex flex-col items-center justify-start text-center shadow-sm gap-2 ">
       <div className="flex items-center gap-2 mb-4 w-full justify-start">
         <div className={`${iconBgColor} p-2 rounded-sm`}>
-          {CardIcon && <CardIcon size={20} className={iconColor} />}
+          {CardIcon && <CardIcon size={20} className={iconColor} filled />}
         </div>
         <span className="font-bold text-md text-text-primary">{title}</span>
       </div>
