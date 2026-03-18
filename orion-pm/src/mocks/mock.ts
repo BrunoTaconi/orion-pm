@@ -418,7 +418,7 @@ export type AcceptanceCriteria = {
 export const reportMocks = {
   wipComparison: [
     { sprint: "Sprint 1", wip: 8 },
-    { sprint: "Sprint 2 (Atual)", wip: 10 },
+    { sprint: "Sprint 2", wip: 10 },
   ],
 
   pointsMetric: [
@@ -433,9 +433,26 @@ export const reportMocks = {
     { sprint: "Sprint 1", time: 4.2 },
     { sprint: "Sprint 2", time: 3.6 },
     { sprint: "Sprint 3", time: 4.7 },
+    { sprint: "Sprint 4", time: 6.7 },
+    { sprint: "Sprint 5", time: 2.7 },
+    { sprint: "Sprint 6", time: 4.1 },
+    { sprint: "Sprint 7", time: 4.1 },
+    { sprint: "Sprint 8", time: 6.7 },
+    { sprint: "Sprint 9", time: 2.7 },
+    { sprint: "Sprint 10", time: 4.1 },
   ],
 
   timePerItem: [
+    { task: "Teste tamanho label", days: 1.5, avg: 3.1 },
+    { task: "wi-4", days: 4.2, avg: 3.1 },
+    { task: "wi-5", days: 1.0, avg: 3.1 },
+    { task: "wi-6", days: 2.8, avg: 3.1 },
+    { task: "wi-7", days: 5.6, avg: 3.1 },
+    { task: "wi-3", days: 1.5, avg: 3.1 },
+    { task: "wi-4", days: 4.2, avg: 3.1 },
+    { task: "wi-5", days: 1.0, avg: 3.1 },
+    { task: "wi-6", days: 2.8, avg: 3.1 },
+    { task: "wi-7", days: 5.6, avg: 3.1 },
     { task: "wi-3", days: 1.5, avg: 3.1 },
     { task: "wi-4", days: 4.2, avg: 3.1 },
     { task: "wi-5", days: 1.0, avg: 3.1 },
@@ -455,10 +472,10 @@ export const reportMocks = {
     { day: "Dia 3", scope: 45, completed: 5 },
     { day: "Dia 4", scope: 45, completed: 8 },
     { day: "Dia 5", scope: 45, completed: 15 },
-    { day: "Dia 6", scope: 48, completed: 15 }, // Scope creep (adicionaram tarefas na sprint)
+    { day: "Dia 6", scope: 48, completed: 15 },
     { day: "Dia 7", scope: 48, completed: 22 },
     { day: "Dia 8", scope: 48, completed: 25 },
     { day: "Dia 9", scope: 48, completed: 30 },
-    { day: "Dia 10", scope: 48, completed: 38 }, // Hoje
+    { day: "Dia 10", scope: 48, completed: 38 },
   ],
 };
