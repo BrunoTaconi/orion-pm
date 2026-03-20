@@ -217,7 +217,7 @@ model WorkItem {
   storyPoints Int?
   createdAt   DateTime     @default(now())
 
-  timeInProgress   Float    @default(0) 
+  timeInProgress   Float    @default(0)
   timeInReview     Float    @default(0)
   timeInValidation Float    @default(0)
   statusUpdatedAt  DateTime @default(now())
@@ -225,6 +225,9 @@ model WorkItem {
   sprintId   String?
   columnId   String?
   assigneeId String?
+
+  startedAt   DateTime?
+  completedAt DateTime?
 
   project  Project @relation(fields: [projectId], references: [id])
   sprint   Sprint? @relation(fields: [sprintId], references: [id])

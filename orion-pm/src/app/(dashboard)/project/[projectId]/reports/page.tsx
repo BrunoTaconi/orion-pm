@@ -11,7 +11,8 @@ import {
   StageTimeChart,
   WipChart,
 } from "@/components/ui/widgets";
-import { reportMocks, sprintsMock, workItemsMock } from "@/mocks/mock";
+import { sprintsMock, workItemsMock } from "@/mocks/mock";
+import { getReportMetrics } from "@/utils/report-calculations";
 import { use, useEffect, useState } from "react";
 
 export default function ReportsPage({
@@ -29,72 +30,10 @@ export default function ReportsPage({
 
   if (!isMounted) return null;
 
-  const activeSprint = sprintsMock.find(
-    (sprint) => sprint.projectId === projectId && sprint.status === "ACTIVE",
-  );
-
-  const lastSprint = sprintsMock
-    .filter(
-      (sprint) => sprint.projectId === projectId && sprint.status === "CLOSED",
-    )
-    .at(-1);
-
-  const lastSprintTasks = workItemsMock.filter(
-    (wi) => wi.sprintId === lastSprint?.id,
-  );
-
-  const sprintTasks = workItemsMock.filter(
-    (wi) => wi.sprintId === activeSprint?.id,
-  );
-
-  const totalTasks = sprintTasks.length;
-  const doneTasks = sprintTasks.filter(
-    (wi) => wi.status === "DONE" || wi.status === "CLOSED",
-  ).length;
-
-  const lastSprintDoneTasks = lastSprintTasks.filter(
-    (wi) => wi.status === "DONE" || wi.status === "CLOSED",
-  ).length;
-
-  const progressPercentage =
-    totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
-
-  const doneSprintsComparisonPerentage =
-    lastSprintDoneTasks && lastSprintDoneTasks > 0
-      ? Math.round(
-          (doneTasks - lastSprintDoneTasks / lastSprintDoneTasks) * 100,
-        )
-      : 100;
-
-  const doneSprintTasks = sprintTasks.filter(
-    (wi) => wi.status === "DONE" || wi.status === "CLOSED",
-  );
-
-  const avgLeadTime =
-    doneSprintTasks.length > 0
-      ? Number(
-          (
-            doneSprintTasks.reduce((acc, wi) => {
-              const totalTime =
-                (wi.timeInProgress ?? 0) +
-                (wi.timeInReview ?? 0) +
-                (wi.timeInValidation ?? 0);
-
-              return acc + totalTime;
-            }, 0) / doneSprintTasks.length
-          ).toFixed(1),
-        )
-      : 0;
-
-  const activeBugs = sprintTasks.filter(
-    (wi) => wi.type === "BUG" && wi.status !== "DONE" && wi.status !== "CLOSED",
-  ).length;
-
-  const burnupData = reportMocks?.burnupData;
+  const metrics = getReportMetrics(projectId, sprintsMock, workItemsMock);
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-6xl mx-auto pb-5">
-      {/* HEADER */}
       <div className="flex items-center justify-between border-b border-border pb-4">
         <div>
           <h2 className="text-2xl font-bold text-text-primary">
@@ -111,15 +50,15 @@ export default function ReportsPage({
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <ProgressStatCard
-          title="Sprint Completion Rato"
-          percentage={progressPercentage ? progressPercentage : 0}
-          footerText={`${doneSprintsComparisonPerentage}% vs last sprint`}
+          title="Sprint Completion Ratio"
+          percentage={metrics.progressPercentage}
+          footerText={`${metrics.doneSprintsComparisonPercentage}% vs last sprint`}
           icon="Cycle"
         />
 
         <NumericStatCard
           title="Average Lead Time"
-          value={(avgLeadTime / 24).toFixed(0)}
+          value={metrics.avgLeadTimeDays}
           footerText="Days to deliver a task"
           icon="Recent"
           iconColor="text-green-icon"
@@ -128,7 +67,7 @@ export default function ReportsPage({
 
         <NumericStatCard
           title="Active Bugs"
-          value={activeBugs}
+          value={metrics.activeBugsCount}
           footerText="Bugs that needs your attention"
           icon="Bug"
           iconColor="text-red-icon"
@@ -140,38 +79,38 @@ export default function ReportsPage({
         <BurnupChart
           title="Burnup Chart"
           subtitle="Planned scope vs. work completed in the current sprint."
-          data={burnupData}
-          firstValueLabel="Scope"
+          data={metrics.burnupData}
+          firstValueLabel="Scope (Points)"
           secondValueLabel="Completed"
         />
         <WipChart
           title="WIP (Work In Progress)"
           subtitle="Comparison of workload across sprints."
-          data={reportMocks.wipComparison}
+          data={metrics.wipComparisonData}
         />
 
         <PointsStatusChart
           title="Points Status"
           subtitle="Planned vs. Delivered."
-          data={reportMocks.pointsMetric}
+          data={metrics.pointsMetricData}
         />
 
         <AvgTimeChart
           title="Average Time per Task"
           subtitle="Historical time spent in days throughout the sprints."
-          data={reportMocks.avgTimePerTask}
+          data={metrics.avgTimePerTaskData}
         />
 
         <ResolutionTimeChart
           title="Resolution Time per Item"
           subtitle="Working days spent per task vs. Sprint average."
-          data={reportMocks.timePerItem}
+          data={metrics.timePerItemData}
         />
 
         <StageTimeChart
           title="Average Time per Step"
           subtitle="Where do tasks spend most of their time? (In hours)"
-          data={reportMocks.timeInStages}
+          data={metrics.timeInStagesData}
         />
       </div>
     </div>

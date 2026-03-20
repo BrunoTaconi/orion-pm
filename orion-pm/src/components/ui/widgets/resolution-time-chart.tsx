@@ -9,7 +9,7 @@ import {
   YAxis,
 } from "recharts";
 
-const MAX_LABEL_LENGTH = 10;
+const MAX_LABEL_LENGTH = 15;
 
 function TruncatedTick({ x, y, payload }: { x?: number; y?: number; payload?: { value: string } }) {
   const raw = payload?.value ?? "";
