@@ -111,6 +111,51 @@ export const projectsMock: ProjectMock[] = [
     ownerId: "user-1",
     createdAt: new Date("2026-03-06T18:27:55"),
   },
+  {
+    id: "project-kanban",
+    name: "Marketing Flow",
+    description: "Testing Kanban development",
+    methodology: "KANBAN",
+    visibility: "TEAM",
+    ownerId: "user-1",
+    createdAt: new Date("2026-03-01T18:27:55"),
+  },
+  {
+    id: "project-cascade",
+    name: "Legacy Migration",
+    description: "Testing Cascade development",
+    methodology: "CASCADE",
+    visibility: "TEAM",
+    ownerId: "user-1",
+    createdAt: new Date("2026-03-01T18:27:55"),
+  },
+  {
+    id: "project-xp",
+    name: "Rapid API Service",
+    description: "Testing XP development",
+    methodology: "XP",
+    visibility: "TEAM",
+    ownerId: "user-1",
+    createdAt: new Date("2026-03-01T18:27:55"),
+  },
+  {
+    id: "project-incremental",
+    name: "Mobile App v2",
+    description: "Testing Incremental development",
+    methodology: "INCREMENTAL",
+    visibility: "TEAM",
+    ownerId: "user-1",
+    createdAt: new Date("2026-03-01T18:27:55"),
+  },
+  {
+    id: "project-spiral",
+    name: "AI Risk Engine",
+    description: "Testing Spiral development",
+    methodology: "SPIRAL",
+    visibility: "TEAM",
+    ownerId: "user-1",
+    createdAt: new Date("2026-03-01T18:27:55"),
+  },
 ];
 
 //////////////////////////////////////////////////////
@@ -173,6 +218,10 @@ export const boardsMock: BoardMock[] = [
     projectId: "dd93b263-dedc-4ea2-bc36-f32f7a3dfa73",
     type: "SCRUM",
   },
+  { id: "board-kanban", projectId: "project-kanban", type: "KANBAN" },
+  { id: "board-xp", projectId: "project-xp", type: "SCRUM" },
+  { id: "board-spiral", projectId: "project-spiral", type: "KANBAN" },
+  { id: "board-cascade", projectId: "project-cascade", type: "KANBAN" },
 ];
 
 export type ColumnMock = {
@@ -189,6 +238,97 @@ export const columnsMock: ColumnMock[] = [
   { id: "col-2-3", boardId: "board-2", name: "In Review", order: 3 },
   { id: "col-2-4", boardId: "board-2", name: "In Validation", order: 4 },
   { id: "col-2-5", boardId: "board-2", name: "Done", order: 5 },
+  {
+    id: "col-k-1",
+    boardId: "board-kanban",
+    name: "Backlog",
+    order: 1,
+  },
+  {
+    id: "col-k-2",
+    boardId: "board-kanban",
+    name: "In Progress",
+    order: 2,
+    wipLimit: 3,
+  },
+  {
+    id: "col-k-3",
+    boardId: "board-kanban",
+    name: "Review",
+    order: 3,
+    wipLimit: 2,
+  },
+  {
+    id: "col-k-4",
+    boardId: "board-kanban",
+    name: "Done",
+    order: 4,
+  },
+];
+
+//////////////////////////////////////////////////////
+// CASCADE
+//////////////////////////////////////////////////////
+
+export type PhaseStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED";
+
+export type PhaseMock = {
+  id: string;
+  projectId: string;
+  name: string;
+  order: number;
+  startDate: Date;
+  endDate: Date;
+  status: PhaseStatus;
+  description?: string;
+};
+
+export const phasesMock: PhaseMock[] = [
+  {
+    id: "phase-1",
+    projectId: "project-cascade",
+    name: "Requirements",
+    order: 1,
+    startDate: new Date("2026-01-01"),
+    endDate: new Date("2026-01-31"),
+    status: "COMPLETED",
+  },
+  {
+    id: "phase-2",
+    projectId: "project-cascade",
+    name: "Design",
+    order: 2,
+    startDate: new Date("2026-02-01"),
+    endDate: new Date("2026-02-28"),
+    status: "COMPLETED",
+  },
+  {
+    id: "phase-3",
+    projectId: "project-cascade",
+    name: "Implementation",
+    order: 3,
+    startDate: new Date("2026-03-01"),
+    endDate: new Date("2026-04-30"),
+    status: "IN_PROGRESS",
+  },
+  {
+    id: "phase-4",
+    projectId: "project-cascade",
+    name: "Testing",
+    order: 4,
+    startDate: new Date("2026-05-01"),
+    endDate: new Date("2026-05-31"),
+    status: "PENDING",
+  },
+  {
+    id: "phase-5",
+    projectId: "project-cascade",
+    name: "Deployment",
+    order: 5,
+    startDate: new Date("2026-06-01"),
+    endDate: new Date("2026-06-15"),
+    status: "PENDING",
+  },
 ];
 
 //////////////////////////////////////////////////////
@@ -254,7 +394,8 @@ export type WorkItemMock = {
   status: string;
   priority: Priority;
   storyPoints?: number;
-  sprintId?: string;
+  sprintId?: string; //scrum, xp
+  phaseId?: string; // cascade, incremental, spiral
   columnId?: string;
   assigneeId?: string;
   createdAt: Date;
@@ -277,7 +418,7 @@ export const workItemsMock: WorkItemMock[] = [
     type: "STORY",
     status: "DONE",
     priority: "HIGH",
-    storyPoints: 8,
+    storyPoints: 3,
     sprintId: "sprint-hist-1",
     createdAt: new Date(new Date().setDate(today.getDate() - 35)),
     timeInProgress: 24,
@@ -322,7 +463,7 @@ export const workItemsMock: WorkItemMock[] = [
     type: "BUG",
     status: "DONE",
     priority: "CRITICAL",
-    storyPoints: 2,
+    storyPoints: 0,
     sprintId: "sprint-hist-2",
     createdAt: new Date(new Date().setDate(today.getDate() - 15)),
     timeInProgress: 8,
@@ -337,7 +478,7 @@ export const workItemsMock: WorkItemMock[] = [
     type: "STORY",
     status: "DONE",
     priority: "HIGH",
-    storyPoints: 8,
+    storyPoints: 5,
     sprintId: "sprint-3",
     assigneeId: "user-1",
     columnId: "col-2-5",
@@ -356,7 +497,7 @@ export const workItemsMock: WorkItemMock[] = [
     type: "STORY",
     status: "DONE",
     priority: "MEDIUM",
-    storyPoints: 5,
+    storyPoints: 3,
     sprintId: "sprint-3",
     assigneeId: "user-2",
     columnId: "col-2-5",
@@ -394,7 +535,7 @@ export const workItemsMock: WorkItemMock[] = [
     type: "SPIKE",
     status: "IN_REVIEW",
     priority: "MEDIUM",
-    storyPoints: 5,
+    storyPoints: 3,
     sprintId: "sprint-3",
     assigneeId: "user-3",
     columnId: "col-2-3",
@@ -448,7 +589,7 @@ export const workItemsMock: WorkItemMock[] = [
     type: "STORY",
     status: "IN_PROGRESS",
     priority: "HIGH",
-    storyPoints: 13,
+    storyPoints: 5,
     sprintId: "sprint-3",
     assigneeId: "user-1",
     columnId: "col-2-2",

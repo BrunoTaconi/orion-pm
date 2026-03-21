@@ -61,7 +61,7 @@ export function PointsStatusChart({ title, subtitle, data }: PointsStatusChartPr
               cursor={{ fill: "var(--border, #f3f4f6)", opacity: 0.4 }}
               contentStyle={tooltipStyle}
             />
-            <Bar dataKey="value" name="Pontos" radius={[0, 4, 4, 0]} barSize={20}>
+            <Bar dataKey="value" name={`Points:`} radius={[0, 4, 4, 0]} barSize={20}>
               {data?.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}

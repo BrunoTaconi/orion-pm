@@ -1,5 +1,6 @@
 import { SelectOption } from "@/components/ui/select";
 import { Icons } from "@/components/icons";
+import { BoardType, Methodology } from "@/mocks/mock";
 
 export const TASK_TYPE_OPTIONS: SelectOption[] = [
   {
@@ -173,7 +174,8 @@ export const getTypeDetails = (type: string) => {
 
 export const getMinimizedTypeDetails = (type: string) => {
   return (
-    MINIMIZED_TYPE_OPTIONS.find((t) => t.value === type) || MINIMIZED_TYPE_OPTIONS[2]
+    MINIMIZED_TYPE_OPTIONS.find((t) => t.value === type) ||
+    MINIMIZED_TYPE_OPTIONS[2]
   );
 };
 
@@ -181,6 +183,11 @@ export const getPriorityDetails = (priority: string) => {
   return (
     PRIORITY_OPTIONS.find((p) => p.value === priority) || PRIORITY_OPTIONS[2]
   );
+};
+
+export const getBoardVisualType = (methodology: Methodology): BoardType => {
+  if (methodology === "SCRUM" || methodology === "XP") return "SCRUM";
+  return "KANBAN";
 };
 
 export const getColumnStyle = (name: string) => {

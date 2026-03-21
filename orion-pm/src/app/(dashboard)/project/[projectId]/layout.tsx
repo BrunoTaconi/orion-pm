@@ -15,6 +15,12 @@ const projectTabs = [
     icon: "Project",
     showFor: ["SCRUM", "KANBAN", "XP", "INCREMENTAL", "SPIRAL"],
   },
+  {
+    name: "Timeline",
+    href: "timeline",
+    icon: "Calendar",
+    showFor: ["CASCADE", "INCREMENTAL", "SPIRAL"],
+  },
   { name: "Reports", href: "reports", icon: "Paper", showFor: ["ALL"] },
 ];
 
