@@ -66,6 +66,7 @@ import { GiGreekTemple, GiWaterfall } from "react-icons/gi";
 import { DiScrum } from "react-icons/di";
 import { ImBlocked } from "react-icons/im";
 import { BiTask } from "react-icons/bi";
+import { IoIosClose } from "react-icons/io";
 
 type IconProps = {
   size?: number;
@@ -137,6 +138,9 @@ export const BoxedIcon = ({
 
 export const Icons = {
   /* ================= NORMAL ICONS ================= */
+  Close: ({ size = 18, className }: IconProps) => (
+    <IoIosClose size={size} className={className} />
+  ),
 
   Menu: ({ size = 18, className }: IconProps) => (
     <IoMenu size={size} className={className} />

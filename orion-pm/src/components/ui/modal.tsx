@@ -1,6 +1,6 @@
 "use client";
 import React, { ReactNode, useEffect } from "react";
-import { IoIosClose } from "react-icons/io";
+import { Icons } from "../icons";
 
 interface ModalProps {
   isOpen: boolean;
@@ -84,7 +84,7 @@ const Modal = ({
                     onClick={onClose}
                     className="text-text-secondary hover:text-text-primary transition cursor-pointer"
                   >
-                    <IoIosClose size={30} />
+                    <Icons.Close size={16} />
                   </button>
                 )}
               </div>

@@ -1,3 +1,4 @@
+import { SelectOption } from "@/components/ui/select";
 import { PhaseMock, PhaseStatus } from "@/mocks/mock";
 
 export type ZoomLevel = "DAY" | "WEEK" | "MONTH";
@@ -125,3 +126,30 @@ export function getPhaseStatusStyles(status: PhaseStatus) {
       return "bg-gray-200 border-gray-300 text-gray-800";
   }
 }
+
+export const PHASE_STATUS_OPTIONS: SelectOption[] = [
+  {
+    value: "PENDING",
+    label: "Peding",
+    icon: "Flag",
+    iconColor: "text-red-icon",
+    iconBgColor: "bg-bg-light-red",
+    iconSize: 14,
+  },
+  {
+    value: "IN_PROGRESS",
+    label: "In Progress",
+    icon: "Flag",
+    iconColor: "text-yellow-icon",
+    iconBgColor: "bg-bg-light-yellow",
+    iconSize: 14,
+  },
+  {
+    value: "COMPLETED",
+    label: "Completed",
+    icon: "Flag",
+    iconColor: "text-green-icon",
+    iconBgColor: "bg-bg-light-green",
+    iconSize: 14,
+  },
+];
