@@ -140,7 +140,7 @@ export default function ProjectTimeline({
 
               <button
                 onClick={handleCreatePhase}
-                className="flex items-center gap-2 bg-accent-primary text-white px-4 py-2 rounded-md hover:opacity-90 transition-opacity text-sm font-medium"
+                className="flex items-center gap-2 cursor-pointer bg-accent-primary text-white px-4 py-2 rounded-md hover:opacity-90 transition-opacity text-sm font-medium"
               >
                 <Icons.Add size={16} />
                 Add Phase
@@ -314,7 +314,7 @@ export default function ProjectTimeline({
                   </p>
                   <button
                     onClick={() => dismissHint(false)}
-                    className="text-text-secondary hover:text-text-primary transition-colors"
+                    className="text-text-secondary hover:text-text-primary transition-colors cursor-pointer"
                   >
                     <Icons.Close size={16} />
                   </button>
@@ -324,7 +324,7 @@ export default function ProjectTimeline({
                     onClick={() => dismissHint(true)}
                     className="text-xs text-text-secondary hover:text-text-primary underline cursor-pointer"
                   >
-                    Don't show this again
+                    Don&apos;t show this again
                   </button>
                 </div>
               </div>

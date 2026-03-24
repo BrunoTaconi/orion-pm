@@ -1,6 +1,5 @@
 import { PhaseMock } from "@/mocks/mock";
 import { useState } from "react";
-import { Icons } from "../icons";
 import Select from "../ui/select";
 import { PHASE_STATUS_OPTIONS } from "@/utils/timeline-utils";
 
@@ -55,7 +54,7 @@ export default function EditPhase({
         <textarea
           value={formData.description}
           onChange={(e) => updateField("description", e.target.value)}
-          className="w-full bg-bg-secondary border border-border rounded-md px-3 py-2 text-text-primary outline-none focus:border-accent-primary min-h-[100px]"
+          className="w-full bg-bg-secondary border border-border rounded-md px-3 py-2 text-text-primary outline-none focus:border-accent-primary min-h-25"
         />
       </div>
 
@@ -105,7 +104,7 @@ export default function EditPhase({
         </button>
         <button
           type="submit"
-          className="flex items-center gap-2 bg-accent-primary text-white px-4 py-2 rounded-md hover:opacity-90 transition-opacity cursor-pointer"
+          className="flex font-medium items-center gap-2 bg-accent-primary text-white px-4 py-2 rounded-md hover:opacity-90 transition-opacity cursor-pointer"
         >
           {isCreating ? "Create Phase" : "Save Changes"}
         </button>

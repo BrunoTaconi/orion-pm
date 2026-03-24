@@ -84,7 +84,7 @@ const Modal = ({
                     onClick={onClose}
                     className="text-text-secondary hover:text-text-primary transition cursor-pointer"
                   >
-                    <Icons.Close size={16} />
+                    <Icons.Close size={24} />
                   </button>
                 )}
               </div>

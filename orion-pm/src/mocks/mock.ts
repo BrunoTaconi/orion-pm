@@ -396,6 +396,7 @@ export type WorkItemMock = {
   storyPoints?: number;
   sprintId?: string; //scrum, xp
   phaseId?: string; // cascade, incremental, spiral
+  releaseId?: string; //incremental, xp, spiral
   columnId?: string;
   assigneeId?: string;
   createdAt: Date;
@@ -599,6 +600,456 @@ export const workItemsMock: WorkItemMock[] = [
     timeInReview: 0,
     timeInValidation: 0,
   },
+  // ── CASCADE: Phase work items ──────────────────────────────
+  // Phase 1 – Requirements (COMPLETED)
+  {
+    id: "wi-cas-1-1",
+    projectId: "project-cascade",
+    phaseId: "phase-1",
+    title: "Document functional requirements",
+    description: "",
+    type: "STORY",
+    status: "DONE",
+    priority: "HIGH",
+    storyPoints: 5,
+    createdAt: new Date("2026-01-02"),
+  },
+  {
+    id: "wi-cas-1-2",
+    projectId: "project-cascade",
+    phaseId: "phase-1",
+    title: "Stakeholder sign-off on requirements",
+    description: "",
+    type: "TASK",
+    status: "DONE",
+    priority: "HIGH",
+    storyPoints: 2,
+    createdAt: new Date("2026-01-10"),
+  },
+  {
+    id: "wi-cas-1-3",
+    projectId: "project-cascade",
+    phaseId: "phase-1",
+    title: "Define non-functional requirements",
+    description: "",
+    type: "TASK",
+    status: "DONE",
+    priority: "MEDIUM",
+    storyPoints: 3,
+    createdAt: new Date("2026-01-12"),
+  },
+  // Phase 2 – Design (COMPLETED)
+  {
+    id: "wi-cas-2-1",
+    projectId: "project-cascade",
+    phaseId: "phase-2",
+    title: "System architecture design",
+    description: "",
+    type: "STORY",
+    status: "DONE",
+    priority: "HIGH",
+    storyPoints: 8,
+    createdAt: new Date("2026-02-02"),
+  },
+  {
+    id: "wi-cas-2-2",
+    projectId: "project-cascade",
+    phaseId: "phase-2",
+    title: "Database schema design",
+    description: "",
+    type: "TASK",
+    status: "DONE",
+    priority: "HIGH",
+    storyPoints: 5,
+    createdAt: new Date("2026-02-05"),
+  },
+  {
+    id: "wi-cas-2-3",
+    projectId: "project-cascade",
+    phaseId: "phase-2",
+    title: "UI/UX wireframes",
+    description: "",
+    type: "TASK",
+    status: "DONE",
+    priority: "MEDIUM",
+    storyPoints: 3,
+    createdAt: new Date("2026-02-10"),
+  },
+  // Phase 3 – Implementation (IN_PROGRESS)
+  {
+    id: "wi-cas-3-1",
+    projectId: "project-cascade",
+    phaseId: "phase-3",
+    title: "Core backend services",
+    description: "",
+    type: "STORY",
+    status: "DONE",
+    priority: "HIGH",
+    storyPoints: 13,
+    createdAt: new Date("2026-03-02"),
+    timeInProgress: 80,
+  },
+  {
+    id: "wi-cas-3-2",
+    projectId: "project-cascade",
+    phaseId: "phase-3",
+    title: "Data migration scripts",
+    description: "",
+    type: "STORY",
+    status: "IN_PROGRESS",
+    priority: "HIGH",
+    storyPoints: 8,
+    createdAt: new Date("2026-03-05"),
+    timeInProgress: 32,
+  },
+  {
+    id: "wi-cas-3-3",
+    projectId: "project-cascade",
+    phaseId: "phase-3",
+    title: "Frontend integration",
+    description: "",
+    type: "TASK",
+    status: "IN_PROGRESS",
+    priority: "MEDIUM",
+    storyPoints: 5,
+    createdAt: new Date("2026-03-08"),
+    timeInProgress: 18,
+  },
+  {
+    id: "wi-cas-3-4",
+    projectId: "project-cascade",
+    phaseId: "phase-3",
+    title: "API adapter for legacy endpoints",
+    description: "",
+    type: "STORY",
+    status: "IN_REVIEW",
+    priority: "CRITICAL",
+    storyPoints: 8,
+    createdAt: new Date("2026-03-10"),
+    timeInProgress: 45,
+    timeInReview: 6,
+  },
+  {
+    id: "wi-cas-3-5",
+    projectId: "project-cascade",
+    phaseId: "phase-3",
+    title: "Performance optimization pass",
+    description: "",
+    type: "TECH_DEBT",
+    status: "TO_DO",
+    priority: "LOW",
+    storyPoints: 3,
+    createdAt: new Date("2026-03-12"),
+  },
+  // Phase 4 – Testing (PENDING)
+  {
+    id: "wi-cas-4-1",
+    projectId: "project-cascade",
+    phaseId: "phase-4",
+    title: "Integration test suite",
+    description: "",
+    type: "TASK",
+    status: "TO_DO",
+    priority: "HIGH",
+    storyPoints: 5,
+    createdAt: new Date("2026-03-01"),
+  },
+  {
+    id: "wi-cas-4-2",
+    projectId: "project-cascade",
+    phaseId: "phase-4",
+    title: "UAT with stakeholders",
+    description: "",
+    type: "TASK",
+    status: "TO_DO",
+    priority: "HIGH",
+    storyPoints: 3,
+    createdAt: new Date("2026-03-01"),
+  },
+  {
+    id: "wi-cas-4-3",
+    projectId: "project-cascade",
+    phaseId: "phase-4",
+    title: "Regression test execution",
+    description: "",
+    type: "BUG",
+    status: "TO_DO",
+    priority: "MEDIUM",
+    storyPoints: 2,
+    createdAt: new Date("2026-03-01"),
+  },
+  // Phase 5 – Deployment (PENDING)
+  {
+    id: "wi-cas-5-1",
+    projectId: "project-cascade",
+    phaseId: "phase-5",
+    title: "Production deployment",
+    description: "",
+    type: "TASK",
+    status: "TO_DO",
+    priority: "CRITICAL",
+    storyPoints: 3,
+    createdAt: new Date("2026-03-01"),
+  },
+  {
+    id: "wi-cas-5-2",
+    projectId: "project-cascade",
+    phaseId: "phase-5",
+    title: "Post-deployment smoke tests",
+    description: "",
+    type: "TASK",
+    status: "TO_DO",
+    priority: "HIGH",
+    storyPoints: 2,
+    createdAt: new Date("2026-03-01"),
+  },
+
+  // ── INCREMENTAL: Release work items ───────────────────────
+  {
+    id: "wi-inc-1-1",
+    projectId: "project-incremental",
+    releaseId: "release-inc-1",
+    title: "User registration & login",
+    description: "",
+    type: "STORY",
+    status: "DONE",
+    priority: "HIGH",
+    storyPoints: 8,
+    createdAt: new Date("2026-01-05"),
+    timeInProgress: 48,
+  },
+  {
+    id: "wi-inc-1-2",
+    projectId: "project-incremental",
+    releaseId: "release-inc-1",
+    title: "User profile screen",
+    description: "",
+    type: "STORY",
+    status: "DONE",
+    priority: "MEDIUM",
+    storyPoints: 5,
+    createdAt: new Date("2026-01-08"),
+    timeInProgress: 32,
+  },
+  {
+    id: "wi-inc-1-3",
+    projectId: "project-incremental",
+    releaseId: "release-inc-1",
+    title: "Push notification setup",
+    description: "",
+    type: "TASK",
+    status: "DONE",
+    priority: "MEDIUM",
+    storyPoints: 3,
+    createdAt: new Date("2026-01-10"),
+    timeInProgress: 16,
+  },
+  {
+    id: "wi-inc-2-1",
+    projectId: "project-incremental",
+    releaseId: "release-inc-2",
+    title: "Content feed implementation",
+    description: "",
+    type: "STORY",
+    status: "DONE",
+    priority: "HIGH",
+    storyPoints: 13,
+    createdAt: new Date("2026-02-08"),
+    timeInProgress: 72,
+  },
+  {
+    id: "wi-inc-2-2",
+    projectId: "project-incremental",
+    releaseId: "release-inc-2",
+    title: "Media upload & storage",
+    description: "",
+    type: "STORY",
+    status: "IN_PROGRESS",
+    priority: "HIGH",
+    storyPoints: 8,
+    createdAt: new Date("2026-02-10"),
+    timeInProgress: 28,
+  },
+  {
+    id: "wi-inc-2-3",
+    projectId: "project-incremental",
+    releaseId: "release-inc-2",
+    title: "In-app notification center",
+    description: "",
+    type: "TASK",
+    status: "IN_PROGRESS",
+    priority: "MEDIUM",
+    storyPoints: 5,
+    createdAt: new Date("2026-02-12"),
+    timeInProgress: 14,
+  },
+  {
+    id: "wi-inc-2-4",
+    projectId: "project-incremental",
+    releaseId: "release-inc-2",
+    title: "Feed scroll performance bug",
+    description: "",
+    type: "BUG",
+    status: "TO_DO",
+    priority: "CRITICAL",
+    storyPoints: 0,
+    createdAt: new Date("2026-03-15"),
+  },
+  {
+    id: "wi-inc-3-1",
+    projectId: "project-incremental",
+    releaseId: "release-inc-3",
+    title: "Social graph & following",
+    description: "",
+    type: "STORY",
+    status: "TO_DO",
+    priority: "HIGH",
+    storyPoints: 13,
+    createdAt: new Date("2026-02-15"),
+  },
+  {
+    id: "wi-inc-3-2",
+    projectId: "project-incremental",
+    releaseId: "release-inc-3",
+    title: "Analytics dashboard",
+    description: "",
+    type: "STORY",
+    status: "TO_DO",
+    priority: "MEDIUM",
+    storyPoints: 8,
+    createdAt: new Date("2026-02-15"),
+  },
+
+  // ── XP: Release work items ─────────────────────────────────
+  {
+    id: "wi-xp-1-1",
+    projectId: "project-xp",
+    releaseId: "release-xp-1",
+    title: "REST API scaffolding",
+    description: "",
+    type: "STORY",
+    status: "DONE",
+    priority: "HIGH",
+    storyPoints: 5,
+    createdAt: new Date("2026-01-16"),
+    timeInProgress: 24,
+  },
+  {
+    id: "wi-xp-1-2",
+    projectId: "project-xp",
+    releaseId: "release-xp-1",
+    title: "JWT authentication middleware",
+    description: "",
+    type: "STORY",
+    status: "DONE",
+    priority: "HIGH",
+    storyPoints: 8,
+    createdAt: new Date("2026-01-18"),
+    timeInProgress: 40,
+  },
+  {
+    id: "wi-xp-1-3",
+    projectId: "project-xp",
+    releaseId: "release-xp-1",
+    title: "Core CRUD endpoints",
+    description: "",
+    type: "STORY",
+    status: "DONE",
+    priority: "HIGH",
+    storyPoints: 5,
+    createdAt: new Date("2026-01-20"),
+    timeInProgress: 20,
+  },
+  {
+    id: "wi-xp-2-1",
+    projectId: "project-xp",
+    releaseId: "release-xp-2",
+    title: "Rate limiting implementation",
+    description: "",
+    type: "STORY",
+    status: "IN_PROGRESS",
+    priority: "HIGH",
+    storyPoints: 5,
+    createdAt: new Date("2026-02-22"),
+    timeInProgress: 18,
+  },
+  {
+    id: "wi-xp-2-2",
+    projectId: "project-xp",
+    releaseId: "release-xp-2",
+    title: "API documentation (OpenAPI)",
+    description: "",
+    type: "TASK",
+    status: "TO_DO",
+    priority: "MEDIUM",
+    storyPoints: 3,
+    createdAt: new Date("2026-02-25"),
+  },
+
+  // ── SPIRAL: Release work items ────────────────────────────
+  {
+    id: "wi-spi-1-1",
+    projectId: "project-spiral",
+    releaseId: "release-spi-1",
+    title: "Risk data ingestion pipeline",
+    description: "",
+    type: "STORY",
+    status: "DONE",
+    priority: "HIGH",
+    storyPoints: 8,
+    createdAt: new Date("2026-01-22"),
+    timeInProgress: 56,
+  },
+  {
+    id: "wi-spi-1-2",
+    projectId: "project-spiral",
+    releaseId: "release-spi-1",
+    title: "Baseline scoring model (rule-based)",
+    description: "",
+    type: "STORY",
+    status: "DONE",
+    priority: "HIGH",
+    storyPoints: 13,
+    createdAt: new Date("2026-01-25"),
+    timeInProgress: 88,
+  },
+  {
+    id: "wi-spi-2-1",
+    projectId: "project-spiral",
+    releaseId: "release-spi-2",
+    title: "Feature engineering for ML model",
+    description: "",
+    type: "STORY",
+    status: "IN_PROGRESS",
+    priority: "HIGH",
+    storyPoints: 13,
+    createdAt: new Date("2026-03-06"),
+    timeInProgress: 32,
+  },
+  {
+    id: "wi-spi-2-2",
+    projectId: "project-spiral",
+    releaseId: "release-spi-2",
+    title: "Model training pipeline",
+    description: "",
+    type: "STORY",
+    status: "TO_DO",
+    priority: "HIGH",
+    storyPoints: 8,
+    createdAt: new Date("2026-03-08"),
+  },
+  {
+    id: "wi-spi-2-3",
+    projectId: "project-spiral",
+    releaseId: "release-spi-2",
+    title: "Accuracy regression bug",
+    description: "",
+    type: "BUG",
+    status: "TO_DO",
+    priority: "CRITICAL",
+    storyPoints: 0,
+    createdAt: new Date("2026-03-15"),
+  },
 ];
 
 //////////////////////////////////////////////////////
@@ -635,3 +1086,278 @@ export type AcceptanceCriteria = {
   title: string;
   completed: boolean;
 };
+
+//////////////////////////////////////////////////////
+// RISKS
+//////////////////////////////////////////////////////
+
+export type RiskStatus =
+  | "OPEN"
+  | "MITIGATING"
+  | "MITIGATED"
+  | "CLOSED"
+  | "OCCURRED";
+export type RiskCategory =
+  | "TECHNICAL"
+  | "SCHEDULE"
+  | "BUDGET"
+  | "RESOURCE"
+  | "EXTERNAL"
+  | "COMPLIANCE";
+export type RiskResponse = "AVOID" | "MITIGATE" | "TRANSFER" | "ACCEPT";
+export type ReleaseStatus =
+  | "PLANNED"
+  | "IN_PROGRESS"
+  | "RELEASED"
+  | "CANCELLED";
+
+export type RiskMock = {
+  id: string;
+  projectId: string;
+  title: string;
+  description: string;
+  category: RiskCategory;
+  probability: 1 | 2 | 3 | 4 | 5;
+  impact: 1 | 2 | 3 | 4 | 5;
+  status: RiskStatus;
+  response: RiskResponse;
+  ownerId?: string;
+  mitigationPlan?: string;
+  contingencyPlan?: string;
+  dueDate?: Date;
+  createdAt: Date;
+};
+
+export const risksMock: RiskMock[] = [
+  // ── CASCADE: Legacy Migration ──────────────────────────────
+  {
+    id: "risk-cas-1",
+    projectId: "project-cascade",
+    title: "Legacy API incompatibility",
+    description:
+      "New system may not be compatible with legacy API endpoints, requiring extensive rework.",
+    category: "TECHNICAL",
+    probability: 4,
+    impact: 4,
+    status: "OPEN",
+    response: "MITIGATE",
+    ownerId: "user-1",
+    mitigationPlan:
+      "Create an adapter layer to bridge legacy and new API contracts. Perform integration tests in Phase 2.",
+    contingencyPlan:
+      "Roll back to legacy system and extend migration timeline by 4 weeks.",
+    dueDate: new Date("2026-04-01"),
+    createdAt: new Date("2026-01-15"),
+  },
+  {
+    id: "risk-cas-2",
+    projectId: "project-cascade",
+    title: "Testing phase timeline compression",
+    description:
+      "If implementation overruns, the testing phase will be compressed, increasing defect escape rate.",
+    category: "SCHEDULE",
+    probability: 3,
+    impact: 4,
+    status: "MITIGATING",
+    response: "MITIGATE",
+    ownerId: "user-2",
+    mitigationPlan:
+      "Introduce parallel testing activities during implementation. Automate regression suite by mid-April.",
+    contingencyPlan: "Negotiate a 2-week deployment buffer or reduce v1 scope.",
+    dueDate: new Date("2026-05-01"),
+    createdAt: new Date("2026-02-01"),
+  },
+  {
+    id: "risk-cas-3",
+    projectId: "project-cascade",
+    title: "Key developer unavailability",
+    description:
+      "Lead developer for the core module may be unavailable during critical implementation.",
+    category: "RESOURCE",
+    probability: 2,
+    impact: 3,
+    status: "CLOSED",
+    response: "ACCEPT",
+    ownerId: "user-1",
+    mitigationPlan:
+      "Documented architecture. Cross-trained a backup developer on the critical module.",
+    createdAt: new Date("2026-01-20"),
+  },
+  {
+    id: "risk-cas-4",
+    projectId: "project-cascade",
+    title: "Third-party vendor delivery delays",
+    description:
+      "Dependency on external vendor for data migration tooling. Vendor has a history of delivery issues.",
+    category: "EXTERNAL",
+    probability: 3,
+    impact: 3,
+    status: "OPEN",
+    response: "TRANSFER",
+    ownerId: "user-3",
+    mitigationPlan:
+      "Establish contractual SLAs with the vendor. Identify alternative migration tool as backup.",
+    contingencyPlan: "Build in-house migration scripts as a fallback.",
+    dueDate: new Date("2026-03-15"),
+    createdAt: new Date("2026-01-25"),
+  },
+  // ── SPIRAL: AI Risk Engine ─────────────────────────────────
+  {
+    id: "risk-spi-1",
+    projectId: "project-spiral",
+    title: "AI model accuracy below target threshold",
+    description:
+      "Trained models may not achieve required 95% accuracy, requiring additional training cycles.",
+    category: "TECHNICAL",
+    probability: 4,
+    impact: 5,
+    status: "OPEN",
+    response: "MITIGATE",
+    ownerId: "user-1",
+    mitigationPlan:
+      "Allocate time for at least 3 model refinement iterations per spiral. Set early accuracy benchmarks.",
+    contingencyPlan:
+      "Reduce scope to a rule-based engine for v1; defer ML to v2.",
+    dueDate: new Date("2026-05-01"),
+    createdAt: new Date("2026-03-01"),
+  },
+  {
+    id: "risk-spi-2",
+    projectId: "project-spiral",
+    title: "Training data quality issues",
+    description:
+      "Historical risk data may be incomplete or biased, leading to poor model generalization.",
+    category: "COMPLIANCE",
+    probability: 3,
+    impact: 4,
+    status: "MITIGATING",
+    response: "AVOID",
+    ownerId: "user-2",
+    mitigationPlan:
+      "Engage a data quality audit before training. Define strict data acceptance criteria.",
+    contingencyPlan: "Use synthetic data generation to supplement gaps.",
+    dueDate: new Date("2026-04-01"),
+    createdAt: new Date("2026-03-05"),
+  },
+  {
+    id: "risk-spi-3",
+    projectId: "project-spiral",
+    title: "Cloud GPU training costs overrun",
+    description:
+      "Cloud GPU costs may exceed the allocated budget during intensive training phases.",
+    category: "BUDGET",
+    probability: 3,
+    impact: 3,
+    status: "OPEN",
+    response: "MITIGATE",
+    ownerId: "user-3",
+    mitigationPlan:
+      "Set budget alerts and caps. Optimize training runs with spot instances.",
+    contingencyPlan:
+      "Use smaller model architectures or reduce training dataset size.",
+    createdAt: new Date("2026-03-10"),
+  },
+];
+
+//////////////////////////////////////////////////////
+// RELEASES
+//////////////////////////////////////////////////////
+
+export type ReleaseMock = {
+  id: string;
+  projectId: string;
+  name: string;
+  version: string;
+  description?: string;
+  status: ReleaseStatus;
+  releaseDate: Date;
+  actualReleaseDate?: Date;
+  releaseNotes?: string;
+  createdAt: Date;
+};
+
+export const releasesMock: ReleaseMock[] = [
+  // ── INCREMENTAL: Mobile App v2 ────────────────────────────
+  {
+    id: "release-inc-1",
+    projectId: "project-incremental",
+    name: "Foundation",
+    version: "v1.0.0",
+    description: "Core authentication and user profile management.",
+    status: "RELEASED",
+    releaseDate: new Date("2026-02-01"),
+    actualReleaseDate: new Date("2026-02-03"),
+    releaseNotes:
+      "Released core auth flows. Minor 2-day delay due to OAuth provider configuration.",
+    createdAt: new Date("2026-01-01"),
+  },
+  {
+    id: "release-inc-2",
+    projectId: "project-incremental",
+    name: "Content Module",
+    version: "v1.1.0",
+    description: "Feed, notifications, and media upload features.",
+    status: "IN_PROGRESS",
+    releaseDate: new Date("2026-04-01"),
+    createdAt: new Date("2026-02-05"),
+  },
+  {
+    id: "release-inc-3",
+    projectId: "project-incremental",
+    name: "Social & Analytics",
+    version: "v2.0.0",
+    description: "Social graph, analytics dashboard, and perf improvements.",
+    status: "PLANNED",
+    releaseDate: new Date("2026-07-01"),
+    createdAt: new Date("2026-02-10"),
+  },
+  // ── XP: Rapid API Service ─────────────────────────────────
+  {
+    id: "release-xp-1",
+    projectId: "project-xp",
+    name: "MVP",
+    version: "v1.0.0",
+    description: "Minimum viable API with core endpoints and auth.",
+    status: "RELEASED",
+    releaseDate: new Date("2026-02-15"),
+    actualReleaseDate: new Date("2026-02-15"),
+    releaseNotes: "Clean release. All acceptance tests passed on time.",
+    createdAt: new Date("2026-01-15"),
+  },
+  {
+    id: "release-xp-2",
+    projectId: "project-xp",
+    name: "Rate Limiting & Docs",
+    version: "v1.1.0",
+    description: "Rate limiting, enhanced error handling, and developer docs.",
+    status: "IN_PROGRESS",
+    releaseDate: new Date("2026-04-15"),
+    createdAt: new Date("2026-02-20"),
+  },
+  // ── SPIRAL: AI Risk Engine ─────────────────────────────────
+  {
+    id: "release-spi-1",
+    projectId: "project-spiral",
+    name: "Prototype",
+    version: "v0.1.0",
+    description:
+      "First spiral: risk data ingestion and baseline scoring model.",
+    status: "RELEASED",
+    releaseDate: new Date("2026-02-28"),
+    actualReleaseDate: new Date("2026-03-01"),
+    releaseNotes:
+      "Prototype validated by stakeholders. Model accuracy at 87% — below 95% target, acceptable for v0.1.",
+    createdAt: new Date("2026-01-20"),
+  },
+  {
+    id: "release-spi-2",
+    projectId: "project-spiral",
+    name: "Enhanced Model",
+    version: "v0.2.0",
+    description:
+      "Second spiral: improved ML model with additional feature engineering.",
+    status: "IN_PROGRESS",
+    releaseDate: new Date("2026-05-31"),
+    createdAt: new Date("2026-03-05"),
+  },
+];
