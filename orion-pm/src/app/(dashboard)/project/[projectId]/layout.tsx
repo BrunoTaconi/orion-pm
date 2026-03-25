@@ -8,6 +8,13 @@ import { usePathname } from "next/navigation";
 
 const projectTabs = [
   { name: "Dashboard", href: "dashboard", icon: "Dashboard", showFor: ["ALL"] },
+  {
+    name: "Timeline",
+    href: "timeline",
+    icon: "Calendar",
+    showFor: ["CASCADE", "INCREMENTAL", "SPIRAL"],
+  },
+  { name: "Phases", href: "phases", icon: "List", showFor: ["CASCADE"] },
   { name: "Backlog", href: "backlog", icon: "Book", showFor: ["SCRUM", "XP"] },
   {
     name: "Board",
@@ -16,10 +23,16 @@ const projectTabs = [
     showFor: ["SCRUM", "KANBAN", "XP", "INCREMENTAL", "SPIRAL"],
   },
   {
-    name: "Timeline",
-    href: "timeline",
-    icon: "Calendar",
-    showFor: ["CASCADE", "INCREMENTAL", "SPIRAL"],
+    name: "Releases",
+    href: "releases",
+    icon: "Box",
+    showFor: ["INCREMENTAL", "XP", "SPIRAL"],
+  },
+  {
+    name: "Risks",
+    href: "risks",
+    icon: "Warning",
+    showFor: ["SPIRAL", "CASCADE"],
   },
   { name: "Reports", href: "reports", icon: "Paper", showFor: ["ALL"] },
 ];
