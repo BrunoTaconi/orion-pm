@@ -4,7 +4,7 @@ import { useState } from "react";
 import { PhaseMock, WorkItemMock } from "@/mocks/mock";
 import { Icons } from "@/components/icons";
 import Modal from "@/components/ui/modal";
-import EditPhase from "@/components/timeline/EditPhase"; // ← REUSE existing!
+import EditPhase from "@/components/timeline/EditPhase";
 import {
   getPhaseDurationDays,
   getPhaseProgress,
@@ -19,41 +19,45 @@ interface PhasesListProps {
   projectId: string;
 }
 
-export default function PhasesList({
-  phases,
-  workItems,
-  projectId,
-}: PhasesListProps) {
+export default function PhasesList({ phases, workItems, projectId }: PhasesListProps) {
   const [selectedPhase, setSelectedPhase] = useState<PhaseMock | null>(null);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const summary = getPhasesListSummary(phases);
 
-  const summaryCards = [
+  const summaryCards: {
+    label: string;
+    value: number;
+    icon?: keyof typeof Icons;
+    color: string;
+    iconBgColor?: string;
+  }[] = [
     {
       label: "Total Phases",
       value: summary.total,
-      icon: "List" as const,
       color: "text-text-primary",
     },
     {
       label: "Completed",
       value: summary.completed,
-      icon: "Flag" as const,
-      color: "text-green-400",
+      icon: "Check" as const,
+      color: "text-white",
+      iconBgColor: "bg-green-500",
     },
     {
       label: "In Progress",
       value: summary.inProgress,
-      icon: "Cycle" as const,
-      color: "text-blue-400",
+      icon: "Tools" as const,
+      color: "text-white",
+      iconBgColor: "bg-blue-500",
     },
     {
       label: "Pending",
       value: summary.pending,
       icon: "Recent" as const,
-      color: "text-neutral-400",
+      color: "text-white",
+      iconBgColor: "bg-gray-300",
     },
   ];
 
@@ -64,24 +68,27 @@ export default function PhasesList({
       year: "numeric",
     });
 
+  const handleCloseEdit = () => {
+    setIsEditOpen(false);
+    setSelectedPhase(null);
+  };
+
   return (
     <div className="flex flex-col gap-6 p-2">
       <div className="grid grid-cols-4 gap-4">
         {summaryCards.map((card) => {
-          const Icon = Icons[card.icon];
+          const Icon = card.icon ? Icons[card.icon] : null;
           return (
             <div
               key={card.label}
-              className="bg-bg-primary rounded-lg border border-border p-4 flex items-center gap-3"
+              className="bg-bg-primary rounded-lg border border-border p-4 flex items-start gap-3 justify-between"
             >
-              <div className="p-2 rounded-md bg-bg-secondary">
-                {Icon && <Icon size={18} className={card.color} />}
-              </div>
               <div>
-                <p className="text-2xl font-bold text-text-primary">
-                  {card.value}
-                </p>
-                <p className="text-xs text-text-secondary">{card.label}</p>
+                <p className="text-2xl font-bold text-text-primary">{card.value}</p>
+                <p className="text-md text-text-secondary">{card.label}</p>
+              </div>
+              <div className={`p-2 rounded-md ${card.iconBgColor}`}>
+                {Icon && <Icon size={14} className={card.color} filled />}
               </div>
             </div>
           );
@@ -90,115 +97,104 @@ export default function PhasesList({
 
       <div className="bg-bg-primary rounded-lg border border-border overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
-          <h2 className="text-sm font-semibold text-text-primary">
-            Phase List
-          </h2>
+          <h2 className="text-md font-semibold text-text-primary">Phase List</h2>
           <button
             onClick={() => setIsCreateOpen(true)}
-            className="flex items-center gap-2 text-xs text-accent-primary hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2 text-sm text-accent-primary hover:opacity-80 transition-opacity cursor-pointer"
           >
             <Icons.Add size={14} />
             Add Phase
           </button>
         </div>
 
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-border text-xs text-text-secondary">
-              <th className="text-left px-5 py-3 w-10">#</th>
-              <th className="text-left px-5 py-3">Phase</th>
-              <th className="text-left px-5 py-3">Start Date</th>
-              <th className="text-left px-5 py-3">End Date</th>
-              <th className="text-left px-5 py-3">Duration</th>
-              <th className="text-left px-5 py-3">Status</th>
-              <th className="text-left px-5 py-3">Progress</th>
-              <th className="text-left px-5 py-3">Items</th>
-              <th className="px-5 py-3" />
-            </tr>
-          </thead>
-          <tbody>
-            {phases.map((phase) => {
-              const badge = PHASE_STATUS_BADGE[phase.status];
-              const progress = getPhaseProgress(phase.id, workItems);
-              const stats = getPhaseItemStats(phase.id, workItems);
-              const duration = getPhaseDurationDays(phase);
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="border-b border-border bg-bg-secondary/40 text-xs uppercase tracking-wider text-text-secondary">
+                <th className="text-left px-5 py-3 font-medium w-10">#</th>
+                <th className="text-left px-5 py-3 font-medium w-[40%]">Phase</th>
+                <th className="text-left px-5 py-3 font-medium whitespace-nowrap">Start Date</th>
+                <th className="text-left px-5 py-3 font-medium whitespace-nowrap">End Date</th>
+                <th className="text-left px-5 py-3 font-medium whitespace-nowrap">Duration</th>
+                <th className="text-left px-5 py-3 font-medium whitespace-nowrap">Status</th>
+                <th className="text-left px-5 py-3 font-medium whitespace-nowrap w-36">Progress</th>
+                <th className="text-left px-5 py-3 font-medium whitespace-nowrap">Items</th>
+              </tr>
+            </thead>
+            <tbody>
+              {phases.map((phase) => {
+                const badge = PHASE_STATUS_BADGE[phase.status];
+                const progress = getPhaseProgress(phase.id, workItems);
+                const stats = getPhaseItemStats(phase.id, workItems);
+                const duration = getPhaseDurationDays(phase);
 
-              return (
-                <tr
-                  key={phase.id}
-                  className="border-b border-border last:border-0 hover:bg-bg-secondary/50 transition-colors"
-                >
-                  <td className="px-5 py-4 text-text-secondary font-mono text-xs">
-                    {phase.order}
-                  </td>
-                  <td className="px-5 py-4">
-                    <div>
-                      <p className="font-medium text-text-primary">
-                        {phase.name}
-                      </p>
-                      {phase.description && (
-                        <p className="text-xs text-text-secondary mt-0.5 line-clamp-1">
-                          {phase.description}
+                return (
+                  <tr
+                    key={phase.id}
+                    className="border-b border-border last:border-0 hover:bg-bg-secondary/50 transition-colors cursor-pointer group"
+                    onClick={() => {
+                      setSelectedPhase(phase);
+                      setIsEditOpen(true);
+                    }}
+                  >
+                    <td className="px-5 py-4 text-text-secondary text-xs">
+                      {phase.order}
+                    </td>
+                    <td className="px-5 py-4">
+                      <div>
+                        <p className="font-medium text-text-primary text-sm group-hover:text-accent-primary transition-colors">
+                          {phase.name}
                         </p>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-5 py-4 text-text-secondary text-xs">
-                    {formatDate(phase.startDate)}
-                  </td>
-                  <td className="px-5 py-4 text-text-secondary text-xs">
-                    {formatDate(phase.endDate)}
-                  </td>
-                  <td className="px-5 py-4 text-text-secondary text-xs">
-                    {duration}d
-                  </td>
-                  <td className="px-5 py-4">
-                    <span
-                      className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${badge.bg} ${badge.text}`}
-                    >
-                      {badge.label}
-                    </span>
-                  </td>
-                  <td className="px-5 py-4 min-w-30">
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 h-1.5 bg-bg-secondary rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-accent-primary rounded-full transition-all"
-                          style={{ width: `${progress}%` }}
-                        />
+                        {phase.description && (
+                          <p className="text-xs text-text-secondary mt-0.5 line-clamp-1">
+                            {phase.description}
+                          </p>
+                        )}
                       </div>
-                      <span className="text-xs text-text-secondary w-8 text-right">
-                        {progress}%
+                    </td>
+                    <td className="px-5 py-4 text-text-secondary text-sm whitespace-nowrap">
+                      {formatDate(phase.startDate)}
+                    </td>
+                    <td className="px-5 py-4 text-text-secondary text-sm whitespace-nowrap">
+                      {formatDate(phase.endDate)}
+                    </td>
+                    <td className="px-8 py-4 text-text-secondary text-sm whitespace-nowrap">
+                      {duration}d
+                    </td>
+                    <td className="px-5 py-4 whitespace-nowrap">
+                      <span
+                        className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${badge.bg} ${badge.text}`}
+                      >
+                        {badge.label}
                       </span>
-                    </div>
-                  </td>
-                  <td className="px-5 py-4 text-text-secondary text-xs">
-                    {stats.done}/{stats.total}
-                  </td>
-                  <td className="px-5 py-4">
-                    <button
-                      onClick={() => {
-                        setSelectedPhase(phase);
-                        setIsEditOpen(true);
-                      }}
-                      className="text-text-secondary hover:text-text-primary transition-colors"
-                    >
-                      <Icons.Settings size={14} />
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                    </td>
+                    <td className="px-5 py-4 w-36">
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 h-1.5 bg-bg-secondary rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-accent-primary rounded-full transition-all"
+                            style={{ width: `${progress}%` }}
+                          />
+                        </div>
+                        <span className="text-xs text-text-secondary w-8 text-right tabular-nums">
+                          {progress}%
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-8 py-4 text-text-secondary text-sm whitespace-nowrap tabular-nums">
+                      {stats.done}/{stats.total}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <Modal
         isOpen={isEditOpen}
-        onClose={() => {
-          setIsEditOpen(false);
-          setSelectedPhase(null);
-        }}
+        onClose={handleCloseEdit}
         title="Edit Phase"
         closeOnOverlayClick
         size="md"
@@ -206,15 +202,8 @@ export default function PhasesList({
         {selectedPhase && (
           <EditPhase
             phase={selectedPhase}
-            onClose={() => {
-              setIsEditOpen(false);
-              setSelectedPhase(null);
-            }}
-            onSave={(updated) => {
-              console.log("Save phase:", updated);
-              setIsEditOpen(false);
-              setSelectedPhase(null);
-            }}
+            isCreating={false}
+            onClose={handleCloseEdit}
           />
         )}
       </Modal>
@@ -228,11 +217,8 @@ export default function PhasesList({
       >
         <EditPhase
           phase={null}
+          isCreating={true}
           onClose={() => setIsCreateOpen(false)}
-          onSave={(created) => {
-            console.log("Create phase:", created);
-            setIsCreateOpen(false);
-          }}
         />
       </Modal>
     </div>

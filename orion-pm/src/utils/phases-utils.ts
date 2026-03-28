@@ -39,17 +39,17 @@ export const PHASE_STATUS_BADGE: Record<
 > = {
   PENDING: {
     bg: "bg-neutral-500/15",
-    text: "text-neutral-400",
+    text: "text-neutral-500",
     label: "Pending",
   },
   IN_PROGRESS: {
-    bg: "bg-blue-500/15",
-    text: "text-blue-400",
+    bg: "bg-bg-light-blue",
+    text: "text-blue-icon",
     label: "In Progress",
   },
   COMPLETED: {
-    bg: "bg-green-500/15",
-    text: "text-green-400",
+    bg: "bg-bg-light-green",
+    text: "text-green-icon",
     label: "Completed",
   },
 };

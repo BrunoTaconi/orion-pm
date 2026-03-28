@@ -14,7 +14,7 @@ const projectTabs = [
     icon: "Calendar",
     showFor: ["CASCADE", "INCREMENTAL", "SPIRAL"],
   },
-  { name: "Phases", href: "phases", icon: "List", showFor: ["CASCADE"] },
+  { name: "Phases", href: "phases", icon: "Phases", showFor: ["CASCADE"] },
   { name: "Backlog", href: "backlog", icon: "Book", showFor: ["SCRUM", "XP"] },
   {
     name: "Board",

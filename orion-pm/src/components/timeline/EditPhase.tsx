@@ -4,7 +4,7 @@ import Select from "../ui/select";
 import { PHASE_STATUS_OPTIONS } from "@/utils/timeline-utils";
 
 interface EditPhaseProps {
-  phase: PhaseMock;
+  phase: PhaseMock | null;
   isCreating: boolean;
   onClose: () => void;
 }
@@ -15,14 +15,14 @@ export default function EditPhase({
   onClose,
 }: EditPhaseProps) {
   const [formData, setFormData] = useState({
-    name: phase.name || "",
-    description: phase.description || "",
-    status: phase.status || "PENDING",
-    startDate: phase.endDate ? phase.endDate.toISOString().split("T")[0] : "",
-    endDate: phase.endDate ? phase.endDate.toISOString().split("T")[0] : "",
+    name: phase?.name ?? "",
+    description: phase?.description ?? "",
+    status: phase?.status ?? "PENDING",
+    startDate: phase?.endDate ? phase.endDate.toISOString().split("T")[0] : "",
+    endDate: phase?.endDate ? phase.endDate.toISOString().split("T")[0] : "",
   });
 
-  const updateField = (field: keyof typeof formData, value: any) => {
+  const updateField = (field: keyof typeof formData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 

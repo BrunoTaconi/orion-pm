@@ -1,10 +1,4 @@
-import {
-  FiSearch,
-  FiUser,
-  FiSettings,
-  FiLogOut,
-  FiChevronsLeft,
-} from "react-icons/fi";
+import { FiSearch, FiSettings, FiLogOut, FiChevronsLeft } from "react-icons/fi";
 import { HiOutlineBell } from "react-icons/hi";
 import { HiRocketLaunch } from "react-icons/hi2";
 import { FcGoogle } from "react-icons/fc";
@@ -28,6 +22,7 @@ import {
   FaBrain,
   FaArrowUp,
   FaArrowDown,
+  FaCheck,
 } from "react-icons/fa";
 import {
   FaPeopleGroup,
@@ -59,14 +54,14 @@ import { MdAdd, MdPeopleAlt, MdOutlineMenuBook } from "react-icons/md";
 import { RiLock2Fill, RiPlantFill, RiSpeakAiFill } from "react-icons/ri";
 import { TiWarning } from "react-icons/ti";
 import { GrCycle, GrCloudComputer } from "react-icons/gr";
-import { LuSunSnow, LuBug } from "react-icons/lu";
+import { LuSunSnow } from "react-icons/lu";
 import { PiInfinityBold, PiUsersFourFill, PiSpiralBold } from "react-icons/pi";
 import { TbDiamondFilled, TbArrowBarBoth } from "react-icons/tb";
 import { GiGreekTemple, GiWaterfall } from "react-icons/gi";
 import { DiScrum } from "react-icons/di";
 import { ImBlocked } from "react-icons/im";
-import { BiTask } from "react-icons/bi";
 import { IoIosClose } from "react-icons/io";
+import { BsBarChartSteps } from "react-icons/bs";
 
 type IconProps = {
   size?: number;
@@ -184,19 +179,19 @@ export const Icons = {
     return <Icon size={size} className={className} />;
   },
 
-  User: ({ size = 18, className, filled }: IconProps) => (
+  User: ({ size = 18, className }: IconProps) => (
     <FaUser size={size} className={className} />
   ),
 
-  Settings: ({ size = 18, className, filled }: IconProps) => (
+  Settings: ({ size = 18, className }: IconProps) => (
     <FiSettings size={size} className={className} />
   ),
 
-  Logout: ({ size = 18, className, filled }: IconProps) => (
+  Logout: ({ size = 18, className }: IconProps) => (
     <FiLogOut size={size} className={className} />
   ),
 
-  Bell: ({ size = 20, className, filled }: IconProps) => (
+  Bell: ({ size = 20, className }: IconProps) => (
     <HiOutlineBell size={size} className={className} />
   ),
 
@@ -357,6 +352,12 @@ export const Icons = {
   ),
   UserSpeak: ({ size = 18, className }: IconProps) => (
     <RiSpeakAiFill size={size} className={className} />
+  ),
+  Phases: ({ size = 18, className }: IconProps) => (
+    <BsBarChartSteps size={size} className={className} />
+  ),
+  Check: ({ size = 18, className }: IconProps) => (
+    <FaCheck size={size} className={className} />
   ),
 };
 
