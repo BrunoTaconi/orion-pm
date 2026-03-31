@@ -56,15 +56,12 @@ const Modal = ({
 
   return (
     <div className="fixed inset-0 z-50">
-      {/* Overlay */}
       <div
         className="absolute inset-0 bg-[rgb(60_60_74/0.6)] backdrop-blur-sm"
         onClick={closeOnOverlayClick ? onClose : undefined}
       />
 
-      {/* Wrapper centralizador */}
       <div className="absolute inset-0 flex items-center justify-center p-4">
-        {/* Modal */}
         <div
           className={`bg-bg-primary rounded-xl shadow-xl w-full ${sizeClasses[size]} relative max-h-[90vh] flex flex-col overflow-hidden`}
         >
@@ -84,7 +81,7 @@ const Modal = ({
                     onClick={onClose}
                     className="text-text-secondary hover:text-text-primary transition cursor-pointer"
                   >
-                    <Icons.Close size={24} />
+                    <Icons.Close size={32} />
                   </button>
                 )}
               </div>

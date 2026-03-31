@@ -110,7 +110,7 @@ export default function ProjectTimeline({
   return (
     <>
       <Tooltip.Provider delayDuration={200}>
-        <div className="flex flex-col gap-6 h-full w-full relative">
+        <div className="flex flex-col gap-3 h-full w-full relative">
           <div className="flex justify-between items-center">
             <div>
               <h2 className="text-xl font-bold text-text-primary">

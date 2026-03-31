@@ -83,7 +83,7 @@ export default function PhasesList({ phases, workItems, projectId }: PhasesListP
               key={card.label}
               className="bg-bg-primary rounded-lg border border-border p-4 flex items-start gap-3 justify-between"
             >
-              <div>
+              <div className="overflow-hidden">
                 <p className="text-2xl font-bold text-text-primary">{card.value}</p>
                 <p className="text-md text-text-secondary">{card.label}</p>
               </div>
@@ -197,7 +197,7 @@ export default function PhasesList({ phases, workItems, projectId }: PhasesListP
         onClose={handleCloseEdit}
         title="Edit Phase"
         closeOnOverlayClick
-        size="md"
+        size="lg"
       >
         {selectedPhase && (
           <EditPhase
@@ -213,7 +213,7 @@ export default function PhasesList({ phases, workItems, projectId }: PhasesListP
         onClose={() => setIsCreateOpen(false)}
         title="New Phase"
         closeOnOverlayClick
-        size="md"
+        size="lg"
       >
         <EditPhase
           phase={null}

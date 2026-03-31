@@ -70,7 +70,7 @@ const Select = ({
     const BaseIcon = Icons[option.icon];
     return (
       <BaseIcon
-        size={18}
+        size={option.iconSize}
         className={
           isSelected
             ? "text-accent-primary"

@@ -18,24 +18,24 @@ export const RISK_LEVEL_STYLES: Record<
   { bg: string; text: string; border: string }
 > = {
   LOW: {
-    bg: "bg-green-500/15",
-    text: "text-green-400",
-    border: "border-green-500/30",
+    bg: "bg-green-500/25",
+    text: "text-green-500",
+    border: "border-green-500/40",
   },
   MEDIUM: {
     bg: "bg-yellow-500/15",
-    text: "text-yellow-400",
-    border: "border-yellow-500/30",
+    text: "text-yellow-500",
+    border: "border-yellow-500/40",
   },
   HIGH: {
-    bg: "bg-orange-500/15",
+    bg: "bg-orange-500/25",
     text: "text-orange-400",
-    border: "border-orange-500/30",
+    border: "border-orange-500/40",
   },
   CRITICAL: {
-    bg: "bg-red-500/15",
+    bg: "bg-red-500/35",
     text: "text-red-400",
-    border: "border-red-500/30",
+    border: "border-red-500/40",
   },
 };
 
@@ -43,32 +43,38 @@ export const RISK_STATUS_OPTIONS = [
   {
     value: "OPEN",
     label: "Open",
-    icon: "Warning" as const,
-    iconColor: "text-red-400",
+    icon: "Book" as const,
+    iconColor: "text-white",
+    iconBgColor: "bg-blue-icon",
   },
   {
     value: "MITIGATING",
     label: "Mitigating",
     icon: "Cycle" as const,
-    iconColor: "text-yellow-400",
+    iconColor: "text-white",
+    iconBgColor: "bg-green-icon",
   },
   {
     value: "MITIGATED",
     label: "Mitigated",
     icon: "Half" as const,
-    iconColor: "text-blue-400",
+    iconColor: "text-white",
+    iconBgColor: "bg-yellow-icon",
   },
   {
     value: "CLOSED",
     label: "Closed",
-    icon: "Flag" as const,
-    iconColor: "text-green-400",
+    icon: "Close" as const,
+    iconSize: 18,
+    iconColor: "text-white",
+    iconBgColor: "bg-purple-icon",
   },
   {
     value: "OCCURRED",
     label: "Occurred",
     icon: "Bug" as const,
-    iconColor: "text-orange-400",
+    iconColor: "text-white",
+    iconBgColor: "bg-red-icon",
   },
 ];
 
@@ -131,10 +137,10 @@ export function getMatrixCellColor(row: number, col: number): string {
   const score = (row + 1) * (col + 1);
   const level = getRiskLevel(score);
   const map: Record<RiskLevel, string> = {
-    LOW: "bg-green-500/20 hover:bg-green-500/35",
-    MEDIUM: "bg-yellow-500/20 hover:bg-yellow-500/35",
-    HIGH: "bg-orange-500/20 hover:bg-orange-500/35",
-    CRITICAL: "bg-red-500/20 hover:bg-red-500/35",
+    LOW: "bg-green-500/30 hover:bg-green-500/55",
+    MEDIUM: "bg-yellow-500/30 hover:bg-yellow-500/55",
+    HIGH: "bg-orange-500/30 hover:bg-orange-500/55",
+    CRITICAL: "bg-red-500/30 hover:bg-red-500/55",
   };
   return map[level];
 }

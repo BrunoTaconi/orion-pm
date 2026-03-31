@@ -21,7 +21,7 @@ import {
 } from "@/utils/risks-utils";
 
 interface EditRiskProps {
-  risk: RiskMock | null; // null = create mode
+  risk: RiskMock | null;
   onClose: () => void;
   onSave: (risk: Partial<RiskMock>) => void;
 }
@@ -40,30 +40,35 @@ const EMPTY_FORM = {
   dueDate: "",
 };
 
-export default function EditRisk({ risk, onClose, onSave }: EditRiskProps) {
-  const [form, setForm] = useState(EMPTY_FORM);
+const getInitialState = (risk: RiskMock | null) => {
+  if (!risk) return EMPTY_FORM;
 
-  useEffect(() => {
-    if (risk) {
-      setForm({
-        title: risk.title,
-        description: risk.description,
-        category: risk.category,
-        probability: String(risk.probability),
-        impact: String(risk.impact),
-        status: risk.status,
-        response: risk.response,
-        ownerId: risk.ownerId ?? "",
-        mitigationPlan: risk.mitigationPlan ?? "",
-        contingencyPlan: risk.contingencyPlan ?? "",
-        dueDate: risk.dueDate
-          ? new Date(risk.dueDate).toISOString().split("T")[0]
-          : "",
-      });
-    } else {
-      setForm(EMPTY_FORM);
-    }
-  }, [risk]);
+  return {
+    title: risk.title,
+    description: risk.description,
+    category: risk.category,
+    probability: String(risk.probability),
+    impact: String(risk.impact),
+    status: risk.status,
+    response: risk.response,
+    ownerId: risk.ownerId ?? "",
+    mitigationPlan: risk.mitigationPlan ?? "",
+    contingencyPlan: risk.contingencyPlan ?? "",
+    dueDate: risk.dueDate
+      ? new Date(risk.dueDate).toISOString().split("T")[0]
+      : "",
+  };
+};
+
+export default function EditRisk({ risk, onClose, onSave }: EditRiskProps) {
+  const [form, setForm] = useState(() => getInitialState(risk));
+
+  const [prevRisk, setPrevRisk] = useState<RiskMock | null>(risk);
+
+  if (risk !== prevRisk) {
+    setPrevRisk(risk);
+    setForm(getInitialState(risk));
+  }
 
   const update = (key: keyof typeof EMPTY_FORM, value: string) =>
     setForm((f) => ({ ...f, [key]: value }));
@@ -86,11 +91,9 @@ export default function EditRisk({ risk, onClose, onSave }: EditRiskProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1.5">
-        <label className="text-xs font-medium text-text-secondary">
-          Title *
-        </label>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      <div className="flex flex-col gap-2">
+        <label className="text-md font-medium text-text-primary">Title *</label>
         <input
           className="bg-bg-secondary border border-border rounded-md px-3 py-2 text-sm text-text-primary outline-none focus:border-accent-primary"
           value={form.title}
@@ -100,8 +103,8 @@ export default function EditRisk({ risk, onClose, onSave }: EditRiskProps) {
         />
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <label className="text-xs font-medium text-text-secondary">
+      <div className="flex flex-col gap-2">
+        <label className="text-md font-medium text-text-primary">
           Description
         </label>
         <textarea
@@ -142,7 +145,7 @@ export default function EditRisk({ risk, onClose, onSave }: EditRiskProps) {
           onChange={(v) => update("impact", v)}
         />
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-text-secondary">
+          <label className="text-sm font-medium text-text-secondary">
             Risk Score
           </label>
           <div
@@ -151,7 +154,7 @@ export default function EditRisk({ risk, onClose, onSave }: EditRiskProps) {
             <span className={`text-sm font-bold ${levelStyle.text}`}>
               {score}
             </span>
-            <span className={`text-xs font-medium ${levelStyle.text}`}>
+            <span className={`text-sm font-medium ${levelStyle.text}`}>
               {level}
             </span>
           </div>
@@ -174,19 +177,19 @@ export default function EditRisk({ risk, onClose, onSave }: EditRiskProps) {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-xs font-medium text-text-secondary">
+        <label className="text-sm font-medium text-text-secondary">
           Mitigation Due Date
         </label>
         <input
           type="date"
-          className="bg-bg-secondary border border-border rounded-md px-3 py-2 text-sm text-text-primary outline-none focus:border-accent-primary"
+          className="bg-bg-secondary border border-border rounded-md px-3 py-3 text-sm text-text-primary outline-none focus:border-accent-primary"
           value={form.dueDate}
           onChange={(e) => update("dueDate", e.target.value)}
         />
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-xs font-medium text-text-secondary">
+        <label className="text-sm font-medium text-text-secondary">
           Mitigation Plan
         </label>
         <textarea
@@ -199,7 +202,7 @@ export default function EditRisk({ risk, onClose, onSave }: EditRiskProps) {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-xs font-medium text-text-secondary">
+        <label className="text-sm font-medium text-text-secondary">
           Contingency Plan
         </label>
         <textarea
@@ -215,13 +218,13 @@ export default function EditRisk({ risk, onClose, onSave }: EditRiskProps) {
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 text-sm text-text-secondary hover:text-text-primary transition-colors"
+          className="px-4 py-2 text-sm text-text-secondary hover:text-text-primary transition-colors font-medium cursor-pointer"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="px-4 py-2 text-sm bg-accent-primary text-white rounded-md hover:opacity-90 transition-opacity"
+          className="px-4 py-2 text-sm bg-accent-primary text-white rounded-md hover:bg-blue-700 font-medium transition-opacity cursor-pointer"
         >
           {risk ? "Save Changes" : "Create Risk"}
         </button>
