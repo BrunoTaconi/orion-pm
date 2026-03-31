@@ -16,13 +16,15 @@ import {
 
 interface EditTaskProps {
   task: WorkItemMock;
-  isCreating?: boolean; 
-  onClose?: () => void; 
+  isCreating?: boolean;
+  isSprintBased?: boolean;
+  onClose?: () => void;
 }
 
 export default function EditTask({
   task: initialTask,
   isCreating = false,
+  isSprintBased = false,
   onClose,
 }: EditTaskProps) {
   const [task, setTask] = useState<WorkItemMock>(initialTask);
@@ -297,14 +299,16 @@ export default function EditTask({
             }
           />
 
-          <Select
-            label="Sprint"
-            options={sprintOptions}
-            value={task.sprintId || "backlog"}
-            onChange={(val) =>
-              updateField("sprintId", val === "backlog" ? null : val)
-            }
-          />
+          {isSprintBased && (
+            <Select
+              label="Sprint"
+              options={sprintOptions}
+              value={task.sprintId || "backlog"}
+              onChange={(val) =>
+                updateField("sprintId", val === "backlog" ? null : val)
+              }
+            />
+          )}
 
           <Select
             label="Priority"

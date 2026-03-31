@@ -226,6 +226,7 @@ export default function BoardPage({
           <EditTask
             task={selectedTask}
             isCreating={isCreating}
+            isSprintBased={isSprintBased}
             onClose={() => {
               setSelectedTask(null);
               setIsCreating(false);

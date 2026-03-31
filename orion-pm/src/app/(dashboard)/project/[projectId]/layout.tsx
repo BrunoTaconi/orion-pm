@@ -25,7 +25,7 @@ const projectTabs = [
   {
     name: "Releases",
     href: "releases",
-    icon: "Box",
+    icon: "Rocket",
     showFor: ["INCREMENTAL", "XP", "SPIRAL"],
   },
   {
