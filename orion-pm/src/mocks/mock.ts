@@ -55,13 +55,30 @@ export type TeamMock = {
   id: string;
   name: string;
   ownerId: string;
+  avatarUrl: string;
 };
 
 export const teamsMock: TeamMock[] = [
   {
     id: "team-1",
-    name: "Bruno Taconi's Team",
+    name: "Core Engineering",
     ownerId: "user-1",
+    avatarUrl:
+      "https://source.boringavatars.com/bauhaus/120/Core%20Engineering?colors=264653,2a9d8f,e9c46a,f4a261,e76f51",
+  },
+  {
+    id: "team-2",
+    name: "Growth & Marketing",
+    ownerId: "user-1",
+    avatarUrl:
+      "https://source.boringavatars.com/bauhaus/120/Growth%20Marketing?colors=8ecae6,219ebc,023047,ffb703,fb8500",
+  },
+  {
+    id: "team-3",
+    name: "Data & AI Solutions",
+    ownerId: "user-2",
+    avatarUrl:
+      "https://source.boringavatars.com/bauhaus/120/Data%20AI%20Solutions?colors=cdb4db,ffc8dd,ffafcc,bde0fe,a2d2ff",
   },
 ];
 
@@ -76,6 +93,8 @@ export const teamMembersMock: TeamMemberMock[] = [
   { id: "tm-1", userId: "user-1", teamId: "team-1", role: "OWNER" },
   { id: "tm-2", userId: "user-2", teamId: "team-1", role: "DEVELOPER" },
   { id: "tm-3", userId: "user-3", teamId: "team-1", role: "DEVELOPER" },
+  { id: "tm-4", userId: "user-1", teamId: "team-2", role: "OWNER" },
+  { id: "tm-5", userId: "user-2", teamId: "team-3", role: "OWNER" },
 ];
 
 //////////////////////////////////////////////////////
@@ -89,6 +108,7 @@ export type ProjectMock = {
   methodology: Methodology;
   visibility: ProjectVisibility;
   ownerId: string;
+  teamId: string;
   createdAt: Date;
 };
 
@@ -100,6 +120,7 @@ export const projectsMock: ProjectMock[] = [
     methodology: "SCRUM",
     visibility: "TEAM",
     ownerId: "user-1",
+    teamId: "team-1",
     createdAt: new Date(),
   },
   {
@@ -109,6 +130,7 @@ export const projectsMock: ProjectMock[] = [
     methodology: "SCRUM",
     visibility: "PUBLIC",
     ownerId: "user-1",
+    teamId: "team-1",
     createdAt: new Date("2026-03-06T18:27:55"),
   },
   {
@@ -118,6 +140,7 @@ export const projectsMock: ProjectMock[] = [
     methodology: "KANBAN",
     visibility: "TEAM",
     ownerId: "user-1",
+    teamId: "team-2",
     createdAt: new Date("2026-03-01T18:27:55"),
   },
   {
@@ -127,6 +150,7 @@ export const projectsMock: ProjectMock[] = [
     methodology: "CASCADE",
     visibility: "TEAM",
     ownerId: "user-1",
+    teamId: "team-1",
     createdAt: new Date("2026-03-01T18:27:55"),
   },
   {
@@ -136,6 +160,7 @@ export const projectsMock: ProjectMock[] = [
     methodology: "XP",
     visibility: "TEAM",
     ownerId: "user-1",
+    teamId: "team-3",
     createdAt: new Date("2026-03-01T18:27:55"),
   },
   {
@@ -145,6 +170,7 @@ export const projectsMock: ProjectMock[] = [
     methodology: "INCREMENTAL",
     visibility: "TEAM",
     ownerId: "user-1",
+    teamId: "team-2",
     createdAt: new Date("2026-03-01T18:27:55"),
   },
   {
@@ -154,6 +180,7 @@ export const projectsMock: ProjectMock[] = [
     methodology: "SPIRAL",
     visibility: "TEAM",
     ownerId: "user-1",
+    teamId: "team-3",
     createdAt: new Date("2026-03-01T18:27:55"),
   },
 ];

@@ -27,7 +27,6 @@ export default function DashboardClient({
   const RecentIcon = Icons["Recent"];
   const ProjectIcon = Icons["Project"];
   const TeamIcon = Icons["Team"];
-
   const handleAction = (action: HomeCardAction, payload?: { id: string }) => {
     switch (action) {
       case "create-project":
@@ -35,7 +34,7 @@ export default function DashboardClient({
         break;
 
       case "create-team":
-        router.push("/teams/create"); 
+        router.push("/teams/create");
         break;
 
       case "enter-project":
@@ -43,7 +42,7 @@ export default function DashboardClient({
         break;
 
       case "enter-team":
-        router.push(`/teams/${payload?.id}`); 
+        router.push(`/teams/${payload?.id}`);
         break;
     }
   };
@@ -73,6 +72,7 @@ export default function DashboardClient({
                   payload={{ id: team.id }}
                   memberCount={getTeamMembersCount(team.id)}
                   onAction={handleAction}
+                  teamAvatarUrl={team.avatarUrl}
                 />
               ))}
             </div>
@@ -98,20 +98,27 @@ export default function DashboardClient({
                 </div>
               ) : (
                 <>
-                  {projects.map((project) => (
-                    <HomeCard
-                      key={project.id}
-                      variant="project"
-                      title={project.name}
-                      icon="Project"
-                      action="enter-project"
-                      payload={{ id: project.id }}
-                      ownerName={user.name}
-                      teamName={"Bruno Taconi's team"}
-                      progress={60}
-                      onAction={handleAction}
-                    />
-                  ))}
+                  {projects.map((project) => {
+                    const projectTeam = teams.find(
+                      (t) => t.id === project.teamId,
+                    );
+
+                    return (
+                      <HomeCard
+                        key={project.id}
+                        variant="project"
+                        title={project.name}
+                        icon="Project"
+                        action="enter-project"
+                        payload={{ id: project.id }}
+                        ownerName={user.name}
+                        teamName={projectTeam?.name || "Personal"}
+                        teamAvatarUrl={projectTeam?.avatarUrl}
+                        progress={60}
+                        onAction={handleAction}
+                      />
+                    );
+                  })}
 
                   <HomeCard
                     variant="create"
@@ -153,6 +160,7 @@ export default function DashboardClient({
                       action="enter-team"
                       payload={{ id: team.id }}
                       memberCount={getTeamMembersCount(team.id)}
+                      teamAvatarUrl={team.avatarUrl}
                       onAction={handleAction}
                     />
                   ))}

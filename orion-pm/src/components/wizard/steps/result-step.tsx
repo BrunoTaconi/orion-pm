@@ -63,8 +63,8 @@ const methodologiesDetails: MethodologyDetail[] = [
     whenToUse:
       "Complex technical projects requiring robust code and frequent changes.",
     icon: "CloudComputer",
-    iconBgColor: "bg-bg-light-orange",
-    iconColor: "text-orange-icon",
+    iconBgColor: "bg-bg-light-green",
+    iconColor: "text-green-icon",
   },
   {
     id: "SPIRAL",

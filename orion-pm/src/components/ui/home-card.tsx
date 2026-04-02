@@ -1,7 +1,8 @@
 "use client";
-import React, { ReactNode } from "react";
+import Image from "next/image";
 import { DynamicIcons, Icons } from "../icons";
-import { useRouter } from "next/navigation";
+import { Methodology } from "@/mocks/mock";
+import Avatar from "boring-avatars";
 
 type HomeCardVariant = "create" | "project" | "team";
 
@@ -12,10 +13,12 @@ export type HomeCardAction =
   | "enter-team";
 
 interface HomeCardProps {
+  projectId?: string;
   variant: HomeCardVariant;
   title: string;
   subtitle?: string;
-  icon: keyof typeof Icons;
+  icon?: keyof typeof Icons;
+  methodology?: Methodology;
   action?: HomeCardAction;
   payload?: any;
   onAction?: (action: HomeCardAction, payload?: any) => void;
@@ -23,13 +26,19 @@ interface HomeCardProps {
   memberCount?: number;
   ownerName?: string;
   teamName?: string;
+  teamAvatarUrl?: string;
 }
+
+type MethodologyConfig = {
+  icon: keyof typeof Icons;
+  iconBgColor: string;
+  iconColor: string;
+};
 
 const HomeCard = ({
   variant,
   title,
-  subtitle,
-  icon,
+  methodology,
   action,
   payload,
   onAction,
@@ -37,20 +46,72 @@ const HomeCard = ({
   memberCount,
   ownerName,
   teamName,
+  teamAvatarUrl,
 }: HomeCardProps) => {
   const isCreate = variant === "create";
   const isProject = variant === "project";
   const isTeam = variant === "team";
-  const showProgress = variant === "project" && progress !== undefined;
-  const Icon = Icons[icon];
   const NewIcon = Icons["Add"];
-  const PeopleIcon = Icons["People"];
 
   const handleClick = () => {
     if (!action || !onAction) return;
     onAction(action, payload);
   };
 
+  const getMethodologyConfig = (
+    methodology?: Methodology,
+  ): MethodologyConfig => {
+    switch (methodology) {
+      case "SCRUM":
+        return {
+          icon: "Scrum",
+          iconBgColor: "bg-bg-light-purple",
+          iconColor: "text-purple-icon",
+        };
+      case "KANBAN":
+        return {
+          icon: "Kanban",
+          iconBgColor: "bg-bg-light-green",
+          iconColor: "text-green-icon",
+        };
+      case "CASCADE":
+        return {
+          icon: "Waterfall",
+          iconBgColor: "bg-bg-light-blue",
+          iconColor: "text-blue-icon",
+        };
+      case "XP":
+        return {
+          icon: "CloudComputer",
+          iconBgColor: "bg-bg-light-green",
+          iconColor: "text-green-icon",
+        };
+      case "SPIRAL":
+        return {
+          icon: "Spiral",
+          iconBgColor: "bg-bg-light-yellow",
+          iconColor: "text-yellow-icon",
+        };
+      case "INCREMENTAL":
+        return {
+          icon: "Incremental",
+          iconBgColor: "bg-bg-light-red",
+          iconColor: "text-red-icon",
+        };
+      default:
+        return {
+          icon: "Project",
+          iconBgColor: "bg-bg-secondary",
+          iconColor: "text-text-secondary",
+        };
+    }
+  };
+
+  const methodologyConfig = getMethodologyConfig(methodology);
+  const MethodologyIcon = Icons[methodologyConfig.icon];
+
+  const Icon = Icons["Project"];
+  const avatarColors = ["#5b1d99", "#0074b4", "#00b34c", "#ffd41f", "#fc6e3d"];
   return (
     <div
       onClick={handleClick}
@@ -121,20 +182,27 @@ const HomeCard = ({
             pl-4
         "
           >
-            <Icon size={22} className={"text-text-secondary"} />
-          </div>
-          <div className="absolute">
-            <h3
-              className={`
+            <div className="absolute">
+              <h3
+                className={`
             font-semibold
             text-text-primary
-            pl-12
-            pt-5
-            pr-3
+            pl-1
+            pt-6
+            pr-10
         `}
+              >
+                {title}
+              </h3>
+            </div>
+          </div>
+
+          <div className="absolute top-[14] right-3">
+            <div
+              className={`w-7 h-7 p-1 ${methodologyConfig.iconBgColor} ${methodologyConfig.iconColor} rounded-sm flex items-center justify-center`}
             >
-              {title}
-            </h3>
+              <MethodologyIcon size={20} />
+            </div>
           </div>
           <div className="w-full mt-25 px-3">
             <div className="w-full h-2 bg-bg-secondary rounded-full overflow-hidden">
@@ -149,16 +217,13 @@ const HomeCard = ({
             </div>
           </div>
           <div className="absolute bottom-0 p-3 flex gap-2 w-full overflow-x-hidden">
-            {
-              <DynamicIcons.Letter
-                text={ownerName ?? ""}
-                size={22}
-                className="text-sm"
-                bgColor="bg-red-600"
-                textColor="text-white"
-              />
-            }
-            <p className="text-sm font-medium text-text-secondary">
+            <Avatar
+              size={20}
+              name={teamName}
+              variant="marble"
+              colors={avatarColors}
+            />
+            <p className="text-sm font-medium text-text-secondary truncate min-w-0">
               {teamName}
             </p>
           </div>
@@ -183,23 +248,18 @@ const HomeCard = ({
           >
             <Icon size={22} className={"text-text-secondary"} />
           </div>
-          <div className="absolute">
-            <h3
-              className={`
-            font-semibold
-            text-text-primary
-            pl-10
-            pt-17
-            pr-4
-        `}
-            >
+          <div className="absolute top-13 left-0 right-0 px-4 pt-2">
+            <h3 className="font-semibold text-text-primary line-clamp-2">
               {title}
             </h3>
           </div>
           <div className="absolute bottom-0 p-3 flex gap-3 w-full items-center">
-            <div className="w-7 h-7 p-1 bg-bg-light-blue text-blue-icon rounded-sm flex items-center text-sm text-center justify-center">
-              <PeopleIcon size={22} />
-            </div>
+            <Avatar
+              name={title}
+              size={20}
+              variant="marble"
+              colors={avatarColors}
+            />
             <div className="flex items-center gap-1">
               <p className="font-black text-lg text-text-primary">
                 {memberCount}
